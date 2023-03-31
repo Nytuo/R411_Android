@@ -9,7 +9,7 @@ const doc = {
         title: "Cosmic API",
         description: "API for Books",
     },
-    host: "localhost:6906",
+    host: "134.59.27.242:6906",
     basePath: "/",
     schemes: ['http', 'https'],
     consumes: ['application/json'],
