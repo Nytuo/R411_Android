@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import fr.nytuo.android411.Gps.MagasinSlectionActibity;
 import fr.nytuo.android411.productsList.ProductsListActivity;
@@ -14,7 +16,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Intent intent = new Intent(this, MagasinSlectionActibity.class);
-        startActivity(intent);
+
+        Button buttonStart = (Button) findViewById(R.id.buttonStart);
+        buttonStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ProductsListActivity.class);
+                startActivity(intent);
+            }
+        });
+
+
     }
 }
