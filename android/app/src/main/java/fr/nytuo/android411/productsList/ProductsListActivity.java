@@ -36,9 +36,8 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         products = (Product[]) itemList.toArray();
         ProductsAdapter productsAdapter = new ProductsAdapter(this, new ArrayList<Product>(Arrays.asList(products)));
         ListView listProduits = (ListView) findViewById(R.id.listView);
-        ProductsAdapter adapter = new ProductsAdapter(this, pList);
-        listProduits.setAdapter(adapter);
-        adapter.addListener(this);
+        listProduits.setAdapter(productsAdapter);
+        productsAdapter.addListener(this);
     }
 
     @Override
