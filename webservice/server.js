@@ -8,12 +8,7 @@ let CryptoJS = require("crypto-js");
 app.use("", express.static(__dirname + "/public"));
 app.use("/js", express.static(__dirname + "/js"));
 var RateLimit = require('express-rate-limit');
-var apiAnilistLimiter = RateLimit({
-    windowMs: 1 * 60 * 1000, max: 90
-});
-var apiMarvelLimiter = RateLimit({
-    windowMs: 1 * 60 * 1000 * 60 * 24, max: 3000
-});
+
 var limiterDefault = RateLimit({
     windowMs: 1 * 60 * 1000, max: 1000
 });
@@ -35,8 +30,8 @@ const dotenv = require('dotenv');
 dotenv.config({
     path: CosmicComicsTemp + "/.env"
 });
-let MarvelPublicKey = process.env.MARVEL_PUBLIC_KEY;
-let MarvelPrivateKey = process.env.MARVEL_PRIVATE_KEY;
+
+
 /**
  * Get the name without some special characters
  * @param {string} CommonName
@@ -60,350 +55,6 @@ const server = app.listen(port, "0.0.0.0", function () {
     console.log("Listening on port %s:%s!", host, port);
 });
 
-async function API_ANILIST_GET(name) {
-    let query = `query ($page: Int, $perPage: Int, $search: String) {
-  Page(page:$page,perPage:$perPage){
-    pageInfo{
-      total
-    }
-    media(type: MANGA,search:$search){
-      id
-      title{
-        romaji
-        english
-        native
-      }
-      status
-      startDate{
-        year
-        month
-        day
-      }
-      endDate{
-        year
-        month
-        day
-	  }
-	  description
-	  meanScore
-	  genres
-	  coverImage{
-	  large
-	  }
-	  bannerImage
-	  trending
-	  siteUrl
-	  volumes
-	  chapters
-      staff{
-        nodes{
-          id
-          name {
-            full
-            native
-          }
-          image {
-            medium
-          }
-          description
-          siteUrl
-        }
-        edges{
-        role
-        }
-      }
-      characters{
-        nodes{
-          id
-          name {
-            full
-            native
-          }
-          image {
-            medium
-          }
-          description
-          siteUrl
-        }
-        edges{
-        role
-        }
-      }
-      relations{
-        nodes{
-          id
-          title{
-            romaji
-            english
-            native
-          }
-          coverImage{
-          large
-          }
-          type
-          format
-        }
-        edges{
-          relationType
-        }
-      }
-    }
-  }
-}`;
-    let variables = {
-        search: name, page: 1, perPage: 5
-    }
-    let url = 'https://graphql.anilist.co', options = {
-        method: 'POST', headers: {
-            'Content-Type': 'application/json', 'Accept': 'application/json',
-        }, body: JSON.stringify({
-            query: query, variables: variables
-        })
-    };
-    let results = {};
-    await fetch(url, options).then(handleResponse).then(handleData).catch(handleError);
-
-    function handleResponse(response) {
-        return response.json().then(function (json) {
-            return response.ok ? json : Promise.reject(json);
-        });
-    }
-
-    // duplicate an object
-    function clone(obj) {
-        return JSON.parse(JSON.stringify(obj));
-    }
-
-    function handleData(data) {
-        console.log(data);
-        if (data.data.Page.media.length === 0) {
-            results = null;
-            return;
-        }
-        let baseObject = clone(data.data.Page.media[0]);
-        let staffObject = clone(data.data.Page.media[0].staff.nodes);
-        let charactersObject = clone(data.data.Page.media[0].characters.nodes);
-        let relationsObjectNodes = clone(data.data.Page.media[0].relations.nodes);
-        let relationsObjectEdges = clone(data.data.Page.media[0].relations.edges);
-        let relationsObject = [];
-        for (let i = 0; i < relationsObjectNodes.length; i++) {
-            relationsObject[i] = relationsObjectNodes[i];
-            relationsObject[i]["relationType"] = relationsObjectEdges[i].relationType;
-        }
-        delete baseObject["relations"];
-        for (let i = 0; i < baseObject.staff.nodes.length; i++) {
-            for (let key in baseObject.staff.nodes[i]) {
-                if (key !== "id" && key !== "name") {
-                    delete baseObject.staff.nodes[i][key];
-                }
-            }
-            baseObject.staff.nodes[i]["name"] = baseObject.staff.nodes[i]["name"]["full"];
-        }
-        baseObject.staff = baseObject.staff.nodes;
-        for (let i = 0; i < baseObject.characters.nodes.length; i++) {
-            for (let key in baseObject.characters.nodes[i]) {
-                if (key !== "id" && key !== "name") {
-                    delete baseObject.characters.nodes[i][key];
-                }
-            }
-            baseObject.characters.nodes[i]["name"] = baseObject.characters.nodes[i]["name"]["full"];
-        }
-        baseObject.characters = baseObject.characters.nodes;
-        results = {
-            "base": baseObject, "staff": staffObject, "characters": charactersObject, "relations": relationsObject
-        }
-    }
-
-    return results;
-
-    function handleError(error) {
-        console.error(error);
-    }
-}
-
-async function API_ANILIST_GET_SEARCH(name) {
-    let query = `query ($page: Int, $perPage: Int, $search: String) {
-  Page(page:$page,perPage:$perPage){
-    pageInfo{
-      total
-    }
-    media(type: MANGA,search:$search){
-      id
-      title{
-        romaji
-        english
-        native
-      }
-	  coverImage{
-	  large
-	  }
-    }
-  }
-}`;
-    let variables = {
-        search: name, page: 1, perPage: 20
-    }
-    let url = 'https://graphql.anilist.co', options = {
-        method: 'POST', headers: {
-            'Content-Type': 'application/json', 'Accept': 'application/json',
-        }, body: JSON.stringify({
-            query: query, variables: variables
-        })
-    };
-    let results = {};
-    await fetch(url, options).then(handleResponse).then(handleData).catch(handleError);
-
-    function handleResponse(response) {
-        return response.json().then(function (json) {
-            return response.ok ? json : Promise.reject(json);
-        });
-    }
-
-    // duplicate an object
-    function clone(obj) {
-        return JSON.parse(JSON.stringify(obj));
-    }
-
-    function handleData(data) {
-        console.log(data);
-        if (data.data.Page.media.length === 0) {
-            results = null;
-            return;
-        }
-        let baseObject = clone(data.data.Page.media);
-        results = {
-            "base": baseObject,
-        }
-    }
-
-    return results;
-
-    function handleError(error) {
-        console.error(error);
-    }
-}
-
-function generateMarvelAPIAuth() {
-    let ts = new Date().getTime();
-    return "&ts=" + ts + "&hash=" + CryptoJS.MD5(ts + MarvelPrivateKey + MarvelPublicKey).toString() + "&apikey=" + MarvelPublicKey;
-}
-
-async function API_MARVEL_GET(name = "") {
-    console.log("API_MARVEL_GET: " + name);
-    if (name === "") {
-        console.log("no name provided, aborting GETMARVELAPI");
-        return;
-    }
-    let date = "";
-    let dateNb = 0;
-    let dateFromName = name.replace(/[^0-9]/g, "#");
-    dateFromName.split("#").forEach(function (element) {
-        if (dateNb === 0 && element.match(/^[0-9]{4}$/)) {
-            dateNb++;
-            date = element;
-        }
-    });
-    name = name.replaceAll(/[(].+[)]/g, "");
-    name = name.replace(/\s+$/, "");
-    let encodedName = encodeURIComponent(name);
-    let url;
-    if (date !== "") {
-        url = "https://gateway.marvel.com:443/v1/public/series?titleStartsWith=" + encodedName + "&startYear=" + date + generateMarvelAPIAuth();
-    } else {
-        url = "https://gateway.marvel.com:443/v1/public/series?titleStartsWith=" + encodedName + generateMarvelAPIAuth();
-    }
-    let response = await fetch(url);
-    return await response.json();
-}
-
-/**
- * Recover the Marvel API data from the server
- * @param {string} what - What to recover (characters, comics, creators, events, series, stories)
- * @param {string} id - The id of the element to recover
- * @param {string} what2 - What to recover (characters, comics, creators, events, series, stories)
- * @param {boolean|string} noVariants - If the comics should be without variants
- * @param {string} orderBy - How to order the results
- * @param {string} type - The type of the element to recover (comic, collection, creator, event, story, series, character)
- */
-function recoverMarvelAPILink(what, id, what2, noVariants = true, orderBy = "issueNumber", type = null) {
-    if (type != null) {
-        return "https://gateway.marvel.com:443/v1/public/" + what + "?" + type + "=" + id + generateMarvelAPIAuth();
-    }
-    if (what2 === "") {
-        return "https://gateway.marvel.com:443/v1/public/" + what + "/" + id + "?noVariants=" + noVariants + "&orderBy=" + orderBy + generateMarvelAPIAuth();
-    }
-    return "https://gateway.marvel.com:443/v1/public/" + what + "/" + id + "/" + what2 + "?noVariants=" + noVariants + "&orderBy=" + orderBy + generateMarvelAPIAuth();
-}
-
-async function GETMARVELAPI_variants(id) {
-    let url = recoverMarvelAPILink("series", id, "comics", true, "issueNumber")
-    let response = await fetch(url);
-    let data = await response.json();
-    console.log(data);
-    return data;
-}
-
-async function GETMARVELAPI_relations(id) {
-    let url = recoverMarvelAPILink("series", id, "comics", true, "issueNumber")
-    let response = await fetch(url);
-    let data = await response.json();
-    console.log(data);
-    return data;
-}
-
-async function GETMARVELAPI_Characters(id, type) {
-    let url = recoverMarvelAPILink("characters", id, "comics", true, "issueNumber", type)
-    let response = await fetch(url);
-    let data = await response.json();
-    console.log(data);
-    return data;
-}
-
-async function GETMARVELAPI_Creators(id, type) {
-    let url = recoverMarvelAPILink("creators", id, "comics", true, "issueNumber", type)
-    let response = await fetch(url);
-    let data = await response.json();
-    console.log(data);
-    return data;
-}
-
-async function GETMARVELAPI_Comics(name = "", seriesStartDate = "") {
-    if (name === "") {
-        console.log("GETMARVELAPI_Comics : name is empty");
-        return;
-    }
-    if (seriesStartDate === "") {
-        console.log("GETMARVELAPI_Comics : seriesStartDate is empty");
-        return;
-    }
-    let issueNumber = "";
-    let inbFromName = name.replace(/[^#0-9]/g, "&");
-    console.log("inbFromName : " + inbFromName);
-    inbFromName.split("&").forEach(function (element) {
-        if (element.match(/^[#][0-9]{1,}$/)) {
-            issueNumber = element.replaceAll("#", "");
-        }
-    });
-    name = name.replaceAll(/[(].+[)]/g, "");
-    name = name.replaceAll(/[\[].+[\]]/g, "");
-    name = name.replaceAll(/[\{].+[\}]/g, "");
-    name = name.replaceAll(/[#][0-9]{1,}/g, "");
-    name = name.replace(/\s+$/, "");
-    console.log("GETMARVELAPI_Comics : name : " + name);
-    console.log("GETMARVELAPI_Comics : issueNumber : " + issueNumber);
-    console.log("GETMARVELAPI_Comics : seriesStartDate : " + seriesStartDate);
-    let url;
-    if (seriesStartDate !== "" && issueNumber !== "") {
-        url = "https://gateway.marvel.com:443/v1/public/comics?titleStartsWith=" + encodeURIComponent(name) + "&startYear=" + seriesStartDate + "&issueNumber=" + issueNumber + "&noVariants=true" + generateMarvelAPIAuth();
-    } else {
-        url = "https://gateway.marvel.com:443/v1/public/comics?titleStartsWith=" + encodeURIComponent(name) + "&noVariants=true" + generateMarvelAPIAuth();
-    }
-    let response = await fetch(url);
-    let data = await response.json();
-    console.log(data);
-    return data;
-}
-
 async function GETGOOGLEAPI_book(name = "") {
     if (name === "") {
         console.log("GETGOOGLEAPI_book : name is empty");
@@ -416,10 +67,22 @@ async function GETGOOGLEAPI_book(name = "") {
     name = name.replaceAll(/[#][0-9]{1,}/g, "");
     name = name.replace(/\s+$/, "");
     console.log("GETGOOGLEAPI_book : name : " + name);
-    let url = "https://www.googleapis.com/books/v1/volumes?q=" + encodeURIComponent(name) + "&maxResults=1&key=" + process.env.GBOOKSAPIKEY;
+    let url = "https://www.googleapis.com/books/v1/volumes?q=" + encodeURIComponent(name) + "&maxResults=10&key=" + process.env.GBOOKSAPIKEY;
     let response = await fetch(url);
     let data = await response.json();
-    console.log(data);
+    return data;
+}
+
+async function GETGOOGLEAPI_bookISBN(isbn = "") {
+    if (isbn === "") {
+        console.log("GETGOOGLEAPI_bookISBN : isbn is empty");
+        return;
+    }
+
+    console.log("GETGOOGLEAPI_bookISBN : isbn : " + isbn);
+    let url = "https://www.googleapis.com/books/v1/volumes?q=isbn:" + isbn + "&key=" + process.env.GBOOKSAPIKEY;
+    let response = await fetch(url);
+    let data = await response.json();
     return data;
 }
 
@@ -441,91 +104,202 @@ async function GETOLAPI_search(name = "") {
     return data;
 }
 
-async function GETMARVELAPI_SEARCH(name = "", date = "") {
-    if (name === "") {
-        console.log("no name provided, aborting GETMARVELAPI");
-        return;
+class Book {
+
+    name;
+    authors;
+    publisher;
+    date;
+    isbn;
+    imgURLs;
+    price;
+    description;
+
+
+    constructor() {
+
     }
-    name = name.replaceAll(/[(].+[)]/g, "");
-    name = name.replace(/\s+$/, "");
-    let encodedName = encodeURIComponent(name);
-    let url;
-    if (date !== "") {
-        url = "https://gateway.marvel.com:443/v1/public/series?titleStartsWith=" + encodedName + "&startYear=" + date + generateMarvelAPIAuth();
-    } else {
-        url = "https://gateway.marvel.com:443/v1/public/series?titleStartsWith=" + encodedName + generateMarvelAPIAuth();
+
+
+    get name() {
+        return this.name;
     }
-    let response = await fetch(url);
-    return await response.json();
+
+    set name(value) {
+        this.name = value;
+    }
+
+    get authors() {
+        return this.authors;
+    }
+
+    set authors(value) {
+        this.authors = value;
+    }
+
+    get publisher() {
+        return this.publisher;
+    }
+
+    set publisher(value) {
+        this.publisher = value;
+    }
+
+    get date() {
+        return this.date;
+    }
+
+    set date(value) {
+        this.date = value;
+    }
+
+    get isbn() {
+        return this.isbn;
+    }
+
+    set isbn(value) {
+        this.isbn = value;
+    }
+
+    get imgURLs() {
+        return this.imgURLs;
+    }
+
+    set imgURLs(value) {
+        this.imgURLs = value;
+    }
+
+    get price() {
+        return this.price;
+    }
+
+    set price(value) {
+        this.price = value;
+    }
+
+    get description() {
+        return this.description;
+    }
+
+    set description(value) {
+        this.description = value;
+    }
 }
 
-app.get("/api/marvel/search/:name/", apiMarvelLimiter, async (req, res) => {
-    GETMARVELAPI_SEARCH(req.params.name).then(function (data) {
-        res.send(data);
-    })
-})
-app.get("/api/marvel/search/:name/:date", apiMarvelLimiter, async (req, res) => {
-    GETMARVELAPI_SEARCH(req.params.name, req.params.date).then(function (data) {
-        res.send(data);
-    })
-})
-
-
-app.get("/api/marvel/book/:name", apiMarvelLimiter, (req, res) => {
-
-    let name = req.params.name;
-    API_MARVEL_GET(name).then(async function (data) {
-        console.log(data);
-        let book = data
-        let creators = await GETMARVELAPI_Creators(data["data"]["results"][0]["id"], "series");
-        let characters = await GETMARVELAPI_Characters(data["data"]["results"][0]["id"], "series");
-        let variants = await GETMARVELAPI_variants(data["data"]["results"][0]["id"]);
-        let relations = await GETMARVELAPI_relations(data["data"]["results"][0]["id"]);
-        let combined = {
-            "book": book,
-            "creators": creators,
-            "characters": characters,
-            "variants": variants,
-            "relations": relations
+app.get("/api/book/search/:name", limiterDefault, async function (req, res) {
+    let name = decodeURIComponent(req.params.name);
+    let ol = await GETOLAPI_search(name);
+    let google = await GETGOOGLEAPI_book(name);
+    let combined = {
+        books: [],
+    }
+    if (ol.docs.length > 0) {
+        for (let i = 0; i < ol.docs.length; i++) {
+            let book = ol.docs[i];
+            let combinedBook = new Book();
+            combinedBook.name = book.title;
+            combinedBook.authors = book.author_name;
+            combinedBook.publisher = book.publisher;
+            combinedBook.date = book.first_publish_year;
+            combinedBook.isbn = book.isbn;
+            combinedBook.imgURLs = [];
+            combinedBook.imgURLs.push("https://covers.openlibrary.org/b/id/" + book.cover_i + "-M.jpg");
+            combinedBook.description = book.subtitle;
+            combinedBook.price = Math.round(Math.random() * 100);
+            combined.books.push(combinedBook);
         }
-        res.send(combined);
-    }).catch((err) => {
-        res.sendStatus(500)
-    })
-})
-
-app.get("/api/anilist/book/:name", apiAnilistLimiter, async (req, res) => {
-    let name = req.params.name;
-    await API_ANILIST_GET(name).then(async function (thedata) {
-        res.send(thedata)
-    })
+    }
+    if (google.items.length > 0) {
+        for (let i = 0; i < google.items.length; i++) {
+            let book = google.items[i];
+            let combinedBook = new Book();
+            combinedBook.name = book.volumeInfo.title;
+            combinedBook.authors = book.volumeInfo.authors;
+            combinedBook.publisher = book.volumeInfo.publisher;
+            combinedBook.date = book.volumeInfo.publishedDate;
+            combinedBook.isbn = book.volumeInfo.industryIdentifiers[0].identifier;
+            combinedBook.price = Math.round(Math.random() * 100);
+            combinedBook.description = book.volumeInfo.description;
+            combinedBook.imgURLs = [];
+            if (book.volumeInfo.imageLinks !== undefined)
+                combinedBook.imgURLs.push(book.volumeInfo.imageLinks.thumbnail);
+            else
+                combinedBook.imgURLs.push("http://" + req.headers.host + "/img/no_cover.jpg");
+            combined.books.push(combinedBook);
+        }
+    }
+    res.send(combined);
 });
 
-app.get("/api/anilist/search/:name", apiAnilistLimiter, (req, res) => {
-    let name = req.params.name;
-    API_ANILIST_GET_SEARCH(name).then(async function (dataa) {
-        res.send(dataa);
-    })
+app.get("/api/libraries/positions", limiterDefault, async function (req, res) {
+    res.send([
+            {
+                "longitude": 2.3488,
+                "latitude": 48.8534,
+                "name": "Bibliothèque nationale de France",
+            }
+        ]
+    );
 });
-app.get("/api/marvel/book/:name/:date", apiMarvelLimiter, async function (req, res) {
-    let name = decodeURIComponent(req.params.name);
-    let date = decodeURIComponent(req.params.date);
-    GETMARVELAPI_Comics(req.params.name, req.params.date).then(function (data) {
-        res.send(data);
-    })
-})
-app.get("/api/ol/book/:name", limiterDefault, async function (req, res) {
-    let name = decodeURIComponent(req.params.name);
-    GETOLAPI_search(name).then(function (data) {
-        res.send(data);
-    })
-})
-app.get("/api/google/book/:name", apiGoogleLimiter, async function (req, res) {
-    let name = decodeURIComponent(req.params.name);
-    GETGOOGLEAPI_book(name).then(function (data) {
-        res.send(data);
-    })
-})
+
+async function GETNYTAPI_ISBN(NYTAPIKEY,number = 10) {
+    let names = "https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=" + NYTAPIKEY;
+    let Nresponse = await fetch(names);
+    let Ndata = await Nresponse.json();
+    let lists = Ndata.results;
+    let ISBNs = [];
+
+    while (lists.length > 0) {
+        let list = lists[0];
+        let url = "https://api.nytimes.com/svc/books/v3/lists/current/" + list.list_name_encoded + ".json?api-key=" + NYTAPIKEY;
+        let response = await fetch(url);
+        let data = await response.json();
+        for (let i = 0; i < data.results.books.length; i++) {
+            ISBNs.push(data.results.books[i].primary_isbn13);
+        }
+        if (ISBNs.length >= number) {
+            return ISBNs;
+        }
+        lists.splice(0, 1);
+    }
+    return ISBNs;
+}
+
+app.get("/api/book/:number", limiterDefault, async function (req, res) {
+
+    let books = [];
+    let number = req.params.number;
+        let NYTAPIKEY = "VpSUrkaKLqAqXlo6RCWILRriPyjaGPpC";
+        let ISBNs = await GETNYTAPI_ISBN(NYTAPIKEY,number);
+        if (ISBNs.length > number){
+            ISBNs = ISBNs.slice(0, number);
+        }
+
+
+
+        for (let i = 0; i < ISBNs.length; i++) {
+            let book = await GETGOOGLEAPI_bookISBN(ISBNs[i]);
+            console.log(book);
+            let book2 = new Book();
+            book2.name = book.items[0].volumeInfo.title;
+            book2.authors = book.items[0].volumeInfo.authors;
+            book2.publisher = book.items[0].volumeInfo.publisher;
+            book2.date = book.items[0].volumeInfo.publishedDate;
+            book2.isbn = book.items[0].volumeInfo.industryIdentifiers[0].identifier;
+            book2.price = Math.round(Math.random() * 100);
+            book2.description = book.items[0].volumeInfo.description;
+            book2.imgURLs = [];
+            if (book.items[0].volumeInfo.imageLinks !== undefined)
+                book2.imgURLs.push(book.items[0].volumeInfo.imageLinks.thumbnail);
+            else
+                book2.imgURLs.push("http://" + req.headers.host + "/img/no_cover.jpg");
+            books.push(book2);
+        }
+
+
+    res.send(books);
+});
+
 process.on('SIGINT', () => {
     console.log('SIGINT signal received: closing server');
     server.close(() => {
@@ -536,5 +310,5 @@ process.on('SIGINT', () => {
 
 //If page not found
 app.all('*', (req, res) => {
-    res.sendFile(__dirname + '/404.html');
+    res.send("Page not found use routes or go to /api-docs for swagger");
 });

@@ -5,7 +5,7 @@
     "title": "Cosmic API",
     "description": "API for Books"
   },
-  "host": "localhost:6906",
+  "host": "134.59.27.242:6906",
   "basePath": "/",
   "schemes": [
     "http",
@@ -18,25 +18,7 @@
     "application/json"
   ],
   "paths": {
-    "/api/marvel/search/{name}/": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/marvel/search/{name}/{date}": {
+    "/api/book/search/{name}": {
       "get": {
         "description": "",
         "parameters": [
@@ -47,9 +29,8 @@
             "type": "string"
           },
           {
-            "name": "date",
-            "in": "path",
-            "required": true,
+            "name": "host",
+            "in": "header",
             "type": "string"
           }
         ],
@@ -60,38 +41,10 @@
         }
       }
     },
-    "/api/marvel/book/{name}": {
+    "/api/libraries/positions": {
       "get": {
         "description": "",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/anilist/book/{name}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "OK"
@@ -99,74 +52,19 @@
         }
       }
     },
-    "/api/anilist/search/{name}": {
+    "/api/book/{number}": {
       "get": {
         "description": "",
         "parameters": [
           {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/marvel/book/{name}/{date}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "name",
+            "name": "number",
             "in": "path",
             "required": true,
             "type": "string"
           },
           {
-            "name": "date",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/ol/book/{name}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
-    "/api/google/book/{name}": {
-      "get": {
-        "description": "",
-        "parameters": [
-          {
-            "name": "name",
-            "in": "path",
-            "required": true,
+            "name": "host",
+            "in": "header",
             "type": "string"
           }
         ],
