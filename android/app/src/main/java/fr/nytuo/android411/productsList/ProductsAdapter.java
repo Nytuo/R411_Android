@@ -15,10 +15,12 @@ import fr.nytuo.android411.R;
 /**
  * Created by frallo on 03/02/2020.
  */
+
 public class ProductsAdapter extends BaseAdapter {
     private ArrayList<Product> items;
     private LayoutInflater mInflater;  //Un mécanisme pour gérer l'affichage graphique depuis un layout XML
     private ProductAdapterListener activity;
+    private ArrayList<ProductAdapterListener> productListener = new ArrayList<>();
 
     public ProductsAdapter(ProductAdapterListener activity, ArrayList<Product> items) {
         this.activity = activity;
@@ -65,7 +67,9 @@ public class ProductsAdapter extends BaseAdapter {
         return layoutItem; //On retourne l'item créé.
     }
 
-
+    public void addListener(ProductAdapterListener listener) {
+        productListener.add(listener);
+    }
 
 }
 
