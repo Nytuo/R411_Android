@@ -10,7 +10,7 @@ public class ProductsListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.pizza_layout);
+        setContentView(R.layout.product_layout);
     }
 
 

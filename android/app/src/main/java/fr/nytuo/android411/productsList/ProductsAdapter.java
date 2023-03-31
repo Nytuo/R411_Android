@@ -14,17 +14,14 @@ import fr.nytuo.android411.R;
  * Created by frallo on 03/02/2020.
  */
 public class ProductsAdapter extends BaseAdapter {
-    private final Button button;
-    private Product selectedProduct;
     private ProductsList items;
     private LayoutInflater mInflater;  //Un mécanisme pour gérer l'affichage graphique depuis un layout XML
     private ProductAdapterListener activity;
 
-    public ProductsAdapter(ProductAdapterListener activity, ProductsList items, Button button) {
+    public ProductsAdapter(ProductAdapterListener activity, ProductsList items) {
         this.activity = activity;
         this.items = items;
         mInflater = LayoutInflater.from(activity.getContext());
-        this.button = button;
     }
 
     public int getCount() {
@@ -43,7 +40,7 @@ public class ProductsAdapter extends BaseAdapter {
         View layoutItem;
 
         //(1) : Réutilisation des layouts
-        layoutItem = convertView == null ? mInflater.inflate(R.layout.pizza_layout, parent, false) : convertView;
+        layoutItem = convertView == null ? mInflater.inflate(R.layout.product_layout, parent, false) : convertView;
 
         //(2) : Récupération des TextView de notre layout
         TextView displayName = layoutItem.findViewById(R.id.name);
@@ -56,7 +53,7 @@ public class ProductsAdapter extends BaseAdapter {
 
         // set image
         ImageView displayImg = layoutItem.findViewById(R.id.image2);
-        displayImg.setImageResource(items.get(position).getImg());
+        displayImg.setImageBitmap(items.get(position).getImgBitmap().get(0));
 
 
         displayName.setTag(position);
