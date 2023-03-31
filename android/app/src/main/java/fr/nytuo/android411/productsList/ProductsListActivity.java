@@ -26,7 +26,7 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products_list);
 
-        HttpAsyncGet<Product> httpAsyncGet = new HttpAsyncGet<Product>("https://api.jsonserve.com/ZjoC6h", Product.class, this, null);
+//        HttpAsyncGet<Product> httpAsyncGet = new HttpAsyncGet<Product>("https://api.jsonserve.com/ZjoC6h", Product.class, this, null);
     }
 
     

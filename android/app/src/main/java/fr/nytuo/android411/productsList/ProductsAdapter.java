@@ -47,20 +47,20 @@ public class ProductsAdapter extends BaseAdapter {
         layoutItem = convertView == null ? mInflater.inflate(R.layout.product_layout, parent, false) : convertView;
 
         //(2) : Récupération des TextView de notre layout
-        TextView displayName = layoutItem.findViewById(R.id.name);
-        TextView displaPrice = layoutItem.findViewById(R.id.price);
-
-        //(3) : Renseignement des valeurs
-        displayName.setText(items.get(position).getName());
-        displaPrice.setText("100");
-
-
-        // set image
-        ImageView displayImg = layoutItem.findViewById(R.id.image2);
-        displayImg.setImageBitmap(items.get(position).getImgBitmap().get(0));
-
-
-        displayName.setTag(position);
+//        TextView displayName = layoutItem.findViewById(R.id.name);
+//        TextView displaPrice = layoutItem.findViewById(R.id.price);
+//
+//        //(3) : Renseignement des valeurs
+//        displayName.setText(items.get(position).getName());
+//        displaPrice.setText("100");
+//
+//
+//        // set image
+//        ImageView displayImg = layoutItem.findViewById(R.id.image2);
+//        displayImg.setImageBitmap(items.get(position).getImgBitmap().get(0));
+//
+//
+//        displayName.setTag(position);
 
 
 
