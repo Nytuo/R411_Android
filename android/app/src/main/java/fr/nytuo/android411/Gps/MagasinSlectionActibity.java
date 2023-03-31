@@ -24,6 +24,8 @@ import fr.nytuo.android411.R;
 
 public class MagasinSlectionActibity extends AppCompatActivity implements PostExecuteActivity {
 
+    PositionMagasin[] magasins;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +39,9 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
 
     @Override
     public void onPostExecutePokemons(List itemList) {
-        PositionMagasin[] magasins = (PositionMagasin[]) itemList.toArray();
+        magasins = (PositionMagasin[]) itemList.toArray();
+
+        // todo add magazin to the vue
 
 
     }

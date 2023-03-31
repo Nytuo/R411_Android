@@ -8,17 +8,19 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 import fr.nytuo.android411.R;
 
 /**
  * Created by frallo on 03/02/2020.
  */
 public class ProductsAdapter extends BaseAdapter {
-    private ProductsList items;
+    private ArrayList<Product> items;
     private LayoutInflater mInflater;  //Un mécanisme pour gérer l'affichage graphique depuis un layout XML
     private ProductAdapterListener activity;
 
-    public ProductsAdapter(ProductAdapterListener activity, ProductsList items) {
+    public ProductsAdapter(ProductAdapterListener activity, ArrayList<Product> items) {
         this.activity = activity;
         this.items = items;
         mInflater = LayoutInflater.from(activity.getContext());
