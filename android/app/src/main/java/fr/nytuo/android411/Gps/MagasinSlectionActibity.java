@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,7 @@ import fr.nytuo.android411.R;
 
 public class MagasinSlectionActibity extends AppCompatActivity implements PostExecuteActivity {
 
-    PositionMagasin[] magasins;
+    ArrayList<PositionMagasin> magasins;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +40,11 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
 
     @Override
     public void onPostExecutePokemons(List itemList) {
-        magasins = (PositionMagasin[]) itemList.toArray();
+        magasins = (ArrayList<PositionMagasin>) itemList;
+
+        for (PositionMagasin magasin : magasins) {
+            System.out.println(magasin.getName());
+        }
 
         // todo add magazin to the vue
 
