@@ -1,4 +1,4 @@
-package fr.nytuo.android411.Gps;
+package fr.nytuo.android411.gps;
 
 public class PositionMagasin {
     private double latitude;

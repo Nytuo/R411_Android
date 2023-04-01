@@ -32,7 +32,16 @@
         </activity>
 
         <activity
-            android:name=".Gps.MagasinSlectionActibity"
+            android:name=".gps.MagasinSlectionActibity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".product.ProductActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

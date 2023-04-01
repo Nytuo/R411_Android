@@ -7,4 +7,6 @@ import android.content.Context;
  */
 public interface ProductAdapterListener {
     Context getContext();
+
+    void onElementClick(int position);
 }

@@ -63,6 +63,12 @@ public class ProductsAdapter extends BaseAdapter {
 //
         displayName.setTag(position);
 
+        layoutItem.setOnClickListener(v -> {
+            for (ProductAdapterListener listener : productListener) {
+                listener.onElementClick(position);
+            }
+        });
+
 
 
         return layoutItem; //On retourne l'item créé.

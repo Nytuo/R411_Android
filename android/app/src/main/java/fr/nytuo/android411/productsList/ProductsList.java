@@ -17,7 +17,4 @@ public class ProductsList extends ArrayList<Product> {
     }
     public ProductsList() {
     }
-    public void setResources(Resources r,String packageName){
-        //todo get list produc from api
-    }
 }

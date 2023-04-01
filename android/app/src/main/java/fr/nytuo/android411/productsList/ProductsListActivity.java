@@ -1,22 +1,19 @@
 package fr.nytuo.android411.productsList;
 
 import android.content.Context;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.sql.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import fr.nytuo.android411.Gps.PositionMagasin;
+import fr.nytuo.android411.gps.PositionMagasin;
 import fr.nytuo.android411.HttpAsyncGet;
 import fr.nytuo.android411.PostExecuteActivity;
 import fr.nytuo.android411.R;
+import fr.nytuo.android411.product.ProductActivity;
 
 public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity<Product>,ProductAdapterListener {
 
@@ -33,8 +30,8 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
 
     @Override
     public void onPostExecutePokemons(List<Product> itemList) {
-        products = itemList;
-        ProductsAdapter productsAdapter = new ProductsAdapter(this, products);
+        ProductsList.getInstance().addAll(itemList);
+        ProductsAdapter productsAdapter = new ProductsAdapter(this, ProductsList.getInstance());
         ListView listProduits = findViewById(R.id.listView);
         listProduits.setAdapter(productsAdapter);
         productsAdapter.addListener(this);
@@ -49,5 +46,13 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
     @Override
     public Context getContext() {
         return getApplicationContext();
+    }
+
+    @Override
+    public void onElementClick(int position) {
+        Intent intent = new Intent(this, ProductActivity.class);
+        intent.putExtra("position", position);
+        startActivity(intent);
+        //on envois sure la vue ou l'on vois l'ariticle en grand
     }
 }

@@ -27,10 +27,8 @@ public class Product {
 
     public void setImgURLs(ArrayList<String> imgURLs) {
         this.imgURLs = imgURLs;
-        // creat a new array for bitmap the same size as imgURLs
         imgBitmap = new ArrayList<Bitmap>();
         for (int i = 0; i < imgURLs.size(); i++) {
-                //todo get image from url
                 Bitmap image = null;
                 try {
                     URL url = new URL(imgURLs.get(i));
@@ -39,7 +37,6 @@ public class Product {
                     e.printStackTrace();
                 }
                 imgBitmap.add(image);
-
         }
     }
 
