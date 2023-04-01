@@ -20,22 +20,22 @@ import fr.nytuo.android411.R;
 
 public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity,ProductAdapterListener {
 
-    ArrayList<Product> products;
+    Product[] products;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_products_list);
 
-        HttpAsyncGet<Product> httpAsyncGet = new HttpAsyncGet<Product>("https://api.nytuo.fr/api/book/5", Product.class, this, null);
+//        HttpAsyncGet<Product> httpAsyncGet = new HttpAsyncGet<Product>("https://api.jsonserve.com/ZjoC6h", Product.class, this, null);
     }
 
     
 
     @Override
     public void onPostExecutePokemons(List itemList) {
-        products = (ArrayList<Product>) itemList;
-        ProductsAdapter productsAdapter = new ProductsAdapter(this, products);
-        ListView listProduits = findViewById(R.id.listView);
+        products = (Product[]) itemList.toArray();
+        ProductsAdapter productsAdapter = new ProductsAdapter(this, new ArrayList<Product>(Arrays.asList(products)));
+        ListView listProduits = (ListView) findViewById(R.id.listView);
         listProduits.setAdapter(productsAdapter);
         productsAdapter.addListener(this);
     }
@@ -48,6 +48,6 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
 
     @Override
     public Context getContext() {
-        return getApplicationContext();
+        return null;
     }
 }

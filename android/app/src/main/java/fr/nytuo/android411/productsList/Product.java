@@ -7,12 +7,12 @@ import java.util.ArrayList;
 public class Product {
     private String name;
     private final ArrayList<Bitmap> imgBitmap=new ArrayList<Bitmap>();
-    private ArrayList<String> imgURLs;
+    private ArrayList<String> imgURL;
     private int price;
     private String description;
     private ArrayList<String> authors;
-    private String publisher;
-    private String isbn;
+    private ArrayList<String> publishers;
+    private String ISBN;
     private String date;
 
     public Product() {
@@ -22,8 +22,8 @@ public class Product {
         this.name = name;
     }
 
-    public void setImgURLs(ArrayList<String> imgURLs) {
-        this.imgURLs = imgURLs;
+    public void setImgURL(ArrayList<String> imgURL) {
+        this.imgURL = imgURL;
     }
 
     public void setPrice(int price) {
@@ -38,12 +38,12 @@ public class Product {
         this.authors = authors;
     }
 
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
+    public void setPublishers(ArrayList<String> publishers) {
+        this.publishers = publishers;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
+    public void setISBN(String ISBN) {
+        this.ISBN = ISBN;
     }
 
     public void setDate(String date) {
@@ -58,8 +58,8 @@ public class Product {
         return imgBitmap;
     }
 
-    public ArrayList<String> getImgURLs() {
-        return imgURLs;
+    public ArrayList<String> getImgURL() {
+        return imgURL;
     }
 
     public int getPrice() {
@@ -74,12 +74,12 @@ public class Product {
         return authors;
     }
 
-    public String getPublisher() {
-        return publisher;
+    public ArrayList<String> getPublishers() {
+        return publishers;
     }
 
-    public String getIsbn() {
-        return isbn;
+    public String getISBN() {
+        return ISBN;
     }
 
     public String getDate() {
