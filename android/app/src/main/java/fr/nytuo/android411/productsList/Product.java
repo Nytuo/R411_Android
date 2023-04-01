@@ -1,12 +1,15 @@
 package fr.nytuo.android411.productsList;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 public class Product {
     private String name;
-    private final ArrayList<Bitmap> imgBitmap=new ArrayList<Bitmap>();
+    private ArrayList<Bitmap> imgBitmap;
     private ArrayList<String> imgURLs;
     private int price;
     private String description;
@@ -24,6 +27,20 @@ public class Product {
 
     public void setImgURLs(ArrayList<String> imgURLs) {
         this.imgURLs = imgURLs;
+        // creat a new array for bitmap the same size as imgURLs
+        imgBitmap = new ArrayList<Bitmap>();
+        for (int i = 0; i < imgURLs.size(); i++) {
+                //todo get image from url
+                Bitmap image = null;
+                try {
+                    URL url = new URL(imgURLs.get(i));
+                    image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                } catch(IOException e) {
+                    e.printStackTrace();
+                }
+                imgBitmap.add(image);
+
+        }
     }
 
     public void setPrice(int price) {
@@ -54,8 +71,9 @@ public class Product {
         return name;
     }
 
-    public ArrayList<Bitmap> getImgBitmap() {
-        return imgBitmap;
+    public Bitmap getImgBitmapIndex(int index) {
+
+        return imgBitmap.get(index);
     }
 
     public ArrayList<String> getImgURLs() {

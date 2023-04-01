@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.nytuo.android411.R;
 
@@ -17,12 +18,12 @@ import fr.nytuo.android411.R;
  */
 
 public class ProductsAdapter extends BaseAdapter {
-    private ArrayList<Product> items;
+    private List<Product> items;
     private LayoutInflater mInflater;  //Un mécanisme pour gérer l'affichage graphique depuis un layout XML
     private ProductAdapterListener activity;
     private ArrayList<ProductAdapterListener> productListener = new ArrayList<>();
 
-    public ProductsAdapter(ProductAdapterListener activity, ArrayList<Product> items) {
+    public ProductsAdapter(ProductAdapterListener activity, List<Product> items) {
         this.activity = activity;
         this.items = items;
         mInflater = LayoutInflater.from(activity.getContext());
@@ -48,16 +49,16 @@ public class ProductsAdapter extends BaseAdapter {
 
         //(2) : Récupération des TextView de notre layout
         TextView displayName = layoutItem.findViewById(R.id.productName);
-//        TextView displaPrice = layoutItem.findViewById(R.id.price);
+        TextView displaPrice = layoutItem.findViewById(R.id.productPrice);
 //
 //        //(3) : Renseignement des valeurs
         displayName.setText(items.get(position).getName());
-//        displaPrice.setText("100");
+        displaPrice.setText(items.get(position).getPrice() + "€");
 //
 //
 //        // set image
-//        ImageView displayImg = layoutItem.findViewById(R.id.image2);
-//        displayImg.setImageBitmap(items.get(position).getImgBitmap().get(0));
+        ImageView displayImg = layoutItem.findViewById(R.id.productImage);
+        displayImg.setImageBitmap(items.get(position).getImgBitmapIndex(0));
 //
 //
         displayName.setTag(position);

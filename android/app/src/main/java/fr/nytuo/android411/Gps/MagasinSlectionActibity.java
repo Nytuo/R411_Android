@@ -21,26 +21,27 @@ import java.util.stream.Collectors;
 import fr.nytuo.android411.HttpAsyncGet;
 import fr.nytuo.android411.PostExecuteActivity;
 import fr.nytuo.android411.R;
+import fr.nytuo.android411.productsList.Product;
 
 
-public class MagasinSlectionActibity extends AppCompatActivity implements PostExecuteActivity {
+public class MagasinSlectionActibity extends AppCompatActivity implements PostExecuteActivity<PositionMagasin> {
 
-    ArrayList<PositionMagasin> magasins;
+    List<PositionMagasin> magasins;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        HttpAsyncGet<PositionMagasin> httpAsyncGet = new HttpAsyncGet<PositionMagasin>("https://api.jsonserve.com/ZjoC6h", PositionMagasin.class, this, null);
+        HttpAsyncGet<PositionMagasin> httpAsyncGet = new HttpAsyncGet<PositionMagasin>("https://api.nytuo.fr/api/libraries/positions", PositionMagasin.class, this, null);
 
 
 
     }
 
     @Override
-    public void onPostExecutePokemons(List itemList) {
-        magasins = (ArrayList<PositionMagasin>) itemList;
+    public void onPostExecutePokemons(List<PositionMagasin> itemList) {
+        magasins = itemList;
 
         for (PositionMagasin magasin : magasins) {
             System.out.println(magasin.getName());

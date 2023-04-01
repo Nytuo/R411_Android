@@ -18,9 +18,9 @@ import fr.nytuo.android411.HttpAsyncGet;
 import fr.nytuo.android411.PostExecuteActivity;
 import fr.nytuo.android411.R;
 
-public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity,ProductAdapterListener {
+public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity<Product>,ProductAdapterListener {
 
-    ArrayList<Product> products;
+    List<Product> products;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,8 +32,8 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
     
 
     @Override
-    public void onPostExecutePokemons(List itemList) {
-        products = (ArrayList<Product>) itemList;
+    public void onPostExecutePokemons(List<Product> itemList) {
+        products = itemList;
         ProductsAdapter productsAdapter = new ProductsAdapter(this, products);
         ListView listProduits = findViewById(R.id.listView);
         listProduits.setAdapter(productsAdapter);
