@@ -2,7 +2,6 @@ package fr.nytuo.android411.product;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.method.ScrollingMovementMethod;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +17,7 @@ public class ProductActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.Theme_Android411);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fullview);
         Intent intent = getIntent();
@@ -36,7 +36,6 @@ public class ProductActivity extends AppCompatActivity {
         TextView date = findViewById(R.id.date);
 
 
-
         name.setText(ProductsList.getInstance().get(position).getName());
         image.setImageBitmap(ProductsList.getInstance().get(position).getImgBitmapIndex(0));
         description.setText(ProductsList.getInstance().get(position).getDescription());
@@ -50,9 +49,8 @@ public class ProductActivity extends AppCompatActivity {
         }
         author.setText("Auteur(s): " + authors);
         publisher.setText("Éditeur: " + ProductsList.getInstance().get(position).getPublisher());
-        isbn.setText("ISBN: "+ProductsList.getInstance().get(position).getIsbn());
-        date.setText("Parution: "+ProductsList.getInstance().get(position).getDate());
-
+        isbn.setText("ISBN: " + ProductsList.getInstance().get(position).getIsbn());
+        date.setText("Parution: " + ProductsList.getInstance().get(position).getDate());
 
 
         Palette.from(ProductsList.getInstance().get(position).getImgBitmapIndex(0)).generate(p -> {
@@ -64,30 +62,10 @@ public class ProductActivity extends AppCompatActivity {
             constraintLayout.setBackgroundColor(darkVibrant);
             button.setBackgroundColor(muted);
 
-            if (darkVibrant == muted) {
-                System.out.println("darkVibrant == muted");
-                button.setBackgroundColor(lightMuted);
+            int dodgerBlue = 0xFF1E90FF;
+            if (muted == darkVibrant || muted == darkMuted || muted == vibrant) {
+                button.setBackgroundColor(dodgerBlue);
             }
-
-            if (darkVibrant == 0) {
-                name.setTextColor(0xFF000000);
-                description.setTextColor(0xFF000000);
-                price.setTextColor(0xFF000000);
-                author.setTextColor(0xFF000000);
-                publisher.setTextColor(0xFF000000);
-                isbn.setTextColor(0xFF000000);
-                date.setTextColor(0xFF000000);
-            }else if (darkVibrant == 0xFF000000) {
-                name.setTextColor(0xFFFFFFFF);
-                description.setTextColor(0xFFFFFFFF);
-                price.setTextColor(0xFFFFFFFF);
-                author.setTextColor(0xFFFFFFFF);
-                publisher.setTextColor(0xFFFFFFFF);
-                isbn.setTextColor(0xFFFFFFFF);
-                date.setTextColor(0xFFFFFFFF);
-            }
-
-
         });
 
         button.setOnClickListener(v -> handleAddToCart());
