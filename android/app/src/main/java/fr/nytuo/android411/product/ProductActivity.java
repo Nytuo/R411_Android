@@ -68,7 +68,11 @@ public class ProductActivity extends AppCompatActivity {
                 System.out.println("darkVibrant == muted");
                 button.setBackgroundColor(lightMuted);
             }
-            
+
+            if (darkVibrant == 0x000000) {
+                constraintLayout.setBackgroundColor(0xFF000000);
+            }
+
         });
 
         button.setOnClickListener(v -> handleAddToCart());
