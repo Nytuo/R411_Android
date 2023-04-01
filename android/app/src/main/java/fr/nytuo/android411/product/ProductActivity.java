@@ -69,9 +69,24 @@ public class ProductActivity extends AppCompatActivity {
                 button.setBackgroundColor(lightMuted);
             }
 
-            if (darkVibrant == 0x000000) {
-                constraintLayout.setBackgroundColor(0xFF000000);
+            if (darkVibrant == 0) {
+                name.setTextColor(0xFF000000);
+                description.setTextColor(0xFF000000);
+                price.setTextColor(0xFF000000);
+                author.setTextColor(0xFF000000);
+                publisher.setTextColor(0xFF000000);
+                isbn.setTextColor(0xFF000000);
+                date.setTextColor(0xFF000000);
+            }else if (darkVibrant == 0xFF000000) {
+                name.setTextColor(0xFFFFFFFF);
+                description.setTextColor(0xFFFFFFFF);
+                price.setTextColor(0xFFFFFFFF);
+                author.setTextColor(0xFFFFFFFF);
+                publisher.setTextColor(0xFFFFFFFF);
+                isbn.setTextColor(0xFFFFFFFF);
+                date.setTextColor(0xFFFFFFFF);
             }
+
 
         });
 
