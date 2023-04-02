@@ -1,4 +1,4 @@
-package fr.nytuo.android411.productsList;
+package fr.nytuo.android411.card;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,18 +12,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.nytuo.android411.R;
+import fr.nytuo.android411.productsList.Product;
 
 /**
  * Created by frallo on 03/02/2020.
  */
 
-public class ProductsAdapter extends BaseAdapter {
+public class Cardapter extends BaseAdapter {
     private List<Product> items;
     private LayoutInflater mInflater;  //Un mécanisme pour gérer l'affichage graphique depuis un layout XML
-    private ProductAdapterListener activity;
-    private ArrayList<ProductAdapterListener> productListener = new ArrayList<>();
+    private CardAdapterListener activity;
+    private ArrayList<CardAdapterListener> productListener = new ArrayList<>();
 
-    public ProductsAdapter(ProductAdapterListener activity, List<Product> items) {
+    public Cardapter(CardAdapterListener activity, List<Product> items) {
         this.activity = activity;
         this.items = items;
         mInflater = LayoutInflater.from(activity.getContext());
@@ -65,14 +66,14 @@ public class ProductsAdapter extends BaseAdapter {
         Button button = layoutItem.findViewById(R.id.button2);
 
         button.setOnClickListener(v -> {
-            for (ProductAdapterListener listener : productListener) {
+            for (CardAdapterListener listener : productListener) {
                 listener.onElementClick(position);
             }
         });
 
 
         layoutItem.setOnClickListener(v -> {
-            for (ProductAdapterListener listener : productListener) {
+            for (CardAdapterListener listener : productListener) {
                 listener.onElementClick(position);
             }
         });
@@ -82,7 +83,7 @@ public class ProductsAdapter extends BaseAdapter {
         return layoutItem; //On retourne l'item créé.
     }
 
-    public void addListener(ProductAdapterListener listener) {
+    public void addListener(CardAdapterListener listener) {
         productListener.add(listener);
     }
 

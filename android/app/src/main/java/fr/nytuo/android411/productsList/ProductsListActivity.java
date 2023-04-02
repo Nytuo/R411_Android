@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
-import fr.nytuo.android411.ProductAdapterListener;
 import fr.nytuo.android411.HttpAsyncGet;
 import fr.nytuo.android411.PostExecuteActivity;
 import fr.nytuo.android411.R;
@@ -20,7 +19,6 @@ import fr.nytuo.android411.product.ProductActivity;
 
 public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity<Product>, ProductAdapterListener {
 
-    List<Product> products;
 
     ProgressDialog progressDialog;
 
@@ -83,5 +81,10 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         intent.putExtra("position", position);
         startActivity(intent);
         //on envois sure la vue ou l'on vois l'ariticle en grand
+    }
+
+    @Override
+    public void onAddToCartClick(int position) {
+        CardList.getInstance().add(ProductsList.getInstance().get(position));
     }
 }

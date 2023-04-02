@@ -4,7 +4,6 @@ package fr.nytuo.android411.gps;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -15,18 +14,15 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import fr.nytuo.android411.HttpAsyncGet;
-import fr.nytuo.android411.MainActivity;
 import fr.nytuo.android411.PostExecuteActivity;
-import fr.nytuo.android411.ProductAdapterListener;
+import fr.nytuo.android411.productsList.ProductAdapterListener;
 import fr.nytuo.android411.R;
 
 
-public class MagasinSlectionActibity extends AppCompatActivity implements PostExecuteActivity<PositionMagasin>, ProductAdapterListener {
+public class MagasinSlectionActibity extends AppCompatActivity implements PostExecuteActivity<PositionMagasin>, MagasinAdapterListener {
 
     List<PositionMagasin> magasins;
     private String fournisseur;

@@ -1,0 +1,59 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/productImage"
+        android:layout_width="130dp"
+        android:layout_height="189dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/productName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/productName"
+        android:layout_width="0dp"
+        android:layout_height="53dp"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/productImage"
+        app:layout_constraintTop_toTopOf="@+id/productImage" />
+
+    <TextView
+        android:id="@+id/productPrice"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/productImage"
+        app:layout_constraintTop_toBottomOf="@+id/productName"
+        app:layout_constraintVertical_bias="0.231" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:drawableLeft="@android:drawable/ic_menu_add"
+        android:text="ajouter "
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/productImage"
+        app:layout_constraintTop_toBottomOf="@+id/productName"
+        app:layout_constraintVertical_bias="0.983" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

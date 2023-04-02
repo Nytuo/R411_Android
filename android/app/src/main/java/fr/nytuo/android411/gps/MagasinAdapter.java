@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.nytuo.android411.R;
-import fr.nytuo.android411.ProductAdapterListener;
+import fr.nytuo.android411.productsList.ProductAdapterListener;
 
 /**
  * Created by frallo on 03/02/2020.
@@ -19,10 +19,10 @@ import fr.nytuo.android411.ProductAdapterListener;
 public class MagasinAdapter extends BaseAdapter {
     private List<PositionMagasin> items;
     private LayoutInflater mInflater;  //Un mécanisme pour gérer l'affichage graphique depuis un layout XML
-    private ProductAdapterListener activity;
-    private ArrayList<ProductAdapterListener> listener = new ArrayList<>();
+    private MagasinAdapterListener activity;
+    private ArrayList<MagasinAdapterListener> listener = new ArrayList<>();
 
-    public MagasinAdapter(ProductAdapterListener activity, List<PositionMagasin> items) {
+    public MagasinAdapter(MagasinAdapterListener activity, List<PositionMagasin> items) {
         this.activity = activity;
         this.items = items;
         mInflater = LayoutInflater.from(activity.getContext());
@@ -61,7 +61,7 @@ public class MagasinAdapter extends BaseAdapter {
         displayName.setTag(position);
 
         layoutItem.setOnClickListener(v -> {
-            for (ProductAdapterListener listener : listener) {
+            for (MagasinAdapterListener listener : listener) {
                 listener.onElementClick(position);
             }
         });
@@ -71,7 +71,7 @@ public class MagasinAdapter extends BaseAdapter {
         return layoutItem; //On retourne l'item créé.
     }
 
-    public void addListener(ProductAdapterListener listener) {
+    public void addListener(MagasinAdapterListener listener) {
         this.listener.add(listener);
     }
 
