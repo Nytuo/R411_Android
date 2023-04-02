@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 
@@ -44,6 +45,12 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
+        });
+        Button button4 = findViewById(R.id.button4);
+        button4.setOnClickListener(v -> {
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
         });
     }
 

@@ -89,6 +89,12 @@ public class ProductActivity extends AppCompatActivity {
 
         button.setOnClickListener(v -> handleAddToCart());
 
+        Button button4 = findViewById(R.id.button4);
+        button4.setOnClickListener(v ->{
+            Intent intent1 = new Intent(ProductActivity.this, ProductsList.class);
+            startActivity(intent1);
+        });
+
 
     }
 
