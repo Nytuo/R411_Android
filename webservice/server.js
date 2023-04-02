@@ -307,7 +307,7 @@ app.get("/api/libraries/positions/:number", limiterDefault, async function (req,
     for (let i = 0; i < number; i++) {
         let lat = 46.227638 + Math.random() * 0.5 - 0.25;
         let long = 2.213749 + Math.random() * 0.5 - 0.25;
-        positions.push({lat: lat, long: long, name: librariesNames[i]});
+        positions.push({latitude: lat, longitude: long, name: librariesNames[i]});
     }
     res.send(positions);
 });
