@@ -9,13 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
-import fr.nytuo.android411.gps.PositionMagasin;
+import fr.nytuo.android411.ProductAdapterListener;
 import fr.nytuo.android411.HttpAsyncGet;
 import fr.nytuo.android411.PostExecuteActivity;
 import fr.nytuo.android411.R;
 import fr.nytuo.android411.product.ProductActivity;
 
-public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity<Product>,ProductAdapterListener {
+public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity<Product>, ProductAdapterListener {
 
     List<Product> products;
     @Override

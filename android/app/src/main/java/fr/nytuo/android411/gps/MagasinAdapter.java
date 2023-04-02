@@ -1,29 +1,28 @@
-package fr.nytuo.android411.productsList;
+package fr.nytuo.android411.gps;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.nytuo.android411.ProductAdapterListener;
 import fr.nytuo.android411.R;
+import fr.nytuo.android411.ProductAdapterListener;
 
 /**
  * Created by frallo on 03/02/2020.
  */
 
-public class ProductsAdapter extends BaseAdapter {
-    private List<Product> items;
+public class MagasinAdapter extends BaseAdapter {
+    private List<PositionMagasin> items;
     private LayoutInflater mInflater;  //Un mécanisme pour gérer l'affichage graphique depuis un layout XML
     private ProductAdapterListener activity;
-    private ArrayList<ProductAdapterListener> productListener = new ArrayList<>();
+    private ArrayList<ProductAdapterListener> listener = new ArrayList<>();
 
-    public ProductsAdapter(ProductAdapterListener activity, List<Product> items) {
+    public MagasinAdapter(ProductAdapterListener activity, List<PositionMagasin> items) {
         this.activity = activity;
         this.items = items;
         mInflater = LayoutInflater.from(activity.getContext());
@@ -45,7 +44,7 @@ public class ProductsAdapter extends BaseAdapter {
         View layoutItem;
 
         //(1) : Réutilisation des layouts
-        layoutItem = convertView == null ? mInflater.inflate(R.layout.product_layout, parent, false) : convertView;
+        layoutItem = convertView == null ? mInflater.inflate(R.layout.magasin_layout, parent, false) : convertView;
 
         //(2) : Récupération des TextView de notre layout
         TextView displayName = layoutItem.findViewById(R.id.magasinName);
@@ -53,18 +52,16 @@ public class ProductsAdapter extends BaseAdapter {
 //
 //        //(3) : Renseignement des valeurs
         displayName.setText(items.get(position).getName());
-        displaPrice.setText(items.get(position).getPrice() + "€");
-//
-//
-//        // set image
-        ImageView displayImg = layoutItem.findViewById(R.id.productImage);
-        displayImg.setImageBitmap(items.get(position).getImgBitmapIndex(0));
-//
-//
+        if (items.get(position).getDistance()==-1){
+            displaPrice.setText("");
+        }else {
+            displaPrice.setText(String.valueOf("distance "+items.get(position).getDistance()));
+        }
+
         displayName.setTag(position);
 
         layoutItem.setOnClickListener(v -> {
-            for (ProductAdapterListener listener : productListener) {
+            for (ProductAdapterListener listener : listener) {
                 listener.onElementClick(position);
             }
         });
@@ -75,7 +72,7 @@ public class ProductsAdapter extends BaseAdapter {
     }
 
     public void addListener(ProductAdapterListener listener) {
-        productListener.add(listener);
+        this.listener.add(listener);
     }
 
 }

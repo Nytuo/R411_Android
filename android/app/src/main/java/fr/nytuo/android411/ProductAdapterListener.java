@@ -1,4 +1,4 @@
-package fr.nytuo.android411.productsList;
+package fr.nytuo.android411;
 
 import android.content.Context;
 

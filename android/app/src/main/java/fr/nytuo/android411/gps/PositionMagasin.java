@@ -3,6 +3,8 @@ package fr.nytuo.android411.gps;
 public class PositionMagasin {
     private double latitude;
     private double longitude;
+
+    private double distance=-1;
     private String name;
 
     PositionMagasin(){
@@ -30,5 +32,13 @@ public class PositionMagasin {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(double distance) {
+        this.distance = distance;
     }
 }
