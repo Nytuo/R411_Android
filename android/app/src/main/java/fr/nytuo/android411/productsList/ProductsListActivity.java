@@ -2,6 +2,7 @@ package fr.nytuo.android411.productsList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -32,12 +33,8 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                try {
-                    query = URLEncoder.encode(query, "UTF-8");
-                    HttpAsyncGet<Product> httpAsyncGet = new HttpAsyncGet<Product>("https://api.nytuo.fr/api/book/search/" + query, Product.class, ProductsListActivity.this, null);
-                } catch (UnsupportedEncodingException e) {
-                    throw new RuntimeException(e);
-                }
+                query = Uri.parse("https://api.nytuo.fr/api/book/search/"+query).buildUpon().build().toString();
+                HttpAsyncGet<Product> httpAsyncGet = new HttpAsyncGet<Product>(query, Product.class, ProductsListActivity.this, null);
                 return false;
             }
 

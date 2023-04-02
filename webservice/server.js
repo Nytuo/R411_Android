@@ -68,6 +68,7 @@ async function GETGOOGLEAPI_book(name = "") {
     name = name.replace(/\s+$/, "");
     console.log("GETGOOGLEAPI_book : name : " + name);
     let url = "https://www.googleapis.com/books/v1/volumes?q=" + encodeURIComponent(name) + "&maxResults=10&key=" + process.env.GBOOKSAPIKEY;
+    console.log("GETGOOGLEAPI_book : url : " + url);
     let response = await fetch(url);
     let data = await response.json();
     return data;
@@ -211,11 +212,15 @@ app.get("/api/book/search/:name", limiterDefault, async function (req, res) {
                 let combinedBook = new Book();
                 combinedBook.name = book.title;
                 combinedBook.authors = book.author_name;
-                combinedBook.publisher = book.publisher;
-                combinedBook.date = book.first_publish_year;
-                combinedBook.isbn = book.isbn;
+                combinedBook.publisher = book.publisher[0];
+                combinedBook.date = book.first_publish_year.toString();
+                combinedBook.isbn = book.isbn[0];
                 combinedBook.imgURLs = [];
+                if (book.cover_i !== undefined && book.cover_i !== "" && book.cover_i !== "undefined") {
                 combinedBook.imgURLs.push("https://covers.openlibrary.org/b/id/" + book.cover_i + "-M.jpg");
+                }else{
+                    combinedBook.imgURLs.push("https://" + req.headers.host + "/img/no_cover.jpg");
+                }
                 combinedBook.description = book.subtitle;
                 combinedBook.price = Math.round(Math.random() * 100);
                 books.push(combinedBook);
@@ -228,7 +233,7 @@ app.get("/api/book/search/:name", limiterDefault, async function (req, res) {
                 combinedBook.name = book.volumeInfo.title;
                 combinedBook.authors = book.volumeInfo.authors;
                 combinedBook.publisher = book.volumeInfo.publisher;
-                combinedBook.date = book.volumeInfo.publishedDate;
+                combinedBook.date = book.volumeInfo.publishedDate.toString();
                 combinedBook.isbn = book.volumeInfo.industryIdentifiers[0].identifier;
                 combinedBook.price = Math.round(Math.random() * 100);
                 combinedBook.description = book.volumeInfo.description;

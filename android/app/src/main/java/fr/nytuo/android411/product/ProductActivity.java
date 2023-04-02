@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -34,6 +35,7 @@ public class ProductActivity extends AppCompatActivity {
         TextView publisher = findViewById(R.id.publisher);
         TextView isbn = findViewById(R.id.isbn);
         TextView date = findViewById(R.id.date);
+        ScrollView scrollView = (ScrollView) findViewById(R.id.backgroundScroll);
 
 
         name.setText(ProductsList.getInstance().get(position).getName());
@@ -60,6 +62,7 @@ public class ProductActivity extends AppCompatActivity {
             int darkMuted = p.getDarkMutedColor(0x000000);
             int lightMuted = p.getLightMutedColor(0x000000);
             constraintLayout.setBackgroundColor(darkVibrant);
+            scrollView.setBackgroundColor(darkVibrant);
             button.setBackgroundColor(muted);
 
             int dodgerBlue = 0xFF1E90FF;
