@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button buttonStart = (Button) findViewById(R.id.buttonStart);
         buttonStart.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), MagasinSlectionActibity.class);
+            Intent intent = new Intent(getApplicationContext(), ProductsListActivity.class);
             startActivity(intent);
         });
 

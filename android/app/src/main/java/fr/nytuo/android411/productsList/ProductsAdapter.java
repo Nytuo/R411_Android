@@ -48,8 +48,8 @@ public class ProductsAdapter extends BaseAdapter {
         layoutItem = convertView == null ? mInflater.inflate(R.layout.product_layout, parent, false) : convertView;
 
         //(2) : Récupération des TextView de notre layout
-        TextView displayName = layoutItem.findViewById(R.id.magasinName);
-        TextView displaPrice = layoutItem.findViewById(R.id.magasinDistance);
+        TextView displayName = layoutItem.findViewById(R.id.productName);
+        TextView displaPrice = layoutItem.findViewById(R.id.productPrice);
 //
 //        //(3) : Renseignement des valeurs
         displayName.setText(items.get(position).getName());

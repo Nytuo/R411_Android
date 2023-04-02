@@ -48,7 +48,7 @@ public class MagasinAdapter extends BaseAdapter {
 
         //(2) : Récupération des TextView de notre layout
         TextView displayName = layoutItem.findViewById(R.id.magasinName);
-        TextView displaPrice = layoutItem.findViewById(R.id.magasinDistance);
+        TextView displaPrice = layoutItem.findViewById(R.id.magasinPrice);
 //
 //        //(3) : Renseignement des valeurs
         displayName.setText(items.get(position).getName());
