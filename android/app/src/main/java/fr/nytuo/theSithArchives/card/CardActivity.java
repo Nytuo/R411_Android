@@ -1,10 +1,10 @@
-package fr.nytuo.android411.card;
+package fr.nytuo.theSithArchives.card;
 
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import fr.nytuo.android411.R;
+import fr.nytuo.theSithArchives.R;
 
 public class CardActivity extends AppCompatActivity {
 

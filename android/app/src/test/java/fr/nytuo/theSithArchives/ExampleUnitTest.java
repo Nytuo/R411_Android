@@ -1,4 +1,4 @@
-package fr.nytuo.android411;
+package fr.nytuo.theSithArchives;
 
 import org.junit.Test;
 

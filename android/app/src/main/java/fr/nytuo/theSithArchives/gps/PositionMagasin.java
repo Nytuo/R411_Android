@@ -1,4 +1,4 @@
-package fr.nytuo.android411.gps;
+package fr.nytuo.theSithArchives.gps;
 
 public class PositionMagasin {
     private double latitude;

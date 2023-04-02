@@ -1,4 +1,4 @@
-package fr.nytuo.android411.gps;
+package fr.nytuo.theSithArchives.gps;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +9,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.nytuo.android411.R;
-import fr.nytuo.android411.productsList.ProductAdapterListener;
+import fr.nytuo.theSithArchives.R;
 
 /**
  * Created by frallo on 03/02/2020.

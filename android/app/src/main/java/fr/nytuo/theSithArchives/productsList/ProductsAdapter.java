@@ -1,8 +1,9 @@
-package fr.nytuo.android411.card;
+package fr.nytuo.theSithArchives.productsList;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,20 +12,19 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import fr.nytuo.android411.R;
-import fr.nytuo.android411.productsList.Product;
+import fr.nytuo.theSithArchives.R;
 
 /**
  * Created by frallo on 03/02/2020.
  */
 
-public class Cardapter extends BaseAdapter {
+public class ProductsAdapter extends BaseAdapter {
     private List<Product> items;
     private LayoutInflater mInflater;  //Un mécanisme pour gérer l'affichage graphique depuis un layout XML
-    private CardAdapterListener activity;
-    private ArrayList<CardAdapterListener> productListener = new ArrayList<>();
+    private ProductAdapterListener activity;
+    private ArrayList<ProductAdapterListener> productListener = new ArrayList<>();
 
-    public Cardapter(CardAdapterListener activity, List<Product> items) {
+    public ProductsAdapter(ProductAdapterListener activity, List<Product> items) {
         this.activity = activity;
         this.items = items;
         mInflater = LayoutInflater.from(activity.getContext());
@@ -50,11 +50,9 @@ public class Cardapter extends BaseAdapter {
 
         //(2) : Récupération des TextView de notre layout
         TextView displayName = layoutItem.findViewById(R.id.productName);
-        TextView displaPrice = layoutItem.findViewById(R.id.productPrice);
 //
 //        //(3) : Renseignement des valeurs
         displayName.setText(items.get(position).getName());
-        displaPrice.setText(items.get(position).getPrice() + "€");
 //
 //
 //        // set image
@@ -66,24 +64,36 @@ public class Cardapter extends BaseAdapter {
         Button button = layoutItem.findViewById(R.id.button2);
 
         button.setOnClickListener(v -> {
-            for (CardAdapterListener listener : productListener) {
+            for (ProductAdapterListener listener : productListener) {
                 listener.onElementClick(position);
             }
         });
 
+        button.setBackgroundColor(activity.getContext().getResources().getColor(R.color.colorPrimary));
+        button.setTextColor(activity.getContext().getResources().getColor(R.color.White));
+        button.setText(items.get(position).getPrice() + "€");
+
+
+        button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_add_shopping_cart_24, 0, 0, 0);
+        button.setCompoundDrawableTintList(activity.getContext().getResources().getColorStateList(R.color.White));
+        //make a left padding
+        button.setPadding(50, 0, 0, 0);
 
         layoutItem.setOnClickListener(v -> {
-            for (CardAdapterListener listener : productListener) {
+            for (ProductAdapterListener listener : productListener) {
                 listener.onElementClick(position);
             }
         });
 
+
+        Animation animation = android.view.animation.AnimationUtils.loadAnimation(activity.getContext(), R.anim.fadein);
+        layoutItem.startAnimation(animation);
 
 
         return layoutItem; //On retourne l'item créé.
     }
 
-    public void addListener(CardAdapterListener listener) {
+    public void addListener(ProductAdapterListener listener) {
         productListener.add(listener);
     }
 

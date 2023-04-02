@@ -1,4 +1,4 @@
-package fr.nytuo.android411.product;
+package fr.nytuo.theSithArchives.product;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,8 +13,8 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.graphics.ColorUtils;
 import androidx.palette.graphics.Palette;
 
-import fr.nytuo.android411.R;
-import fr.nytuo.android411.productsList.ProductsList;
+import fr.nytuo.theSithArchives.R;
+import fr.nytuo.theSithArchives.productsList.ProductsList;
 
 public class ProductActivity extends AppCompatActivity {
 

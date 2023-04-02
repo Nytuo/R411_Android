@@ -1,4 +1,4 @@
-package fr.nytuo.android411.gps;
+package fr.nytuo.theSithArchives.gps;
 
 
 import android.Manifest;
@@ -16,10 +16,9 @@ import androidx.core.app.ActivityCompat;
 
 import java.util.List;
 
-import fr.nytuo.android411.HttpAsyncGet;
-import fr.nytuo.android411.PostExecuteActivity;
-import fr.nytuo.android411.productsList.ProductAdapterListener;
-import fr.nytuo.android411.R;
+import fr.nytuo.theSithArchives.HttpAsyncGet;
+import fr.nytuo.theSithArchives.PostExecuteActivity;
+import fr.nytuo.theSithArchives.R;
 
 
 public class MagasinSlectionActibity extends AppCompatActivity implements PostExecuteActivity<PositionMagasin>, MagasinAdapterListener {

@@ -1,4 +1,4 @@
-package fr.nytuo.android411.gps;
+package fr.nytuo.theSithArchives.gps;
 
 import android.content.Context;
 

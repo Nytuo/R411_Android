@@ -9,11 +9,11 @@ sonar {
     }
 }
 android {
-    namespace 'fr.nytuo.android411'
+    namespace 'fr.nytuo.theSithArchives'
     compileSdk 33
 
     defaultConfig {
-        applicationId "fr.nytuo.android411"
+        applicationId "fr.nytuo.theSithArchives"
         minSdk 24
         targetSdk 33
         versionCode 1

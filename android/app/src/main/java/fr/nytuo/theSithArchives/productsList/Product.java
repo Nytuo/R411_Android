@@ -1,4 +1,4 @@
-package fr.nytuo.android411.productsList;
+package fr.nytuo.theSithArchives.productsList;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

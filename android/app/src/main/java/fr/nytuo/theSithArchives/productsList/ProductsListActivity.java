@@ -1,4 +1,4 @@
-package fr.nytuo.android411.productsList;
+package fr.nytuo.theSithArchives.productsList;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,10 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
-import fr.nytuo.android411.HttpAsyncGet;
-import fr.nytuo.android411.PostExecuteActivity;
-import fr.nytuo.android411.R;
-import fr.nytuo.android411.product.ProductActivity;
+import fr.nytuo.theSithArchives.HttpAsyncGet;
+import fr.nytuo.theSithArchives.PostExecuteActivity;
+import fr.nytuo.theSithArchives.R;
+import fr.nytuo.theSithArchives.product.ProductActivity;
 
 public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity<Product>, ProductAdapterListener {
 

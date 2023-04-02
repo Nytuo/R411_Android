@@ -1,4 +1,4 @@
-package fr.nytuo.android411;
+package fr.nytuo.theSithArchives;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,8 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import fr.nytuo.android411.gps.MagasinSlectionActibity;
-import fr.nytuo.android411.productsList.ProductsListActivity;
+import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
 public class MainActivity extends AppCompatActivity {
 
