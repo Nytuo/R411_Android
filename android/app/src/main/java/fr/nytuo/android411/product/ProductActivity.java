@@ -1,6 +1,7 @@
 package fr.nytuo.android411.product;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.graphics.ColorUtils;
 import androidx.palette.graphics.Palette;
 
 import fr.nytuo.android411.R;
@@ -56,24 +58,46 @@ public class ProductActivity extends AppCompatActivity {
 
 
         Palette.from(ProductsList.getInstance().get(position).getImgBitmapIndex(0)).generate(p -> {
+            assert p != null;
             int vibrant = p.getVibrantColor(0x000000);
             int darkVibrant = p.getDarkVibrantColor(0x000000);
             int muted = p.getMutedColor(0x000000);
             int darkMuted = p.getDarkMutedColor(0x000000);
             int lightMuted = p.getLightMutedColor(0x000000);
+            if (darkVibrant == Color.TRANSPARENT || darkVibrant == Color.WHITE) {
+                darkVibrant = Color.BLACK;
+            }
             constraintLayout.setBackgroundColor(darkVibrant);
             scrollView.setBackgroundColor(darkVibrant);
             button.setBackgroundColor(muted);
 
-            int dodgerBlue = 0xFF1E90FF;
             if (muted == darkVibrant || muted == darkMuted || muted == vibrant) {
-                button.setBackgroundColor(dodgerBlue);
+                button.setBackgroundColor(Color.CYAN);
             }
+
+            if (isColorDark(darkVibrant)){
+                name.setTextColor(Color.WHITE);
+                description.setTextColor(Color.WHITE);
+                price.setTextColor(Color.WHITE);
+                author.setTextColor(Color.WHITE);
+                publisher.setTextColor(Color.WHITE);
+                isbn.setTextColor(Color.WHITE);
+                date.setTextColor(Color.WHITE);
+            }
+
         });
 
         button.setOnClickListener(v -> handleAddToCart());
 
 
+    }
+
+    private boolean isColorDark(int color) {
+        return ColorUtils.calculateLuminance(color) < 0.5 && ColorUtils.calculateContrast(Color.WHITE, color) > 1.5;
+    }
+
+    private boolean isColorLight(int color) {
+        return ColorUtils.calculateLuminance(color) > 0.5;
     }
 
     public void handleAddToCart() {
