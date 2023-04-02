@@ -49,11 +49,9 @@ public class ProductsAdapter extends BaseAdapter {
 
         //(2) : Récupération des TextView de notre layout
         TextView displayName = layoutItem.findViewById(R.id.productName);
-        TextView displaPrice = layoutItem.findViewById(R.id.productPrice);
 //
 //        //(3) : Renseignement des valeurs
         displayName.setText(items.get(position).getName());
-        displaPrice.setText(items.get(position).getPrice() + "€");
 //
 //
 //        // set image
@@ -70,13 +68,21 @@ public class ProductsAdapter extends BaseAdapter {
             }
         });
 
+        button.setBackgroundColor(activity.getContext().getResources().getColor(R.color.colorPrimary));
+        button.setTextColor(activity.getContext().getResources().getColor(R.color.White));
+        button.setText(items.get(position).getPrice() + "€");
+
+
+        button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_add_shopping_cart_24, 0, 0, 0);
+        button.setCompoundDrawableTintList(activity.getContext().getResources().getColorStateList(R.color.White));
+        //make a left padding
+        button.setPadding(50, 0, 0, 0);
 
         layoutItem.setOnClickListener(v -> {
             for (ProductAdapterListener listener : productListener) {
                 listener.onElementClick(position);
             }
         });
-
 
 
         return layoutItem; //On retourne l'item créé.
