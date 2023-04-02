@@ -16,6 +16,7 @@ import java.util.List;
 import fr.nytuo.theSithArchives.HttpAsyncGet;
 import fr.nytuo.theSithArchives.PostExecuteActivity;
 import fr.nytuo.theSithArchives.R;
+import fr.nytuo.theSithArchives.gps.MagasinSlectionActibity;
 import fr.nytuo.theSithArchives.product.ProductActivity;
 
 public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity<Product>, ProductAdapterListener {
@@ -50,6 +51,12 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         button4.setOnClickListener(v -> {
             Intent intent = getIntent();
             finish();
+            startActivity(intent);
+        });
+
+        Button button3 = findViewById(R.id.button3);
+        button3.setOnClickListener(v -> {
+            Intent intent = new Intent(this, MagasinSlectionActibity.class);
             startActivity(intent);
         });
     }

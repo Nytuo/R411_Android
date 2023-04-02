@@ -15,6 +15,7 @@ import androidx.palette.graphics.Palette;
 
 import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.productsList.ProductsList;
+import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
 public class ProductActivity extends AppCompatActivity {
 
@@ -91,7 +92,7 @@ public class ProductActivity extends AppCompatActivity {
 
         Button button4 = findViewById(R.id.button4);
         button4.setOnClickListener(v ->{
-            Intent intent1 = new Intent(ProductActivity.this, ProductsList.class);
+            Intent intent1 = new Intent(ProductActivity.this, ProductsListActivity.class);
             startActivity(intent1);
         });
 
