@@ -188,58 +188,116 @@ class Book {
 
 app.get("/api/book/search/:name", limiterDefault, async function (req, res) {
     let name = decodeURIComponent(req.params.name);
+    if (name === "") {
+        res.status(400).send("Bad request");
+        return;
+    }
+    if (name.length > 100) {
+        res.status(400).send("Bad request");
+        return;
+    }
+    if (name.length < 3) {
+        res.status(400).send("Bad request");
+        return;
+    }
     let ol = await GETOLAPI_search(name);
     let google = await GETGOOGLEAPI_book(name);
-    let combined = {
-        books: [],
-    }
-    if (ol.docs.length > 0) {
-        for (let i = 0; i < ol.docs.length; i++) {
-            let book = ol.docs[i];
-            let combinedBook = new Book();
-            combinedBook.name = book.title;
-            combinedBook.authors = book.author_name;
-            combinedBook.publisher = book.publisher;
-            combinedBook.date = book.first_publish_year;
-            combinedBook.isbn = book.isbn;
-            combinedBook.imgURLs = [];
-            combinedBook.imgURLs.push("https://covers.openlibrary.org/b/id/" + book.cover_i + "-M.jpg");
-            combinedBook.description = book.subtitle;
-            combinedBook.price = Math.round(Math.random() * 100);
-            combined.books.push(combinedBook);
-        }
-    }
-    if (google.items.length > 0) {
-        for (let i = 0; i < google.items.length; i++) {
-            let book = google.items[i];
-            let combinedBook = new Book();
-            combinedBook.name = book.volumeInfo.title;
-            combinedBook.authors = book.volumeInfo.authors;
-            combinedBook.publisher = book.volumeInfo.publisher;
-            combinedBook.date = book.volumeInfo.publishedDate;
-            combinedBook.isbn = book.volumeInfo.industryIdentifiers[0].identifier;
-            combinedBook.price = Math.round(Math.random() * 100);
-            combinedBook.description = book.volumeInfo.description;
-            combinedBook.imgURLs = [];
-            if (book.volumeInfo.imageLinks !== undefined)
-                combinedBook.imgURLs.push(book.volumeInfo.imageLinks.thumbnail);
-            else
-                combinedBook.imgURLs.push("http://" + req.headers.host + "/img/no_cover.jpg");
-            combined.books.push(combinedBook);
-        }
-    }
-    res.send(combined);
-});
+    let books = []
 
-app.get("/api/libraries/positions", limiterDefault, async function (req, res) {
-    res.send([
-            {
-                "longitude": 2.3488,
-                "latitude": 48.8534,
-                "name": "Bibliothèque nationale de France",
+    try {
+        if (ol.docs.length > 0) {
+            for (let i = 0; i < ol.docs.length; i++) {
+                let book = ol.docs[i];
+                let combinedBook = new Book();
+                combinedBook.name = book.title;
+                combinedBook.authors = book.author_name;
+                combinedBook.publisher = book.publisher;
+                combinedBook.date = book.first_publish_year;
+                combinedBook.isbn = book.isbn;
+                combinedBook.imgURLs = [];
+                combinedBook.imgURLs.push("https://covers.openlibrary.org/b/id/" + book.cover_i + "-M.jpg");
+                combinedBook.description = book.subtitle;
+                combinedBook.price = Math.round(Math.random() * 100);
+                books.push(combinedBook);
             }
-        ]
-    );
+        }
+        if (google.items.length > 0) {
+            for (let i = 0; i < google.items.length; i++) {
+                let book = google.items[i];
+                let combinedBook = new Book();
+                combinedBook.name = book.volumeInfo.title;
+                combinedBook.authors = book.volumeInfo.authors;
+                combinedBook.publisher = book.volumeInfo.publisher;
+                combinedBook.date = book.volumeInfo.publishedDate;
+                combinedBook.isbn = book.volumeInfo.industryIdentifiers[0].identifier;
+                combinedBook.price = Math.round(Math.random() * 100);
+                combinedBook.description = book.volumeInfo.description;
+                combinedBook.imgURLs = [];
+                if (book.volumeInfo.imageLinks !== undefined)
+                    combinedBook.imgURLs.push(book.volumeInfo.imageLinks.thumbnail);
+                else
+                    combinedBook.imgURLs.push("https://" + req.headers.host + "/img/no_cover.jpg");
+                books.push(combinedBook);
+            }
+        }
+    }
+    catch (e) {
+        console.log(e);
+    }
+    res.send(books);
+});
+let librariesNames = [
+    "Le Havre du Livre",
+    "Le Coin Lecture",
+    "L'Annexe Littéraire",
+    "L'Étagère à Livres",
+    "Le Coffre aux Romans",
+    "Le Coin Tranquille",
+    "Le Paradis du Lecteur",
+    "Le Repaire du Rat de Bibliothèque",
+    "L'Oasis du Bibliophile",
+    "La Retraite Littéraire",
+    "Le Palais de la Prose",
+    "L'Emporium du Livre de Poche",
+    "L'Encrier",
+    "La Forge Fictionnelle",
+    "Le Sanctuaire du Conte",
+    "La Caverne des Livres",
+    "La Bouquinerie",
+    "La Galerie Littéraire",
+    "La Bibliothèque Imaginaire",
+    "La Salle de Lecture",
+    "L'Atelier de l'Écrivain",
+    "Le Coin des Mots",
+    "Le Coin des Écrivains",
+    "L'Antre des Mots",
+    "Le Livrothèque",
+    "Le Coin des Livres Anciens",
+    "L'Étage des Écrivains",
+    "Le Cabinet de Lecture",
+    "La Grotte des Romans",
+    "Le Royaume des Livres",
+    "La Salle des Auteurs",
+    "Le Coin des Essais",
+    "Le Palais des Nouvelles",
+    "Le Grenier des Livres",
+    "La Résidence des Mots"
+]
+app.get("/api/libraries/positions/:number", limiterDefault, async function (req, res) {
+    let number = req.params.number;
+    if (number === undefined || number === null || number === "" || isNaN(number) || number === "undefined" || number === "null" || number === "NaN" || number === " " || number === 0) {
+        number = 1;
+    }
+    if (number > librariesNames.length) {
+        number = librariesNames.length;
+    }
+    let positions = [];
+    for (let i = 0; i < number; i++) {
+        let lat = 46.227638 + Math.random() * 0.5 - 0.25;
+        let long = 2.213749 + Math.random() * 0.5 - 0.25;
+        positions.push({lat: lat, long: long, name: librariesNames[i]});
+    }
+    res.send(positions);
 });
 
 async function GETNYTAPI_ISBN(NYTAPIKEY,number = 10) {
@@ -250,7 +308,7 @@ async function GETNYTAPI_ISBN(NYTAPIKEY,number = 10) {
     let ISBNs = [];
 
     while (lists.length > 0) {
-        let list = lists[0];
+        let list = lists[Math.floor(Math.random() * lists.length)];
         let url = "https://api.nytimes.com/svc/books/v3/lists/current/" + list.list_name_encoded + ".json?api-key=" + NYTAPIKEY;
         let response = await fetch(url);
         let data = await response.json();
@@ -260,15 +318,18 @@ async function GETNYTAPI_ISBN(NYTAPIKEY,number = 10) {
         if (ISBNs.length >= number) {
             return ISBNs;
         }
-        lists.splice(0, 1);
+        lists.splice(lists.indexOf(list), 1);
     }
     return ISBNs;
 }
 
 app.get("/api/book/:number", limiterDefault, async function (req, res) {
-
-    let books = [];
     let number = req.params.number;
+    if (number === undefined || number === null || number === "" || isNaN(number) || number === "undefined" || number === "null" || number === "NaN" || number === " " || number === 0) {
+        number = 1;
+    }
+    let books = [];
+
         let NYTAPIKEY = "VpSUrkaKLqAqXlo6RCWILRriPyjaGPpC";
         let ISBNs = await GETNYTAPI_ISBN(NYTAPIKEY,number);
         if (ISBNs.length > number){
