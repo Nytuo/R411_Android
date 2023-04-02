@@ -212,13 +212,17 @@ app.get("/api/book/search/:name", limiterDefault, async function (req, res) {
                 let combinedBook = new Book();
                 combinedBook.name = book.title;
                 combinedBook.authors = book.author_name;
-                combinedBook.publisher = book.publisher[0];
+                if (typeof combinedBook.publisher === "string") {
+                    combinedBook.publisher = book.publisher;
+                } else {
+                    combinedBook.publisher = book.publisher[0];
+                }
                 combinedBook.date = book.first_publish_year.toString();
                 combinedBook.isbn = book.isbn[0];
                 combinedBook.imgURLs = [];
                 if (book.cover_i !== undefined && book.cover_i !== "" && book.cover_i !== "undefined") {
-                combinedBook.imgURLs.push("https://covers.openlibrary.org/b/id/" + book.cover_i + "-M.jpg");
-                }else{
+                    combinedBook.imgURLs.push("https://covers.openlibrary.org/b/id/" + book.cover_i + "-M.jpg");
+                } else {
                     combinedBook.imgURLs.push("https://" + req.headers.host + "/img/no_cover.jpg");
                 }
                 combinedBook.description = book.subtitle;
@@ -226,6 +230,10 @@ app.get("/api/book/search/:name", limiterDefault, async function (req, res) {
                 books.push(combinedBook);
             }
         }
+    } catch (e) {
+        console.log("OL API : " + e);
+    }
+    try {
         if (google.items.length > 0) {
             for (let i = 0; i < google.items.length; i++) {
                 let book = google.items[i];
@@ -245,9 +253,8 @@ app.get("/api/book/search/:name", limiterDefault, async function (req, res) {
                 books.push(combinedBook);
             }
         }
-    }
-    catch (e) {
-        console.log(e);
+    } catch (e) {
+        console.log("Google API : " + e);
     }
     res.send(books);
 });
@@ -305,7 +312,7 @@ app.get("/api/libraries/positions/:number", limiterDefault, async function (req,
     res.send(positions);
 });
 
-async function GETNYTAPI_ISBN(NYTAPIKEY,number = 10) {
+async function GETNYTAPI_ISBN(NYTAPIKEY, number = 10) {
     let names = "https://api.nytimes.com/svc/books/v3/lists/names.json?api-key=" + NYTAPIKEY;
     let Nresponse = await fetch(names);
     let Ndata = await Nresponse.json();
@@ -335,16 +342,21 @@ app.get("/api/book/:number", limiterDefault, async function (req, res) {
     }
     let books = [];
 
-        let NYTAPIKEY = "VpSUrkaKLqAqXlo6RCWILRriPyjaGPpC";
-        let ISBNs = await GETNYTAPI_ISBN(NYTAPIKEY,number);
-        if (ISBNs.length > number){
-            ISBNs = ISBNs.slice(0, number);
-        }
+    let NYTAPIKEY = "VpSUrkaKLqAqXlo6RCWILRriPyjaGPpC";
+    let ISBNs = await GETNYTAPI_ISBN(NYTAPIKEY, number);
+    if (ISBNs.length > number) {
+        ISBNs = ISBNs.slice(0, number);
+    }
 
 
+    for (let i = 0; i < ISBNs.length; i++) {
+        let book = await GETGOOGLEAPI_bookISBN(ISBNs[i]);
+        try{
 
-        for (let i = 0; i < ISBNs.length; i++) {
-            let book = await GETGOOGLEAPI_bookISBN(ISBNs[i]);
+
+        if (book.items.length > 0) {
+
+
             console.log(book);
             let book2 = new Book();
             book2.name = book.items[0].volumeInfo.title;
@@ -360,7 +372,13 @@ app.get("/api/book/:number", limiterDefault, async function (req, res) {
             else
                 book2.imgURLs.push("http://" + req.headers.host + "/img/no_cover.jpg");
             books.push(book2);
+        } else {
+            console.log("Google API : No book found");
         }
+    }catch(e){
+        console.log("Google API : No book found");
+        }
+    }
 
 
     res.send(books);
