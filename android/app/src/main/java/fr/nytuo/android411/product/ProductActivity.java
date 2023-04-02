@@ -47,7 +47,7 @@ public class ProductActivity extends AppCompatActivity {
             } else
                 authors.append(authorE).append(", ");
         }
-        author.setText("Auteur(s): " + authors);
+        author.setText("Auteur: " + authors);
         publisher.setText("Éditeur: " + ProductsList.getInstance().get(position).getPublisher());
         isbn.setText("ISBN: " + ProductsList.getInstance().get(position).getIsbn());
         date.setText("Parution: " + ProductsList.getInstance().get(position).getDate());
