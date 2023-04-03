@@ -4,6 +4,7 @@ package fr.nytuo.theSithArchives.gps;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -25,7 +26,7 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
 
     List<PositionMagasin> magasins;
     private String fournisseur;
-    public static int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
+    public static int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
 
     MagasinAdapter adapter;
 
@@ -51,9 +52,8 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         ListView listProduits = findViewById(R.id.listView);
         listProduits.setAdapter(adapter);
 
-        LocationManager androidLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
             Log.d("GPS", "fails");
             return;
         }
@@ -65,7 +65,7 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION == requestCode) {
+        if (MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION == requestCode) {
             // If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -91,16 +91,33 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        Location loc = androidLocationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if(loc != null) {
-            Log.d("GPS", "Latitude : " + loc.getLatitude() + " Longitude : " + loc.getLongitude());
-            for (PositionMagasin magasin : magasins) {
-                Location location = new Location("magasin");
-                location.setLatitude(magasin.getLatitude());
-                location.setLongitude(magasin.getLongitude());
-                magasin.setDistance(loc.distanceTo(location));
-            }
+        double lat;
+        double lon;
+
+        LocationManager locationManager = (LocationManager)
+                getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String bestProvider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(bestProvider);
+        try {
+            lat = location.getLatitude();
+            lon = location.getLongitude();
+        } catch (NullPointerException e) {
+            lat = -1.0;
+            lon = -1.0;
         }
+
+        if (lat == -1.0 && lon == -1.0) {
+            Toast.makeText(getApplicationContext(), "Impossible de récupérer votre position", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        for (PositionMagasin magasin : magasins) {
+            Location locationMagasin = new Location("magasin");
+            locationMagasin.setLatitude(magasin.getLatitude());
+            locationMagasin.setLongitude(magasin.getLongitude());
+            magasin.setDistance(location.distanceTo(locationMagasin));
+        }
+
         adapter.notifyDataSetChanged();
         for (PositionMagasin magasin : magasins) {
             System.out.println(magasin.getName() + " " + magasin.getDistance());
