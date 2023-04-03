@@ -47,16 +47,27 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         setContentView(R.layout.activity_magasin_list);
         // on récupère la liste des magasins
         HttpAsyncGet<PositionMagasin> httpAsyncGet = new HttpAsyncGet<PositionMagasin>("https://api.nytuo.fr/api/libraries/positions/5", PositionMagasin.class, this, null);
-
+        int commandNumber = (int) (Math.random() * 1000000);
         Button button5 = findViewById(R.id.button5);
         button5.setOnClickListener(v -> {
             spawnNotification("Vos articles sont réservés dans votre librairie '"+selectedMagasin
-                    +"'. Vous recevrez une notification lors de leur disponibilité. Votre commande porte le numéro: "+Math.random());
+                    +"'. Vous recevrez une notification lors de leur disponibilité. Votre commande porte le numéro: "+commandNumber);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Confirmation de commande");
             builder.setMessage("Vos articles sont réservés dans votre librairie '"+selectedMagasin
-                    +"'. Vous recevrez une notification lors de leur disponibilité. Votre commande porte le numéro: "+Math.random());
-            builder.setPositiveButton("OK", (dialog, which) -> dialog.dismiss());
+                    +"'. Vous recevrez une notification lors de leur disponibilité. Votre commande porte le numéro: "+commandNumber);
+            builder.setPositiveButton("OK", (dialog, which) -> {
+                dialog.dismiss();
+                new Thread(() -> {
+                    try {
+                        Thread.sleep((long) (Math.random() * 20000 + 10000));
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    spawnNotification("Vos articles sont disponibles dans votre librairie '"+selectedMagasin
+                            +"'. Votre commande porte le numéro: "+commandNumber);
+                }).start();
+            });
             AlertDialog alert = builder.create();
             alert.show();
 
@@ -88,7 +99,8 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
                 .setSmallIcon(R.drawable.logo)
                 .setContentTitle("Commande")
                 .setContentText(text)
-                .setContentInfo("Info");
+                .setContentInfo("Info")
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText(text));
 
         notificationManager.notify(1, notificationBuilder.build());
     }
