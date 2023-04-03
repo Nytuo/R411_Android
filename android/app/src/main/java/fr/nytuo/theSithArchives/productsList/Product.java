@@ -1,15 +1,12 @@
 package fr.nytuo.theSithArchives.productsList;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 
 public class Product {
     private String name;
-    private ArrayList<Bitmap> imgBitmap;
+    private Bitmap imgBitmap;
     private ArrayList<String> imgURLs;
     private int price;
     private String description;
@@ -27,17 +24,7 @@ public class Product {
 
     public void setImgURLs(ArrayList<String> imgURLs) {
         this.imgURLs = imgURLs;
-        imgBitmap = new ArrayList<Bitmap>();
-        for (int i = 0; i < imgURLs.size(); i++) {
-                Bitmap image = null;
-                try {
-                    URL url = new URL(imgURLs.get(i));
-                    image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                } catch(IOException e) {
-                    e.printStackTrace();
-                }
-                imgBitmap.add(image);
-        }
+
     }
 
     public void setPrice(int price) {
@@ -68,9 +55,8 @@ public class Product {
         return name;
     }
 
-    public Bitmap getImgBitmapIndex(int index) {
-
-        return imgBitmap.get(index);
+    public Bitmap getImgBitmap() {
+        return imgBitmap;
     }
 
     public ArrayList<String> getImgURLs() {
@@ -99,5 +85,9 @@ public class Product {
 
     public String getDate() {
         return date;
+    }
+
+    public void setImgBitmap(Bitmap s) {
+        imgBitmap = s;
     }
 }

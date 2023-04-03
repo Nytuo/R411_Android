@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
+import fr.nytuo.theSithArchives.gps.MagasinSlectionActibity;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -17,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
 
         Button buttonStart = (Button) findViewById(R.id.buttonStart);
         buttonStart.setOnClickListener(view -> {
-            Intent intent = new Intent(getApplicationContext(), ProductsListActivity.class);
+            Intent intent = new Intent(getApplicationContext(), MagasinSlectionActibity.class);
             startActivity(intent);
         });
 

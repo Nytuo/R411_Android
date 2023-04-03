@@ -1,5 +1,7 @@
 package fr.nytuo.theSithArchives.productsList;
 
+import android.annotation.SuppressLint;
+import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,7 +58,12 @@ public class ProductsAdapter extends BaseAdapter {
 //
 //        // set image
         ImageView displayImg = layoutItem.findViewById(R.id.productImage);
-        displayImg.setImageBitmap(items.get(position).getImgBitmapIndex(0));
+        if (items.get(position).getImgBitmap() == null){
+            displayImg.setImageResource(R.drawable.no_cover);
+        }
+        else {
+            displayImg.setImageBitmap(items.get(position).getImgBitmap());
+        }
 //
 //
         displayName.setTag(position);
