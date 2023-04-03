@@ -96,6 +96,18 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
                 googleMap -> {
                     for (PositionMagasin magasin1 : magasins) {
                         googleMap.addMarker(new MarkerOptions().position(new LatLng(magasin1.getLatitude(), magasin1.getLongitude())).title(magasin1.getName()));
+                        googleMap.setOnMarkerClickListener(marker -> {
+                            for (PositionMagasin magasin : magasins) {
+                                if (magasin.getName().equals(marker.getTitle())) {
+                                    selectedMagasin = magasin;
+                                    Toast.makeText(this, "Vous avez sélectionné la librairie " + magasin.getName(), Toast.LENGTH_SHORT).show();
+                                    Spinner spinner = findViewById(R.id.spinner);
+                                    spinner.setSelection(magasins.indexOf(magasin));
+                                    return true;
+                                }
+                            }
+                            return false;
+                        });
                     }
                 }
         );
