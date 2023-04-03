@@ -17,6 +17,7 @@
         android:theme="@style/Theme.Android411"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyCVMSgjmpSk2Kv-FhjX1ho8WT4e3-2ZwCo"/>
         <activity
             android:name=".SplashActivity"
             android:exported="true"

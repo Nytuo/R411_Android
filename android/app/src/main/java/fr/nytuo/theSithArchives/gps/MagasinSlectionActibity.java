@@ -6,6 +6,7 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.Location;
@@ -24,11 +25,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.List;
 
 import fr.nytuo.theSithArchives.HttpAsyncGet;
 import fr.nytuo.theSithArchives.PostExecuteActivity;
 import fr.nytuo.theSithArchives.R;
+import fr.nytuo.theSithArchives.cart.CartActivity;
+import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
 
 public class MagasinSlectionActibity extends AppCompatActivity implements PostExecuteActivity<PositionMagasin>, MagasinAdapterListener {
@@ -39,7 +47,9 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
 
     MagasinAdapter adapter;
 
-    String selectedMagasin;
+    PositionMagasin selectedMagasin;
+
+    MapView mapView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,33 +60,49 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         int commandNumber = (int) (Math.random() * 1000000);
         Button button5 = findViewById(R.id.button5);
         button5.setOnClickListener(v -> {
-            spawnNotification("Vos articles sont réservés dans votre librairie '"+selectedMagasin
-                    +"'. Vous recevrez une notification lors de leur disponibilité. Votre commande porte le numéro: "+commandNumber);
+            spawnNotification("Vos articles sont réservés dans votre librairie '" + selectedMagasin.getName()
+                    + "'. Vous recevrez une notification lors de leur disponibilité. Votre commande porte le numéro: " + commandNumber, System.currentTimeMillis() + 10000);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Confirmation de commande");
-            builder.setMessage("Vos articles sont réservés dans votre librairie '"+selectedMagasin
-                    +"'. Vous recevrez une notification lors de leur disponibilité. Votre commande porte le numéro: "+commandNumber);
+            builder.setMessage("Vos articles sont réservés dans votre librairie '" + selectedMagasin.getName()
+                    + "'. Vous recevrez une notification lors de leur disponibilité. Votre commande porte le numéro: " + commandNumber);
             builder.setPositiveButton("OK", (dialog, which) -> {
-                dialog.dismiss();
-                new Thread(() -> {
-                    try {
-                        Thread.sleep((long) (Math.random() * 20000 + 10000));
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    spawnNotification("Vos articles sont disponibles dans votre librairie '"+selectedMagasin
-                            +"'. Votre commande porte le numéro: "+commandNumber);
-                }).start();
+                spawnNotification("Vos articles sont disponibles dans votre librairie '" + selectedMagasin.getName()
+                        + "'. Votre commande porte le numéro: " + commandNumber, System.currentTimeMillis() + 10000);
+                Intent intent = new Intent(this, ProductsListActivity.class);
+                startActivity(intent);
+
+
             });
             AlertDialog alert = builder.create();
             alert.show();
-
-
-
         });
+
+        Button button6 = findViewById(R.id.button6);
+        button6.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CartActivity.class);
+            startActivity(intent);
+        });
+        Button button7 = findViewById(R.id.button7);
+        button7.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ProductsListActivity.class);
+            startActivity(intent);
+        });
+        mapView = findViewById(R.id.mapView3);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+
+        mapView.getMapAsync(
+                googleMap -> {
+                    for (PositionMagasin magasin1 : magasins) {
+                        googleMap.addMarker(new MarkerOptions().position(new LatLng(magasin1.getLatitude(), magasin1.getLongitude())).title(magasin1.getName()));
+                    }
+                }
+        );
+
     }
 
-    public void spawnNotification(String text){
+    public void spawnNotification(String text, long time) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "fr.nytuo.theSithArchives";
 
@@ -95,19 +121,18 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
 
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(System.currentTimeMillis())
+                .setWhen(time)
                 .setSmallIcon(R.drawable.logo)
                 .setContentTitle("Commande")
                 .setContentText(text)
                 .setContentInfo("Info")
-                        .setStyle(new NotificationCompat.BigTextStyle().bigText(text));
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(text));
 
         notificationManager.notify(1, notificationBuilder.build());
     }
 
     @Override
     public void onPostExecutePokemons(List<PositionMagasin> itemList) {
-
 
 
         magasins = itemList;
@@ -117,12 +142,18 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         for (PositionMagasin magasin : magasins) {
             System.out.println(magasin.getName());
         }
-        adapter =new MagasinAdapter(this, magasins);
+        adapter = new MagasinAdapter(this, magasins);
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 PositionMagasin magasin = magasins.get(i);
-                selectedMagasin = magasin.getName();
+                selectedMagasin = magasin;
+                if (mapView != null) {
+                    mapView.getMapAsync(googleMap -> {
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(selectedMagasin.getLatitude(), selectedMagasin.getLongitude()), 15));
+                    });
+                }
+
             }
 
             @Override
@@ -209,7 +240,6 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         adapter.notifyDataSetChanged();
 
     }
-
 
 
     @Override

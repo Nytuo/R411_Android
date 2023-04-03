@@ -54,7 +54,7 @@ public class MagasinAdapter extends BaseAdapter {
         if (items.get(position).getDistance()==-1){
             displaPrice.setText("");
         }else {
-            displaPrice.setText(String.valueOf("distance "+items.get(position).getDistance()));
+            displaPrice.setText("distance " + items.get(position).getDistance() / 1000 + " km");
         }
 
         displayName.setTag(position);
