@@ -113,4 +113,9 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         ProductsList.getInstance().get(position).setQuantity(1);
         CartList.getInstance().add(ProductsList.getInstance().get(position));
     }
+
+    @Override
+    public AppCompatActivity getActivity() {
+        return this;
+    }
 }

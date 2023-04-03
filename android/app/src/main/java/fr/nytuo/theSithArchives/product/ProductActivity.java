@@ -44,7 +44,8 @@ public class ProductActivity extends AppCompatActivity {
 
 
         name.setText(ProductsList.getInstance().get(position).getName());
-        image.setImageBitmap(ProductsList.getInstance().get(position).getImgBitmap());
+        ProductsList.getInstance().get(position).subToGetImgBitmap(this,image);
+
         description.setText(ProductsList.getInstance().get(position).getDescription());
         price.setText(ProductsList.getInstance().get(position).getPrice() + "€");
         StringBuilder authors = new StringBuilder();

@@ -51,6 +51,12 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
         updateTotalPrice();
 
     }
+
+    @Override
+    public AppCompatActivity getActivity() {
+        return this;
+    }
+
     private void updateTotalPrice() {
         TextView totalPrice = findViewById(R.id.textViewTotal);
         totalPrice.setText("Total : " + CartList.getInstance().getTotalPrice() + "€");

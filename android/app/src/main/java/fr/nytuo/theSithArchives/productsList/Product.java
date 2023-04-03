@@ -1,8 +1,14 @@
 package fr.nytuo.theSithArchives.productsList;
 
 import android.graphics.Bitmap;
+import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
+
+import fr.nytuo.theSithArchives.R;
+import fr.nytuo.theSithArchives.cart.CartAdapterListener;
 
 public class Product {
     private String name;
@@ -15,6 +21,9 @@ public class Product {
     private String isbn;
     private String date;
 
+    private AppCompatActivity listener;
+    private ImageView imageView;
+
     private int quantity = 0;
 
     public Product() {
@@ -26,7 +35,6 @@ public class Product {
 
     public void setImgURLs(ArrayList<String> imgURLs) {
         this.imgURLs = imgURLs;
-
     }
 
     public void setPrice(int price) {
@@ -57,8 +65,20 @@ public class Product {
         return name;
     }
 
-    public Bitmap getImgBitmap() {
-        return imgBitmap;
+    public void subToGetImgBitmap(AppCompatActivity listener, ImageView imageView) {
+        if (imgBitmap == null) {
+            imageView.setImageResource(R.drawable.no_cover);
+            this.listener = listener;
+            this.imageView = imageView;
+        } else {
+            imageView.setImageBitmap(imgBitmap);
+        }
+    }
+    protected void resiveImgBitmap(Bitmap imgBitmap) {
+        this.imgBitmap = imgBitmap;
+        if (listener != null) {
+            listener.runOnUiThread(() -> imageView.setImageBitmap(imgBitmap));
+        }
     }
 
     public ArrayList<String> getImgURLs() {
@@ -98,5 +118,9 @@ public class Product {
     }
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public Bitmap getImgBitmap() {
+        return imgBitmap;
     }
 }

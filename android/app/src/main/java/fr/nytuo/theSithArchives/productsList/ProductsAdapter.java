@@ -58,12 +58,7 @@ public class ProductsAdapter extends BaseAdapter {
 //
 //        // set image
         ImageView displayImg = layoutItem.findViewById(R.id.productImage);
-        if (items.get(position).getImgBitmap() == null){
-            displayImg.setImageResource(R.drawable.no_cover);
-        }
-        else {
-            displayImg.setImageBitmap(items.get(position).getImgBitmap());
-        }
+        items.get(position).subToGetImgBitmap(activity.getActivity(),displayImg);
 //
 //
         displayName.setTag(position);

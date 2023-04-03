@@ -47,7 +47,7 @@ public class FlexibleProductImageDonloaderTread implements Runnable{
                         e.printStackTrace();
                     }
 
-                product.setImgBitmap(image);
+                product.resiveImgBitmap(image);
                 adapters.forEach((key, value) -> value.runOnUiThread(key::notifyDataSetChanged));
             } catch (InterruptedException e) {
                 e.printStackTrace();

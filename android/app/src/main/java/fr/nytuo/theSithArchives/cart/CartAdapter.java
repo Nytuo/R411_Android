@@ -78,7 +78,7 @@ public class CartAdapter extends BaseAdapter {
         displayQuantity.setText(items.get(position).getQuantity() + "");
      // set image
         ImageView displayImg = layoutItem.findViewById(R.id.productImage);
-        displayImg.setImageBitmap(items.get(position).getImgBitmap());
+        items.get(position).subToGetImgBitmap(activity.getActivity(),displayImg);
 //
 //
         displayName.setTag(position);
