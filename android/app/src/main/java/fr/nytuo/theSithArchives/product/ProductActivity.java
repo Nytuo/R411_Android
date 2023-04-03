@@ -48,11 +48,19 @@ public class ProductActivity extends AppCompatActivity {
         description.setText(ProductsList.getInstance().get(position).getDescription());
         price.setText(ProductsList.getInstance().get(position).getPrice() + "€");
         StringBuilder authors = new StringBuilder();
-        for (String authorE : ProductsList.getInstance().get(position).getAuthors()) {
-            if (authorE.equals(ProductsList.getInstance().get(position).getAuthors().get(ProductsList.getInstance().get(position).getAuthors().size() - 1))) {
-                authors.append(authorE);
-            } else
-                authors.append(authorE).append(", ");
+        if (ProductsList.getInstance().get(position).getAuthors().size() == 1)
+            authors.append(ProductsList.getInstance().get(position).getAuthors().get(0));
+        else if (ProductsList.getInstance().get(position).getAuthors().size() == 2)
+            authors.append(ProductsList.getInstance().get(position).getAuthors().get(0)).append(" et ").append(ProductsList.getInstance().get(position).getAuthors().get(1));
+        else if (ProductsList.getInstance().get(position).getAuthors().size() > 2) {
+            for (String authorE : ProductsList.getInstance().get(position).getAuthors()) {
+                if (authorE.equals(ProductsList.getInstance().get(position).getAuthors().get(ProductsList.getInstance().get(position).getAuthors().size() - 1))) {
+                    authors.append(authorE);
+                } else
+                    authors.append(authorE).append(", ");
+            }
+        }else{
+            authors.append("Aucun auteur");
         }
         author.setText("Auteur: " + authors);
         publisher.setText("Éditeur: " + ProductsList.getInstance().get(position).getPublisher());

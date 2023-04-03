@@ -65,14 +65,6 @@ public class CartAdapter extends BaseAdapter {
 //
 //
         displayName.setTag(position);
-        Button button = layoutItem.findViewById(R.id.buttonAjouter);
-
-        button.setOnClickListener(v -> {
-            for (CartAdapterListener listener : productListener) {
-                listener.onElementClick(position);
-            }
-        });
-
 
         layoutItem.setOnClickListener(v -> {
             for (CartAdapterListener listener : productListener) {
