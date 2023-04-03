@@ -101,7 +101,7 @@ public class ProductActivity extends AppCompatActivity {
         });
 
         button.setOnClickListener(v -> {
-            button.setText("Ajouté");
+            button.setText(R.string.added);
             handleAddToCart(position);
         });
 

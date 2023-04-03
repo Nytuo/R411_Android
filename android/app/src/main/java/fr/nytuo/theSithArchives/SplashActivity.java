@@ -6,7 +6,6 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import fr.nytuo.theSithArchives.gps.MagasinSlectionActibity;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
 public class SplashActivity extends AppCompatActivity {
@@ -18,7 +17,7 @@ public class SplashActivity extends AppCompatActivity {
         new Handler().postDelayed(() -> {
             startActivity(new Intent(SplashActivity.this, ProductsListActivity.class));
             finish();
-        }, 3000);
+        }, 1000);
 
     }
 }

@@ -33,7 +33,7 @@
             android:exported="true"
             />
         <activity
-            android:name=".gps.MagasinSlectionActibity"
+            android:name=".gps.MagasinSelectionActivity"
             android:exported="true" />
         <activity
             android:name=".product.ProductActivity"

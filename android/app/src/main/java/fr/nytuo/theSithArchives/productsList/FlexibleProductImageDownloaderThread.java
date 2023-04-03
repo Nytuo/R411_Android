@@ -2,26 +2,24 @@ package fr.nytuo.theSithArchives.productsList;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.widget.Adapter;
 import android.widget.BaseAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
-public class FlexibleProductImageDonloaderTread implements Runnable{
+public class FlexibleProductImageDownloaderThread implements Runnable{
 
-    private HashMap<BaseAdapter,AppCompatActivity> adapters= new HashMap<>();
-    private BlockingQueue<Product> blockingQueue = new LinkedBlockingDeque<>();
+    private final HashMap<BaseAdapter,AppCompatActivity> adapters= new HashMap<>();
+    private final BlockingQueue<Product> blockingQueue = new LinkedBlockingDeque<>();
 
-    public static FlexibleProductImageDonloaderTread instance = new FlexibleProductImageDonloaderTread();
+    public static FlexibleProductImageDownloaderThread instance = new FlexibleProductImageDownloaderThread();
 
-    public FlexibleProductImageDonloaderTread() {
+    public FlexibleProductImageDownloaderThread() {
         Thread thread = new Thread(this);
         thread.setDaemon(true);
         thread.start();

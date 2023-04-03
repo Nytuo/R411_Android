@@ -12,16 +12,12 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -33,7 +29,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
-import java.util.Objects;
 
 import fr.nytuo.theSithArchives.HttpAsyncGet;
 import fr.nytuo.theSithArchives.ItemListDialogFragment;
@@ -43,10 +38,9 @@ import fr.nytuo.theSithArchives.cart.CartActivity;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
 
-public class MagasinSlectionActibity extends AppCompatActivity implements PostExecuteActivity<PositionMagasin>, MagasinAdapterListener {
+public class MagasinSelectionActivity extends AppCompatActivity implements PostExecuteActivity<PositionMagasin>, MagasinAdapterListener {
 
     List<PositionMagasin> magasins;
-    private String fournisseur;
     public static int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
 
     MagasinAdapter adapter;
@@ -59,8 +53,7 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_magasin_list);
-        // on récupère la liste des magasins
-        HttpAsyncGet<PositionMagasin> httpAsyncGet = new HttpAsyncGet<PositionMagasin>("https://api.nytuo.fr/api/libraries/positions/20", PositionMagasin.class, this, null);
+        new HttpAsyncGet<>("https://api.nytuo.fr/api/libraries/positions/20", PositionMagasin.class, this, null);
         int commandNumber = (int) (Math.random() * 1000000);
         Button button5 = findViewById(R.id.button5);
 
@@ -131,14 +124,12 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
     }
 
     @Override
-    public void onPostExecutePokemons(List<PositionMagasin> itemList) {
+    public void onPostExecute(List<PositionMagasin> itemList) {
 
 
         magasins = itemList;
         selectedMagasin = magasins.get(0);
-        mapView.getMapAsync(googleMap -> {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(selectedMagasin.getLatitude(), selectedMagasin.getLongitude()), 15));
-        });
+        mapView.getMapAsync(googleMap -> googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(selectedMagasin.getLatitude(), selectedMagasin.getLongitude()), 15)));
         TextView textView4 = findViewById(R.id.textView4);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
@@ -169,47 +160,32 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         );
 
 
-        spinner.setOnClickListener(v -> {
-            showItemListDialogAndWait();
-        });
+        spinner.setOnClickListener(v -> showItemListDialogAndWait());
     }
 
     public void showItemListDialogAndWait() {
         ItemListDialogFragment dialogFragment = ItemListDialogFragment.newInstance(magasins.size(),magasins);
         dialogFragment.show(getSupportFragmentManager(), "dialog");
-
-        final Object lock = new Object(); // create a lock object to wait on
-
-        dialogFragment.setOnItemSelectedListener(new ItemListDialogFragment.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(int position) {
-                System.out.println("Selected position: " + position);
-                synchronized (lock) {
-                    lock.notify(); // notify the lock object
-                }
+        final Object lock = new Object();
+        dialogFragment.setOnItemSelectedListener(position -> {
+            System.out.println("Selected position: " + position);
+            synchronized (lock) {
+                lock.notify();
             }
         });
 
-        // wait for the user selection in a separate thread
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (lock) {
-                    try {
-                        lock.wait(); // wait for the user selection
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+        new Thread(() -> {
+            synchronized (lock) {
+                try {
+                    lock.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                // dismiss the dialog fragment on the UI thread
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        System.out.println("Selected position: " + getSelectedPosition());
-                        itemSelected(getSelectedPosition());
-                    }
-                });
             }
+            runOnUiThread(() -> {
+                System.out.println("Selected position: " + getSelectedPosition());
+                itemSelected(getSelectedPosition());
+            });
         }).start();
     }
     private int getSelectedPosition() {
@@ -226,33 +202,22 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         textView4.setText("Boutique actuelle: " + magasin.getName() + " (" + magasin.getDistance()/1000 + "km)");
         selectedMagasin = magasin;
         if (mapView != null) {
-            mapView.getMapAsync(googleMap -> {
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(selectedMagasin.getLatitude(), selectedMagasin.getLongitude()), 15));
-            });
+            mapView.getMapAsync(googleMap -> googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(selectedMagasin.getLatitude(), selectedMagasin.getLongitude()), 15)));
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        // une fois que l'utilisateur a répondu à la demande de permission, on met à jour la liste si la permission est accordée
         if (MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION == requestCode) {
-            // If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                // permission was granted, yay! Do the
-                // contacts-related task you need to do.
                 Toast.makeText(getApplicationContext(), "Permission granted", Toast.LENGTH_SHORT).show();
                 updateDistanceOnList();
 
             } else {
-
-                // permission denied, boo! Disable the
-                // functionality that depends on this permission.
                 Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
             }
-            return;
         }
 
     }
@@ -262,8 +227,6 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-
-        // on récupère la position de l'utilisateur et on met à jour la distance de chaque magasin
         double lat;
         double lon;
 
@@ -290,14 +253,11 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
             locationMagasin.setLongitude(magasin.getLongitude());
             magasin.setDistance(location.distanceTo(locationMagasin));
         }
-
         try {
         adapter.notifyDataSetChanged();
         }catch (NullPointerException e){
             Log.d("GPS", "fails");
         }
-
-
     }
 
 

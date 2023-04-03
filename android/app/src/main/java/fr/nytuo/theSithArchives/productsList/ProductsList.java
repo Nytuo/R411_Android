@@ -1,7 +1,4 @@
 package fr.nytuo.theSithArchives.productsList;
-
-
-
 import java.util.ArrayList;
 
 public class ProductsList extends ArrayList<Product> {

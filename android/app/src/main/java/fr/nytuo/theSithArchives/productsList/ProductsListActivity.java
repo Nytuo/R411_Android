@@ -22,8 +22,6 @@ import fr.nytuo.theSithArchives.cart.CartList;
 import fr.nytuo.theSithArchives.product.ProductActivity;
 
 public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity<Product>, ProductAdapterListener {
-
-
     ProgressDialog progressDialog;
 
     @Override
@@ -32,7 +30,7 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         setContentView(R.layout.activity_products_list);
 
         progressDialog = new ProgressDialog(this);
-        HttpAsyncGet<Product> httpAsyncGet = new HttpAsyncGet<Product>("https://api.nytuo.fr/api/book/10", Product.class, this, null);
+        new HttpAsyncGet<>("https://api.nytuo.fr/api/book/10", Product.class, this, null);
         this.progressDialog.setMessage("Chargement...");
         this.progressDialog.setIndeterminate(true);
         this.progressDialog.show();
@@ -66,11 +64,11 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
     public void onsubmit(String query){
         this.progressDialog.show();
         query = Uri.parse("https://api.nytuo.fr/api/book/search/" + query).buildUpon().build().toString();
-        HttpAsyncGet<Product> httpAsyncGet = new HttpAsyncGet<Product>(query, Product.class, ProductsListActivity.this, null);
+        new HttpAsyncGet<>(query, Product.class, ProductsListActivity.this, null);
     }
 
     @Override
-    public void onPostExecutePokemons(List<Product> itemList) {
+    public void onPostExecute(List<Product> itemList) {
         ListView listProduits = findViewById(R.id.listView);
         Animation animation = android.view.animation.AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fadeout);
         listProduits.startAnimation(animation);
@@ -80,11 +78,11 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         listProduits.startAnimation(animation2);
         this.progressDialog.dismiss();
         ProductsAdapter productsAdapter = new ProductsAdapter(this, ProductsList.getInstance());
-        FlexibleProductImageDonloaderTread.instance.addAdapter(productsAdapter, this);
+        FlexibleProductImageDownloaderThread.instance.addAdapter(productsAdapter, this);
         for (Product product : ProductsList.getInstance()){
-            FlexibleProductImageDonloaderTread.instance.add(product);
+            FlexibleProductImageDownloaderThread.instance.add(product);
         }
-        this.runOnUiThread(() -> productsAdapter.notifyDataSetChanged());
+        this.runOnUiThread(productsAdapter::notifyDataSetChanged);
         listProduits.setAdapter(productsAdapter);
         productsAdapter.addListener(this);
     }
@@ -105,7 +103,6 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         Intent intent = new Intent(this, ProductActivity.class);
         intent.putExtra("position", position);
         startActivity(intent);
-        //on envois sure la vue ou l'on vois l'ariticle en grand
     }
 
     @Override

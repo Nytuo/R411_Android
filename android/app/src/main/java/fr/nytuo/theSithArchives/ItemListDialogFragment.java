@@ -21,13 +21,7 @@ import fr.nytuo.theSithArchives.databinding.FragmentItemListDialogListDialogItem
 import fr.nytuo.theSithArchives.databinding.FragmentItemListDialogListDialogBinding;
 import fr.nytuo.theSithArchives.gps.PositionMagasin;
 
-/**
- * <p>A fragment that shows a list of items as a modal bottom sheet.</p>
- * <p>You can show this modal bottom sheet from your activity like this:</p>
- * <pre>
- *     ItemListDialogFragment.newInstance(30).show(getSupportFragmentManager(), "dialog");
- * </pre>
- */
+
 public class ItemListDialogFragment extends BottomSheetDialogFragment {
 
     public void setOnItemSelectedListener(OnItemSelectedListener onItemSelectedListener) {
@@ -40,14 +34,12 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
 
     private OnItemSelectedListener mListener;
 
-    // TODO: Customize parameter argument names
     private static final String ARG_ITEM_COUNT = "item_count";
     private FragmentItemListDialogListDialogBinding binding;
 
     private static List<PositionMagasin> magasinss;
     private int selectedPosition = -1;
 
-    // TODO: Customize parameters
     public static ItemListDialogFragment newInstance(int itemCount, List<PositionMagasin> magasins) {
         final ItemListDialogFragment fragment = new ItemListDialogFragment();
         final Bundle args = new Bundle();

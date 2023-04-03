@@ -16,13 +16,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-/**
- * construit un Objet T depuis un fichier json dont l'adress URL est passé en paramètre
- * Tache asynchrone
- * @author Frédéric RALLO - March 2023
- */
 public class HttpAsyncGet<T>{
-    private static final String TAG = "android411 " + HttpAsyncGet.class.getSimpleName();    //Pour affichage en cas d'erreur
+    private static final String TAG = "android411 " + HttpAsyncGet.class.getSimpleName();
     private final Class<T> clazz;
     private List<T> itemList;
     private final HttpHandler webService;
@@ -37,7 +32,7 @@ public class HttpAsyncGet<T>{
             doInBackGround(url);
             postExecuteActivity.runOnUiThread( ()-> {
                 if(progressDialog != null) progressDialog.dismiss();
-                postExecuteActivity.onPostExecutePokemons(getItemResult());
+                postExecuteActivity.onPostExecute(getItemResult());
             } );
         };
         Executors.newSingleThreadExecutor().execute( runnable );
@@ -49,10 +44,6 @@ public class HttpAsyncGet<T>{
         String jsonStr = webService.makeServiceCall(urlAddress);
         ObjectMapper mapper = new ObjectMapper();
         try {
-            //todo:  itemList = mapper.readValue(jsonStr, new TypeReference<List<T>>(){});   was not possible
-            //       the previous line provided List<Object> instead of List<T>
-            //       because "l'argument List<T> dans new TypeReference<List<T>>(){} est un type générique non résolu".
-
             itemList = mapper.readValue(jsonStr, mapper.getTypeFactory().constructCollectionType(List.class, clazz));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
@@ -69,14 +60,13 @@ public class HttpAsyncGet<T>{
         progressDialog.show();
     }
 
-    static class HttpHandler { //innerClass
+    static class HttpHandler {
 
         public String makeServiceCall(String reqUrl) {
             String response = null;
             try {
                 HttpURLConnection connection = (HttpURLConnection) new URL(reqUrl).openConnection();
                 connection.setRequestMethod("GET");
-                // lecture du fichier
                 InputStream inputStream = new BufferedInputStream(connection.getInputStream());
                 response = convertStreamToString(inputStream);
             } catch (MalformedURLException e) {
@@ -91,7 +81,6 @@ public class HttpAsyncGet<T>{
             return response;
         }
 
-        //Conversion flux en String
         private String convertStreamToString(InputStream inputStream) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             StringBuilder stringBuilder = new StringBuilder();

@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import fr.nytuo.theSithArchives.R;
-import fr.nytuo.theSithArchives.gps.MagasinSlectionActibity;
+import fr.nytuo.theSithArchives.gps.MagasinSelectionActivity;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
 public class CartActivity extends AppCompatActivity implements CartAdapterListener {
@@ -41,15 +41,10 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
         Button button3 = findViewById(R.id.buttonConfirmer);
         button3.setOnClickListener(v -> {
             CartList.getInstance().clear();
-            Intent intent = new Intent(this, MagasinSlectionActibity.class);
+            Intent intent = new Intent(this, MagasinSelectionActivity.class);
             startActivity(intent);
         });
-        if (CartList.getInstance().isEmpty()) {
-            button3.setEnabled(false);
-        }
-        else {
-            button3.setEnabled(true);
-        }
+        button3.setEnabled(!CartList.getInstance().isEmpty());
 
         updateTotalPrice();
     }
@@ -67,7 +62,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
     }
 
     @Override
-    public void onMoinClick(int position) {
+    public void onMoinsClick(int position) {
         if (CartList.getInstance().get(position).getQuantity() > 1) {
             CartList.getInstance().get(position).setQuantity(CartList.getInstance().get(position).getQuantity() - 1);
             cartAdapter.notifyDataSetChanged();
@@ -92,7 +87,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
 
     private void updateTotalPrice() {
         TextView totalPrice = findViewById(R.id.textViewTotal);
-        totalPrice.setText("Total : " + CartList.getInstance().getTotalPrice() + "€");
+        totalPrice.setText(getString(R.string.total) + CartList.getInstance().getTotalPrice() + "€");
     }
 
 }

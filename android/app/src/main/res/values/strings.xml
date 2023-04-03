@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">The Sith Archives</string>
+    <string name="total">Total</string>
+    <string name="added">Ajouté</string>
 </resources>
