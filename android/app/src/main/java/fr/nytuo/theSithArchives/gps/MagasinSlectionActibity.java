@@ -61,14 +61,14 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         Button button5 = findViewById(R.id.button5);
         button5.setOnClickListener(v -> {
             spawnNotification("Vos articles sont réservés dans votre librairie '" + selectedMagasin.getName()
-                    + "'. Vous recevrez une notification lors de leur disponibilité. Votre commande porte le numéro: " + commandNumber, System.currentTimeMillis() + 10000);
+                    + "'. Vous recevrez une notification lors de leur disponibilité. Votre commande porte le numéro: " + commandNumber, System.currentTimeMillis(),1);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Confirmation de commande");
             builder.setMessage("Vos articles sont réservés dans votre librairie '" + selectedMagasin.getName()
                     + "'. Vous recevrez une notification lors de leur disponibilité. Votre commande porte le numéro: " + commandNumber);
             builder.setPositiveButton("OK", (dialog, which) -> {
                 spawnNotification("Vos articles sont disponibles dans votre librairie '" + selectedMagasin.getName()
-                        + "'. Votre commande porte le numéro: " + commandNumber, System.currentTimeMillis() + 10000);
+                        + "'. Votre commande porte le numéro: " + commandNumber, System.currentTimeMillis() + 10000,2);
                 Intent intent = new Intent(this, ProductsListActivity.class);
                 startActivity(intent);
 
@@ -92,29 +92,9 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
 
-        mapView.getMapAsync(
-                googleMap -> {
-                    for (PositionMagasin magasin1 : magasins) {
-                        googleMap.addMarker(new MarkerOptions().position(new LatLng(magasin1.getLatitude(), magasin1.getLongitude())).title(magasin1.getName()));
-                        googleMap.setOnMarkerClickListener(marker -> {
-                            for (PositionMagasin magasin : magasins) {
-                                if (magasin.getName().equals(marker.getTitle())) {
-                                    selectedMagasin = magasin;
-                                    Toast.makeText(this, "Vous avez sélectionné la librairie " + magasin.getName(), Toast.LENGTH_SHORT).show();
-                                    Spinner spinner = findViewById(R.id.spinner);
-                                    spinner.setSelection(magasins.indexOf(magasin));
-                                    return true;
-                                }
-                            }
-                            return false;
-                        });
-                    }
-                }
-        );
-
     }
 
-    public void spawnNotification(String text, long time) {
+    public void spawnNotification(String text, long time,int id) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "fr.nytuo.theSithArchives";
 
@@ -140,7 +120,7 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
                 .setContentInfo("Info")
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(text));
 
-        notificationManager.notify(1, notificationBuilder.build());
+        notificationManager.notify(id, notificationBuilder.build());
     }
 
     @Override
@@ -149,7 +129,24 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
 
         magasins = itemList;
         Spinner spinner = findViewById(R.id.spinner);
-
+        mapView.getMapAsync(
+                googleMap -> {
+                    for (PositionMagasin magasin1 : magasins) {
+                        googleMap.addMarker(new MarkerOptions().position(new LatLng(magasin1.getLatitude(), magasin1.getLongitude())).title(magasin1.getName()));
+                        googleMap.setOnMarkerClickListener(marker -> {
+                            for (PositionMagasin magasin : magasins) {
+                                if (magasin.getName().equals(marker.getTitle())) {
+                                    selectedMagasin = magasin;
+                                    Toast.makeText(this, "Vous avez sélectionné la librairie " + magasin.getName(), Toast.LENGTH_SHORT).show();
+                                    spinner.setSelection(magasins.indexOf(magasin));
+                                    return true;
+                                }
+                            }
+                            return false;
+                        });
+                    }
+                }
+        );
 
         for (PositionMagasin magasin : magasins) {
             System.out.println(magasin.getName());
