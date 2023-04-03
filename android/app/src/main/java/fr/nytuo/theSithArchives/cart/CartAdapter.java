@@ -65,14 +65,30 @@ public class CartAdapter extends BaseAdapter {
                 listener.onPlusClick(position);
             }
         });
+        plusButton.setBackgroundColor(activity.getContext().getResources().getColor(R.color.colorPrimary));
+        plusButton.setTextColor(activity.getContext().getResources().getColor(R.color.White));
+        plusButton.setText(items.get(position).getPrice() + "€");
 
+
+        plusButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_add_24, 0, 0, 0);
+        plusButton.setCompoundDrawableTintList(activity.getContext().getResources().getColorStateList(R.color.White));
+        //make a left padding
+        plusButton.setPadding(35, 0, 0, 0);
         Button minusButton = layoutItem.findViewById(R.id.buttonMoins);
         minusButton.setOnClickListener(v -> {
             for (CartAdapterListener listener : productListener) {
                 listener.onMoinClick(position);
             }
         });
+        minusButton.setBackgroundColor(activity.getContext().getResources().getColor(R.color.colorPrimary));
+        minusButton.setTextColor(activity.getContext().getResources().getColor(R.color.White));
+        minusButton.setText(items.get(position).getPrice() + "€");
 
+
+        minusButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_remove_24, 0, 0, 0);
+        minusButton.setCompoundDrawableTintList(activity.getContext().getResources().getColorStateList(R.color.White));
+        //make a left padding
+        minusButton.setPadding(35, 0, 0, 0);
         TextView displayQuantity = layoutItem.findViewById(R.id.quantity);
 
         displayQuantity.setText(items.get(position).getQuantity() + "");

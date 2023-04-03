@@ -1,5 +1,6 @@
 package fr.nytuo.theSithArchives.gps;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.nytuo.theSithArchives.R;
+import fr.nytuo.theSithArchives.cart.CartList;
 
 /**
  * Created by frallo on 03/02/2020.
@@ -24,6 +26,15 @@ public class MagasinAdapter extends BaseAdapter {
     public MagasinAdapter(MagasinAdapterListener activity, List<PositionMagasin> items) {
         this.activity = activity;
         this.items = items;
+        this.items.sort((o1, o2) -> {
+            if (o1.getDistance() == -1) {
+                return 1;
+            } else if (o2.getDistance() == -1) {
+                return -1;
+            } else {
+                return (int) (o1.getDistance() - o2.getDistance());
+            }
+        });
         mInflater = LayoutInflater.from(activity.getContext());
     }
 

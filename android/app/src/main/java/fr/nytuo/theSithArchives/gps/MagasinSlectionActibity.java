@@ -56,7 +56,7 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_magasin_list);
         // on récupère la liste des magasins
-        HttpAsyncGet<PositionMagasin> httpAsyncGet = new HttpAsyncGet<PositionMagasin>("https://api.nytuo.fr/api/libraries/positions/5", PositionMagasin.class, this, null);
+        HttpAsyncGet<PositionMagasin> httpAsyncGet = new HttpAsyncGet<PositionMagasin>("https://api.nytuo.fr/api/libraries/positions/20", PositionMagasin.class, this, null);
         int commandNumber = (int) (Math.random() * 1000000);
         Button button5 = findViewById(R.id.button5);
         button5.setOnClickListener(v -> {
@@ -148,10 +148,16 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
                 }
         );
 
-        for (PositionMagasin magasin : magasins) {
-            System.out.println(magasin.getName());
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+            Log.d("GPS", "fails");
+            return;
         }
+        updateDistanceOnList();
+
         adapter = new MagasinAdapter(this, magasins);
+        spinner.setAdapter(adapter);
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -170,15 +176,10 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
                 PositionMagasin magasin = magasins.get(0);
             }
         });
-        spinner.setAdapter(adapter);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
-            Log.d("GPS", "fails");
-            return;
-        }
 
-        updateDistanceOnList();
+
+
 
 
     }
@@ -245,8 +246,12 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         for (PositionMagasin magasin : magasins) {
             System.out.println(magasin.getName() + " " + magasin.getDistance());
         }
-
+        try {
         adapter.notifyDataSetChanged();
+        }catch (NullPointerException e){
+            Log.d("GPS", "fails");
+        }
+
 
     }
 

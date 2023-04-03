@@ -3,12 +3,15 @@ package fr.nytuo.theSithArchives.cart;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import fr.nytuo.theSithArchives.R;
+import fr.nytuo.theSithArchives.gps.MagasinSlectionActibity;
+import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
 public class CartActivity extends AppCompatActivity implements CartAdapterListener {
     CartAdapter cartAdapter;
@@ -22,6 +25,31 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
         cartAdapter = new CartAdapter(this, CartList.getInstance());
         listView.setAdapter(cartAdapter);
         cartAdapter.addListener(this);
+
+        Button button = findViewById(R.id.buttonPanier);
+        button.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CartActivity.class);
+            startActivity(intent);
+        });
+
+        Button button2 = findViewById(R.id.buttonHome);
+        button2.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ProductsListActivity.class);
+            startActivity(intent);
+        });
+
+        Button button3 = findViewById(R.id.buttonConfirmer);
+        button3.setOnClickListener(v -> {
+            CartList.getInstance().clear();
+            Intent intent = new Intent(this, MagasinSlectionActibity.class);
+            startActivity(intent);
+        });
+        if (CartList.getInstance().isEmpty()) {
+            button3.setEnabled(false);
+        }
+        else {
+            button3.setEnabled(true);
+        }
 
         updateTotalPrice();
     }
@@ -49,6 +77,11 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
             cartAdapter.notifyDataSetChanged();
         }
         updateTotalPrice();
+
+        if (CartList.getInstance().isEmpty()) {
+            Button button3 = findViewById(R.id.buttonConfirmer);
+            button3.setEnabled(false);
+        }
 
     }
 
