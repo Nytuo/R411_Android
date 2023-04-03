@@ -25,7 +25,6 @@ import fr.nytuo.theSithArchives.R;
 public class MagasinSlectionActibity extends AppCompatActivity implements PostExecuteActivity<PositionMagasin>, MagasinAdapterListener {
 
     List<PositionMagasin> magasins;
-    private String fournisseur;
     public static int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
 
     MagasinAdapter adapter;
@@ -34,7 +33,7 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_magasin_list);
-
+        // on récupère la liste des magasins
         HttpAsyncGet<PositionMagasin> httpAsyncGet = new HttpAsyncGet<PositionMagasin>("https://api.nytuo.fr/api/libraries/positions/5", PositionMagasin.class, this, null);
 
 
@@ -43,20 +42,16 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
     @Override
     public void onPostExecutePokemons(List<PositionMagasin> itemList) {
         magasins = itemList;
-
-
-        for (PositionMagasin magasin : magasins) {
-            System.out.println(magasin.getName());
-        }
+        //on ajoute les magasins à la vue
         adapter = new MagasinAdapter(this, magasins);
         ListView listProduits = findViewById(R.id.listView);
         listProduits.setAdapter(adapter);
-
+        // on demande la permission de localisation si elle n'est pas déjà accordée
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
-            Log.d("GPS", "fails");
             return;
         }
+        // on mais a joure les distances si la permission est déjà accordée
         updateDistanceOnList();
 
 
@@ -65,32 +60,28 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // une fois que l'utilisateur a répondu à la demande de permission, on met à jour la liste si la permission est accordée
         if (MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION == requestCode) {
-            // If request is cancelled, the result arrays are empty.
             if (grantResults.length > 0
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                // permission was granted, yay! Do the
-                // contacts-related task you need to do.
                 Toast.makeText(getApplicationContext(), "Permission granted", Toast.LENGTH_SHORT).show();
                 updateDistanceOnList();
 
             } else {
 
-                // permission denied, boo! Disable the
-                // functionality that depends on this permission.
                 Toast.makeText(getApplicationContext(), "Permission denied", Toast.LENGTH_SHORT).show();
             }
-            return;
         }
 
     }
 
     public void updateDistanceOnList() {
-        LocationManager androidLocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+
+        // on récupère la position de l'utilisateur et on met à jour la distance de chaque magasin
         double lat;
         double lon;
 
@@ -119,9 +110,6 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         }
 
         adapter.notifyDataSetChanged();
-        for (PositionMagasin magasin : magasins) {
-            System.out.println(magasin.getName() + " " + magasin.getDistance());
-        }
     }
 
 
