@@ -3,7 +3,6 @@ package fr.nytuo.theSithArchives.productsList;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -61,7 +60,7 @@ public class ProductsAdapter extends BaseAdapter {
 //
 //
         displayName.setTag(position);
-        Button button = layoutItem.findViewById(R.id.button2);
+        Button button = layoutItem.findViewById(R.id.buttonAjouter);
 
         button.setOnClickListener(v -> {
             button.setText("Ajouté");

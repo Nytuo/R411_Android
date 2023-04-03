@@ -39,7 +39,7 @@
 
         </activity>
         <activity
-            android:name=".card.CardActivity"
+            android:name=".cart.CartActivity"
             android:exported="true">
 
         </activity>
