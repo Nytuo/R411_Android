@@ -135,6 +135,7 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
 
 
         magasins = itemList;
+        selectedMagasin = magasins.get(0);
         TextView textView4 = findViewById(R.id.textView4);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
