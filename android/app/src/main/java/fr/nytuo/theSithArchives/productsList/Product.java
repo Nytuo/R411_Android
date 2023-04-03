@@ -25,6 +25,7 @@ public class Product {
     private ImageView imageView;
 
     private int quantity = 0;
+    private EventAfterImageLoad eventAfterImageLoad;
 
     public Product() {
     }
@@ -72,12 +73,26 @@ public class Product {
             this.imageView = imageView;
         } else {
             imageView.setImageBitmap(imgBitmap);
+            if (eventAfterImageLoad != null) {
+                eventAfterImageLoad.onImageLoad(imgBitmap);
+            }
         }
     }
+    public void subToGetImgBitmap(AppCompatActivity listener, ImageView imageView, EventAfterImageLoad event) {
+        this.eventAfterImageLoad = event;
+        subToGetImgBitmap(listener, imageView);
+    }
+
     protected void resiveImgBitmap(Bitmap imgBitmap) {
         this.imgBitmap = imgBitmap;
         if (listener != null) {
-            listener.runOnUiThread(() -> imageView.setImageBitmap(imgBitmap));
+            listener.runOnUiThread(() -> {
+                imageView.setImageBitmap(imgBitmap);
+                if (eventAfterImageLoad != null) {
+                    eventAfterImageLoad.onImageLoad(imgBitmap);
+                }
+            }
+            );
         }
     }
 

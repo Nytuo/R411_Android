@@ -68,39 +68,37 @@ public class ProductActivity extends AppCompatActivity {
         isbn.setText("ISBN: " + ProductsList.getInstance().get(position).getIsbn());
         date.setText("Parution: " + ProductsList.getInstance().get(position).getDate());
 
-        if (ProductsList.getInstance().get(position).getImgBitmap()!=null){
+        ProductsList.getInstance().get(position).subToGetImgBitmap(this, image, bitmap -> {
+            Palette.from(ProductsList.getInstance().get(position).getImgBitmap()).generate(p -> {
+                assert p != null;
+                int vibrant = p.getVibrantColor(0x000000);
+                int darkVibrant = p.getDarkVibrantColor(0x000000);
+                int muted = p.getMutedColor(0x000000);
+                int darkMuted = p.getDarkMutedColor(0x000000);
+                int lightMuted = p.getLightMutedColor(0x000000);
+                if (darkVibrant == Color.TRANSPARENT || darkVibrant == Color.WHITE) {
+                    darkVibrant = Color.BLACK;
+                }
+                constraintLayout.setBackgroundColor(darkVibrant);
+                scrollView.setBackgroundColor(darkVibrant);
+                button.setBackgroundColor(muted);
 
+                if (muted == darkVibrant || muted == darkMuted || muted == vibrant) {
+                    button.setBackgroundColor(Color.CYAN);
+                }
 
-        Palette.from(ProductsList.getInstance().get(position).getImgBitmap()).generate(p -> {
-            assert p != null;
-            int vibrant = p.getVibrantColor(0x000000);
-            int darkVibrant = p.getDarkVibrantColor(0x000000);
-            int muted = p.getMutedColor(0x000000);
-            int darkMuted = p.getDarkMutedColor(0x000000);
-            int lightMuted = p.getLightMutedColor(0x000000);
-            if (darkVibrant == Color.TRANSPARENT || darkVibrant == Color.WHITE) {
-                darkVibrant = Color.BLACK;
-            }
-            constraintLayout.setBackgroundColor(darkVibrant);
-            scrollView.setBackgroundColor(darkVibrant);
-            button.setBackgroundColor(muted);
+                if (isColorDark(darkVibrant)){
+                    name.setTextColor(Color.WHITE);
+                    description.setTextColor(Color.WHITE);
+                    price.setTextColor(Color.WHITE);
+                    author.setTextColor(Color.WHITE);
+                    publisher.setTextColor(Color.WHITE);
+                    isbn.setTextColor(Color.WHITE);
+                    date.setTextColor(Color.WHITE);
+                }
 
-            if (muted == darkVibrant || muted == darkMuted || muted == vibrant) {
-                button.setBackgroundColor(Color.CYAN);
-            }
-
-            if (isColorDark(darkVibrant)){
-                name.setTextColor(Color.WHITE);
-                description.setTextColor(Color.WHITE);
-                price.setTextColor(Color.WHITE);
-                author.setTextColor(Color.WHITE);
-                publisher.setTextColor(Color.WHITE);
-                isbn.setTextColor(Color.WHITE);
-                date.setTextColor(Color.WHITE);
-            }
-
+            });
         });
-        }
 
         button.setOnClickListener(v -> {
             button.setText("Ajouté");
