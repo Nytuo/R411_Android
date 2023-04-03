@@ -18,6 +18,7 @@ import fr.nytuo.theSithArchives.HttpAsyncGet;
 import fr.nytuo.theSithArchives.PostExecuteActivity;
 import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.cart.CartActivity;
+import fr.nytuo.theSithArchives.cart.CartList;
 import fr.nytuo.theSithArchives.product.ProductActivity;
 
 public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity<Product>, ProductAdapterListener {
@@ -109,6 +110,7 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
 
     @Override
     public void onAddToCartClick(int position) {
+        ProductsList.getInstance().get(position).setQuantity(1);
         CartList.getInstance().add(ProductsList.getInstance().get(position));
     }
 }

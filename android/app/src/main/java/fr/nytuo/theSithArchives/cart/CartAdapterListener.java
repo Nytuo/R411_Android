@@ -8,7 +8,7 @@ import android.content.Context;
 public interface CartAdapterListener {
     Context getContext();
 
-    void onElementClick(int position);
+    void onPlusClick(int position);
 
-    void onAddToCartClick(int position);
+    void onMoinClick(int position);
 }

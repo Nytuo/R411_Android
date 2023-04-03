@@ -75,5 +75,18 @@
         app:layout_constraintTop_toBottomOf="@+id/productName"
         app:layout_constraintVertical_bias="1.0" />
 
+    <TextView
+        android:id="@+id/quantity"
+        android:layout_width="0dp"
+        android:layout_height="42dp"
+        android:layout_marginBottom="32dp"
+        android:gravity="center"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/productImage"
+        app:layout_constraintTop_toBottomOf="@+id/productName"
+        app:layout_constraintVertical_bias="0.231" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

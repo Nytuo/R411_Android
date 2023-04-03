@@ -15,7 +15,7 @@ import androidx.palette.graphics.Palette;
 
 import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.cart.CartActivity;
-import fr.nytuo.theSithArchives.productsList.CartList;
+import fr.nytuo.theSithArchives.cart.CartList;
 import fr.nytuo.theSithArchives.productsList.ProductsList;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 

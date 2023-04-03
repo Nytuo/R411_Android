@@ -15,6 +15,8 @@ public class Product {
     private String isbn;
     private String date;
 
+    private int quantity = 0;
+
     public Product() {
     }
 
@@ -89,5 +91,12 @@ public class Product {
 
     public void setImgBitmap(Bitmap s) {
         imgBitmap = s;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

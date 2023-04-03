@@ -57,20 +57,32 @@ public class CartAdapter extends BaseAdapter {
 //        //(3) : Renseignement des valeurs
         displayName.setText(items.get(position).getName());
         displayPrice.setText(items.get(position).getPrice() + "€");
-//
-//
-//        // set image
+
+        Button plusButton = layoutItem.findViewById(R.id.buttonPlus);
+
+        plusButton.setOnClickListener(v -> {
+            for (CartAdapterListener listener : productListener) {
+                listener.onPlusClick(position);
+            }
+        });
+
+        Button minusButton = layoutItem.findViewById(R.id.buttonMoins);
+        minusButton.setOnClickListener(v -> {
+            for (CartAdapterListener listener : productListener) {
+                listener.onMoinClick(position);
+            }
+        });
+
+        TextView displayQuantity = layoutItem.findViewById(R.id.quantity);
+
+        displayQuantity.setText(items.get(position).getQuantity() + "");
+     // set image
         ImageView displayImg = layoutItem.findViewById(R.id.productImage);
         displayImg.setImageBitmap(items.get(position).getImgBitmap());
 //
 //
         displayName.setTag(position);
 
-        layoutItem.setOnClickListener(v -> {
-            for (CartAdapterListener listener : productListener) {
-                listener.onElementClick(position);
-            }
-        });
 
 
 
