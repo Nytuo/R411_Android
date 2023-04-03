@@ -26,7 +26,7 @@
         app:layout_constraintTop_toTopOf="@+id/productImage" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonAjouter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

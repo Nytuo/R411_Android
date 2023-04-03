@@ -67,7 +67,7 @@ public class ProductsAdapter extends BaseAdapter {
 //
 //
         displayName.setTag(position);
-        Button button = layoutItem.findViewById(R.id.button2);
+        Button button = layoutItem.findViewById(R.id.buttonAjouter);
 
         button.setOnClickListener(v -> {
             button.setText("Ajouté");

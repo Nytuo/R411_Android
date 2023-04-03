@@ -59,11 +59,7 @@ public class MagasinAdapter extends BaseAdapter {
 
         displayName.setTag(position);
 
-        layoutItem.setOnClickListener(v -> {
-            for (MagasinAdapterListener listener : listener) {
-                listener.onElementClick(position);
-            }
-        });
+
 
 
 

@@ -2,14 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/LL_Fond"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal">
-
+    android:orientation="horizontal"
+    android:id="@+id/LL_Fond"
+    >
 
     <Button
-        android:id="@+id/buttonHome"
+        android:id="@+id/buttonHome2"
         android:layout_width="40dp"
         android:layout_height="48dp"
         android:layout_marginStart="16dp"
@@ -23,26 +23,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="150dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <SearchView
-        android:id="@+id/search"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="100dp"
-        android:background="#942C2F"
-        android:backgroundTint="#942C2F"
-        android:queryHint="Rechercher un livre parmis notre vaste selection"
-        app:layout_constraintBottom_toTopOf="@+id/listView"
-        app:layout_constraintEnd_toEndOf="parent"
+    <Button
+        android:id="@+id/buttonHome"
+        android:layout_width="40dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="72dp"
+        android:paddingLeft="8dp"
+        android:text="text"
+        android:textSize="0sp"
+        app:icon="@drawable/baseline_home_24"
+        app:iconPadding="0dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageLogo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -69,6 +61,41 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageLogo"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+    <ListView
+        android:id="@+id/cartListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/imageLogo"
+        android:layout_marginTop="60dp"
+        />
+
+    <TextView
+        android:id="@+id/textViewTotal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total :"
+        android:textSize="50dp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/cartListView"
+        app:layout_constraintBottom_toTopOf="@id/buttonConfirmer"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+        />
+
+    <Button
+        android:id="@+id/buttonConfirmer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Poursuivez l'achat"
+        app:layout_constraintTop_toBottomOf="@id/textViewTotal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

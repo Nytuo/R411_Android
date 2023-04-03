@@ -1,6 +1,5 @@
 package fr.nytuo.theSithArchives.productsList;
 
-import android.app.Application;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,8 +17,7 @@ import java.util.List;
 import fr.nytuo.theSithArchives.HttpAsyncGet;
 import fr.nytuo.theSithArchives.PostExecuteActivity;
 import fr.nytuo.theSithArchives.R;
-import fr.nytuo.theSithArchives.card.CardActivity;
-import fr.nytuo.theSithArchives.gps.MagasinSlectionActibity;
+import fr.nytuo.theSithArchives.cart.CartActivity;
 import fr.nytuo.theSithArchives.product.ProductActivity;
 
 public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity<Product>, ProductAdapterListener {
@@ -50,16 +48,16 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
                 return false;
             }
         });
-        Button button4 = findViewById(R.id.button4);
-        button4.setOnClickListener(v -> {
+        Button buttonHome = findViewById(R.id.buttonHome);
+        buttonHome.setOnClickListener(v -> {
             Intent intent = getIntent();
             finish();
             startActivity(intent);
         });
 
-        Button button3 = findViewById(R.id.button3);
-        button3.setOnClickListener(v -> {
-            Intent intent = new Intent(this, CardActivity.class);
+        Button buttonPanier = findViewById(R.id.buttonPanier);
+        buttonPanier.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CartActivity.class);
             startActivity(intent);
         });
     }
@@ -111,6 +109,6 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
 
     @Override
     public void onAddToCartClick(int position) {
-        CardList.getInstance().add(ProductsList.getInstance().get(position));
+        CartList.getInstance().add(ProductsList.getInstance().get(position));
     }
 }

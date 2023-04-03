@@ -1,4 +1,4 @@
-package fr.nytuo.theSithArchives.card;
+package fr.nytuo.theSithArchives.cart;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,13 +18,13 @@ import fr.nytuo.theSithArchives.productsList.Product;
  * Created by frallo on 03/02/2020.
  */
 
-public class Cardapter extends BaseAdapter {
+public class CartAdapter extends BaseAdapter {
     private List<Product> items;
     private LayoutInflater mInflater;  //Un mécanisme pour gérer l'affichage graphique depuis un layout XML
-    private CardAdapterListener activity;
-    private ArrayList<CardAdapterListener> productListener = new ArrayList<>();
+    private CartAdapterListener activity;
+    private ArrayList<CartAdapterListener> productListener = new ArrayList<>();
 
-    public Cardapter(CardAdapterListener activity, List<Product> items) {
+    public CartAdapter(CartAdapterListener activity, List<Product> items) {
         this.activity = activity;
         this.items = items;
         mInflater = LayoutInflater.from(activity.getContext());
@@ -45,16 +45,18 @@ public class Cardapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View layoutItem;
 
+        //TODO: Refaire l'adapter en fonction des boutons plus et moins
+
         //(1) : Réutilisation des layouts
-        layoutItem = convertView == null ? mInflater.inflate(R.layout.product_layout, parent, false) : convertView;
+        layoutItem = convertView == null ? mInflater.inflate(R.layout.cart_layout, parent, false) : convertView;
 
         //(2) : Récupération des TextView de notre layout
         TextView displayName = layoutItem.findViewById(R.id.productName);
-        TextView displaPrice = layoutItem.findViewById(R.id.productPrice);
+        TextView displayPrice = layoutItem.findViewById(R.id.productPrice);
 //
 //        //(3) : Renseignement des valeurs
         displayName.setText(items.get(position).getName());
-        displaPrice.setText(items.get(position).getPrice() + "€");
+        displayPrice.setText(items.get(position).getPrice() + "€");
 //
 //
 //        // set image
@@ -63,17 +65,17 @@ public class Cardapter extends BaseAdapter {
 //
 //
         displayName.setTag(position);
-        Button button = layoutItem.findViewById(R.id.button2);
+        Button button = layoutItem.findViewById(R.id.buttonAjouter);
 
         button.setOnClickListener(v -> {
-            for (CardAdapterListener listener : productListener) {
+            for (CartAdapterListener listener : productListener) {
                 listener.onElementClick(position);
             }
         });
 
 
         layoutItem.setOnClickListener(v -> {
-            for (CardAdapterListener listener : productListener) {
+            for (CartAdapterListener listener : productListener) {
                 listener.onElementClick(position);
             }
         });
@@ -83,7 +85,7 @@ public class Cardapter extends BaseAdapter {
         return layoutItem; //On retourne l'item créé.
     }
 
-    public void addListener(CardAdapterListener listener) {
+    public void addListener(CartAdapterListener listener) {
         productListener.add(listener);
     }
 
