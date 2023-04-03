@@ -33,7 +33,7 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         setContentView(R.layout.activity_products_list);
 
         progressDialog = new ProgressDialog(this);
-        HttpAsyncGet<Product> httpAsyncGet = new HttpAsyncGet<Product>("https://api.nytuo.fr/api/book/5", Product.class, this, null);
+        HttpAsyncGet<Product> httpAsyncGet = new HttpAsyncGet<Product>("https://api.nytuo.fr/api/book/10", Product.class, this, null);
         this.progressDialog.setMessage("Chargement...");
         this.progressDialog.setIndeterminate(true);
         this.progressDialog.show();
@@ -81,6 +81,11 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         listProduits.startAnimation(animation2);
         this.progressDialog.dismiss();
         ProductsAdapter productsAdapter = new ProductsAdapter(this, ProductsList.getInstance());
+        FlexibleProductImageDonloaderTread.instance.addAdapter(productsAdapter, this);
+        for (Product product : ProductsList.getInstance()){
+            FlexibleProductImageDonloaderTread.instance.add(product);
+        }
+        this.runOnUiThread(() -> productsAdapter.notifyDataSetChanged());
         listProduits.setAdapter(productsAdapter);
         productsAdapter.addListener(this);
     }

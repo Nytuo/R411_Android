@@ -59,7 +59,7 @@ public class Cardapter extends BaseAdapter {
 //
 //        // set image
         ImageView displayImg = layoutItem.findViewById(R.id.productImage);
-        displayImg.setImageBitmap(items.get(position).getImgBitmapIndex(0));
+        displayImg.setImageBitmap(items.get(position).getImgBitmap());
 //
 //
         displayName.setTag(position);

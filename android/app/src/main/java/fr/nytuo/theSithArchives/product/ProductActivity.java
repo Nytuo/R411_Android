@@ -44,7 +44,7 @@ public class ProductActivity extends AppCompatActivity {
 
 
         name.setText(ProductsList.getInstance().get(position).getName());
-        image.setImageBitmap(ProductsList.getInstance().get(position).getImgBitmapIndex(0));
+        image.setImageBitmap(ProductsList.getInstance().get(position).getImgBitmap());
         description.setText(ProductsList.getInstance().get(position).getDescription());
         price.setText(ProductsList.getInstance().get(position).getPrice() + "€");
         StringBuilder authors = new StringBuilder();
@@ -59,8 +59,10 @@ public class ProductActivity extends AppCompatActivity {
         isbn.setText("ISBN: " + ProductsList.getInstance().get(position).getIsbn());
         date.setText("Parution: " + ProductsList.getInstance().get(position).getDate());
 
+        if (ProductsList.getInstance().get(position).getImgBitmap()!=null){
 
-        Palette.from(ProductsList.getInstance().get(position).getImgBitmapIndex(0)).generate(p -> {
+
+        Palette.from(ProductsList.getInstance().get(position).getImgBitmap()).generate(p -> {
             assert p != null;
             int vibrant = p.getVibrantColor(0x000000);
             int darkVibrant = p.getDarkVibrantColor(0x000000);
@@ -89,6 +91,7 @@ public class ProductActivity extends AppCompatActivity {
             }
 
         });
+        }
 
         button.setOnClickListener(v -> {
             button.setText("Ajouté");

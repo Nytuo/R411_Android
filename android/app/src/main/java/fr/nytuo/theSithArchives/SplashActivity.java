@@ -6,6 +6,7 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import fr.nytuo.theSithArchives.gps.MagasinSlectionActibity;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
 public class SplashActivity extends AppCompatActivity {
