@@ -12,12 +12,14 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
@@ -31,8 +33,10 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
+import java.util.Objects;
 
 import fr.nytuo.theSithArchives.HttpAsyncGet;
+import fr.nytuo.theSithArchives.ItemListDialogFragment;
 import fr.nytuo.theSithArchives.PostExecuteActivity;
 import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.cart.CartActivity;
@@ -59,6 +63,9 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         HttpAsyncGet<PositionMagasin> httpAsyncGet = new HttpAsyncGet<PositionMagasin>("https://api.nytuo.fr/api/libraries/positions/20", PositionMagasin.class, this, null);
         int commandNumber = (int) (Math.random() * 1000000);
         Button button5 = findViewById(R.id.button5);
+
+
+
         button5.setOnClickListener(v -> {
             spawnNotification("Vos articles sont réservés dans votre librairie '" + selectedMagasin.getName()
                     + "'. Vous recevrez une notification lors de leur disponibilité. Votre commande porte le numéro: " + commandNumber, System.currentTimeMillis(),1);
@@ -128,7 +135,16 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
 
 
         magasins = itemList;
-        Spinner spinner = findViewById(R.id.spinner);
+        TextView textView4 = findViewById(R.id.textView4);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+            Log.d("GPS", "fails");
+            return;
+        }
+        updateDistanceOnList();
+
+        textView4.setText("Boutique actuelle: " + magasins.get(0).getName() + " (" + magasins.get(0).getDistance() + "km)");
+                Button spinner = findViewById(R.id.button2);
         mapView.getMapAsync(
                 googleMap -> {
                     for (PositionMagasin magasin1 : magasins) {
@@ -138,7 +154,7 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
                                 if (magasin.getName().equals(marker.getTitle())) {
                                     selectedMagasin = magasin;
                                     Toast.makeText(this, "Vous avez sélectionné la librairie " + magasin.getName(), Toast.LENGTH_SHORT).show();
-                                    spinner.setSelection(magasins.indexOf(magasin));
+                                    textView4.setText("Boutique actuelle: " + magasin.getName() + " (" + magasin.getDistance() + "km)");
                                     return true;
                                 }
                             }
@@ -148,40 +164,68 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
                 }
         );
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
-            Log.d("GPS", "fails");
-            return;
-        }
-        updateDistanceOnList();
 
-        adapter = new MagasinAdapter(this, magasins);
-        spinner.setAdapter(adapter);
+        spinner.setOnClickListener(v -> {
+            showItemListDialogAndWait();
+        });
+    }
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+    public void showItemListDialogAndWait() {
+        ItemListDialogFragment dialogFragment = ItemListDialogFragment.newInstance(magasins.size(),magasins);
+        dialogFragment.show(getSupportFragmentManager(), "dialog");
+
+        final Object lock = new Object(); // create a lock object to wait on
+
+        dialogFragment.setOnItemSelectedListener(new ItemListDialogFragment.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                PositionMagasin magasin = magasins.get(i);
-                selectedMagasin = magasin;
-                if (mapView != null) {
-                    mapView.getMapAsync(googleMap -> {
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(selectedMagasin.getLatitude(), selectedMagasin.getLongitude()), 15));
-                    });
+            public void onItemSelected(int position) {
+                System.out.println("Selected position: " + position);
+                synchronized (lock) {
+                    lock.notify(); // notify the lock object
                 }
-
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                PositionMagasin magasin = magasins.get(0);
             }
         });
 
-
-
-
-
-
+        // wait for the user selection in a separate thread
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (lock) {
+                    try {
+                        lock.wait(); // wait for the user selection
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                // dismiss the dialog fragment on the UI thread
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("Selected position: " + getSelectedPosition());
+                        itemSelected(getSelectedPosition());
+                    }
+                });
+            }
+        }).start();
+    }
+    private int getSelectedPosition() {
+        ItemListDialogFragment dialogFragment = (ItemListDialogFragment) getSupportFragmentManager()
+                .findFragmentByTag("dialog");
+        if (dialogFragment != null && dialogFragment.isAdded()) {
+            return dialogFragment.getSelectedItem();
+        }
+        return -1;
+    }
+    private void itemSelected(int i){
+        PositionMagasin magasin = magasins.get(i);
+        TextView textView4 = findViewById(R.id.textView4);
+        textView4.setText("Boutique actuelle: " + magasin.getName() + " (" + magasin.getDistance() + "km)");
+        selectedMagasin = magasin;
+        if (mapView != null) {
+            mapView.getMapAsync(googleMap -> {
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(selectedMagasin.getLatitude(), selectedMagasin.getLongitude()), 15));
+            });
+        }
     }
 
     @Override
