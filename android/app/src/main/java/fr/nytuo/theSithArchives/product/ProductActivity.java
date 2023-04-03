@@ -14,6 +14,8 @@ import androidx.core.graphics.ColorUtils;
 import androidx.palette.graphics.Palette;
 
 import fr.nytuo.theSithArchives.R;
+import fr.nytuo.theSithArchives.card.CardActivity;
+import fr.nytuo.theSithArchives.productsList.CardList;
 import fr.nytuo.theSithArchives.productsList.ProductsList;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
@@ -88,7 +90,10 @@ public class ProductActivity extends AppCompatActivity {
 
         });
 
-        button.setOnClickListener(v -> handleAddToCart());
+        button.setOnClickListener(v -> {
+            button.setText("Ajouté");
+            handleAddToCart(position);
+        });
 
         Button button4 = findViewById(R.id.button4);
         button4.setOnClickListener(v ->{
@@ -96,6 +101,11 @@ public class ProductActivity extends AppCompatActivity {
             startActivity(intent1);
         });
 
+        Button button3 = findViewById(R.id.button3);
+        button3.setOnClickListener(v ->{
+            Intent intent1 = new Intent(ProductActivity.this, CardActivity.class);
+            startActivity(intent1);
+        });
 
     }
 
@@ -107,8 +117,8 @@ public class ProductActivity extends AppCompatActivity {
         return ColorUtils.calculateLuminance(color) > 0.5;
     }
 
-    public void handleAddToCart() {
-        //TODO
+    public void handleAddToCart(int position) {
+        CardList.getInstance().add(ProductsList.getInstance().get(position));
     }
 
 }

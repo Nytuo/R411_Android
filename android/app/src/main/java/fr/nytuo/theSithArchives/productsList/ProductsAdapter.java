@@ -64,9 +64,8 @@ public class ProductsAdapter extends BaseAdapter {
         Button button = layoutItem.findViewById(R.id.button2);
 
         button.setOnClickListener(v -> {
-            for (ProductAdapterListener listener : productListener) {
-                listener.onElementClick(position);
-            }
+            button.setText("Ajouté");
+            activity.onAddToCartClick(position);
         });
 
         button.setBackgroundColor(activity.getContext().getResources().getColor(R.color.colorPrimary));
