@@ -128,7 +128,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.text.setText(magasinss.get(position).getName() + " (" + magasinss.get(position).getDistance() + " km)");
+            holder.text.setText(magasinss.get(position).getName() + " (" + magasinss.get(position).getDistance()/1000 + " km)");
         }
 
     }

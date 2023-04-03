@@ -136,6 +136,9 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
 
         magasins = itemList;
         selectedMagasin = magasins.get(0);
+        mapView.getMapAsync(googleMap -> {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(selectedMagasin.getLatitude(), selectedMagasin.getLongitude()), 15));
+        });
         TextView textView4 = findViewById(R.id.textView4);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
@@ -144,7 +147,7 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
         }
         updateDistanceOnList();
 
-        textView4.setText("Boutique actuelle: " + magasins.get(0).getName() + " (" + magasins.get(0).getDistance() + "km)");
+        textView4.setText("Boutique actuelle: " + magasins.get(0).getName() + " (" + magasins.get(0).getDistance()/1000 + "km)");
                 Button spinner = findViewById(R.id.button2);
         mapView.getMapAsync(
                 googleMap -> {
@@ -155,7 +158,7 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
                                 if (magasin.getName().equals(marker.getTitle())) {
                                     selectedMagasin = magasin;
                                     Toast.makeText(this, "Vous avez sélectionné la librairie " + magasin.getName(), Toast.LENGTH_SHORT).show();
-                                    textView4.setText("Boutique actuelle: " + magasin.getName() + " (" + magasin.getDistance() + "km)");
+                                    textView4.setText("Boutique actuelle: " + magasin.getName() + " (" + magasin.getDistance()/1000 + "km)");
                                     return true;
                                 }
                             }
@@ -220,7 +223,7 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
     private void itemSelected(int i){
         PositionMagasin magasin = magasins.get(i);
         TextView textView4 = findViewById(R.id.textView4);
-        textView4.setText("Boutique actuelle: " + magasin.getName() + " (" + magasin.getDistance() + "km)");
+        textView4.setText("Boutique actuelle: " + magasin.getName() + " (" + magasin.getDistance()/1000 + "km)");
         selectedMagasin = magasin;
         if (mapView != null) {
             mapView.getMapAsync(googleMap -> {
@@ -288,9 +291,6 @@ public class MagasinSlectionActibity extends AppCompatActivity implements PostEx
             magasin.setDistance(location.distanceTo(locationMagasin));
         }
 
-        for (PositionMagasin magasin : magasins) {
-            System.out.println(magasin.getName() + " " + magasin.getDistance());
-        }
         try {
         adapter.notifyDataSetChanged();
         }catch (NullPointerException e){

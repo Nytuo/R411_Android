@@ -258,58 +258,78 @@ app.get("/api/book/search/:name", limiterDefault, async function (req, res) {
     }
     res.send(books);
 });
-let librariesNames = [
-    "Le Havre du Livre",
-    "Le Coin Lecture",
-    "L'Annexe Littéraire",
-    "L'Étagère à Livres",
-    "Le Coffre aux Romans",
-    "Le Coin Tranquille",
-    "Le Paradis du Lecteur",
-    "Le Repaire du Rat de Bibliothèque",
-    "L'Oasis du Bibliophile",
-    "La Retraite Littéraire",
-    "Le Palais de la Prose",
-    "L'Emporium du Livre de Poche",
-    "L'Encrier",
-    "La Forge Fictionnelle",
-    "Le Sanctuaire du Conte",
-    "La Caverne des Livres",
-    "La Bouquinerie",
-    "La Galerie Littéraire",
-    "La Bibliothèque Imaginaire",
-    "La Salle de Lecture",
-    "L'Atelier de l'Écrivain",
-    "Le Coin des Mots",
-    "Le Coin des Écrivains",
-    "L'Antre des Mots",
-    "Le Livrothèque",
-    "Le Coin des Livres Anciens",
-    "L'Étage des Écrivains",
-    "Le Cabinet de Lecture",
-    "La Grotte des Romans",
-    "Le Royaume des Livres",
-    "La Salle des Auteurs",
-    "Le Coin des Essais",
-    "Le Palais des Nouvelles",
-    "Le Grenier des Livres",
-    "La Résidence des Mots"
-]
+
 app.get("/api/libraries/positions/:number", limiterDefault, async function (req, res) {
     let number = req.params.number;
     if (number === undefined || number === null || number === "" || isNaN(number) || number === "undefined" || number === "null" || number === "NaN" || number === " " || number === 0) {
         number = 1;
     }
-    if (number > librariesNames.length) {
-        number = librariesNames.length;
+
+    let positions = [
+        {"latitude": 47.2152, "longitude": 1.5529, "name": "La Bibliothèque de la Comté"},
+        {"latitude": 43.6018, "longitude": 1.4391, "name": "La Librairie du Magicien Blanc"},
+        {"latitude": 48.8566, "longitude": 2.3522, "name": "La Salle des Cartes de la Terre du Milieu"},
+        {"latitude": 46.2276, "longitude": 6.1170, "name": "La Bibliothèque de Fondcombe"},
+        {"latitude": 48.8903, "longitude": 2.2370, "name": "La Bibliothèque de Poudlard"},
+        {"latitude": 45.7640, "longitude": 4.8357, "name": "Les Sortilèges des Mots"},
+        {"latitude": 43.2965, "longitude": 5.3698, "name": "La Librairie des Sorciers"},
+        {"latitude": 47.4765, "longitude": -0.5503, "name": "Le Chaudron Littéraire"},
+        {"latitude": 43.6043, "longitude": 1.4437, "name": "La Bibliothèque de la Force"},
+        {"latitude": 48.5734, "longitude": 7.7521, "name": "La Cantina des Livres"},
+        {"latitude": 48.6908, "longitude": 2.3983, "name": "La Librairie du Côté Obscur"},
+        {"latitude": 45.7644, "longitude": 4.8351, "name": "Le Sabre des Mots"},
+        {"latitude": 44.8378, "longitude": 0.5792, "name": "La Bibliothèque Galactique"},
+        {"latitude": 47.2183, "longitude": -1.5533, "name": "La Librairie de l'Espace-Temps"},
+        {"latitude": 48.8566, "longitude": 2.3522, "name": "L'Antre des Extraterrestres"},
+        {"latitude": 44.8378, "longitude": -0.5792, "name": "La Bibliothèque d'Elfes"},
+        {"latitude": 48.8752, "longitude": 2.3356, "name": "Les Chroniques des Dragons"},
+        {"latitude": 43.6108, "longitude": 3.8767, "name": "Les Grimoires des Nains"},
+        {"latitude": 48.8566, "longitude": 2.3522, "name": "La Bibliothèque du Docteur"},
+        {"latitude": 43.6108, "longitude": 3.8767, "name": "La Bibliothèque de Gallifrey"},
+        {"latitude": 47.2183, "longitude": -1.5533, "name": "Le Tardis"},
+        {"latitude": 48.2118, "longitude": -1.5536, "name": "La bibliothèque de la guerre du Temps"},
+        {"latitude": 48.5810, "longitude": 7.7431, "name": "La Bibliothèque de Skaro"},
+        {"latitude": 47.4765, "longitude": -0.5503, "name": "La Bibliothèque du Silence"}
+    ];
+    if (number > positions.length) {
+        number = positions.length;
     }
-    let positions = [];
+    let randomPositions = [];
     for (let i = 0; i < number; i++) {
-        let lat = 46.227638 + Math.random() * 0.5 - 0.25;
-        let long = 2.213749 + Math.random() * 0.5 - 0.25;
-        positions.push({latitude: lat, longitude: long, name: librariesNames[i]});
+        let randomIndex = Math.floor(Math.random() * positions.length);
+        randomPositions.push(positions[randomIndex]);
+        positions.splice(randomIndex, 1);
     }
-    res.send(positions);
+    res.send(randomPositions);
+});
+
+let Commands = [];
+
+class Command {
+    constructor(commandNumber, price, books) {
+        this.id = Crypto.randomBytes(16).toString("hex");
+        this.books = books;
+        this.price = price;
+        this.commandNumber = commandNumber;
+        this.date = new Date();
+        this.status = "pending";
+    }
+}
+
+app.post("/api/command", limiterDefault, async function (req, res) {
+    let commandNumber = req.body.commandNumber;
+    let price = req.body.price;
+    let books = req.body.books;
+
+    let command = new Command(commandNumber, price, books);
+    Commands.push(command);
+    res.sendStatus(200);
+});
+
+app.get("/api/command/:commandNumber", limiterDefault, async function (req, res) {
+    let commandNumber = req.params.commandNumber;
+    let command = Commands.find(c => c.commandNumber === commandNumber);
+    res.send(command);
 });
 
 async function GETNYTAPI_ISBN(NYTAPIKEY, number = 10) {
@@ -324,13 +344,17 @@ async function GETNYTAPI_ISBN(NYTAPIKEY, number = 10) {
         let url = "https://api.nytimes.com/svc/books/v3/lists/current/" + list.list_name_encoded + ".json?api-key=" + NYTAPIKEY;
         let response = await fetch(url);
         let data = await response.json();
-        for (let i = 0; i < data.results.books.length; i++) {
-            ISBNs.push(data.results.books[i].primary_isbn13);
+        try {
+            for (let i = 0; i < data.results.books.length; i++) {
+                ISBNs.push(data.results.books[i].primary_isbn13);
+            }
+            if (ISBNs.length >= number) {
+                return ISBNs;
+            }
+            lists.splice(lists.indexOf(list), 1);
+        } catch (e) {
+            console.log(e);
         }
-        if (ISBNs.length >= number) {
-            return ISBNs;
-        }
-        lists.splice(lists.indexOf(list), 1);
     }
     return ISBNs;
 }
@@ -351,32 +375,32 @@ app.get("/api/book/:number", limiterDefault, async function (req, res) {
 
     for (let i = 0; i < ISBNs.length; i++) {
         let book = await GETGOOGLEAPI_bookISBN(ISBNs[i]);
-        try{
+        try {
 
 
-        if (book.items.length > 0) {
+            if (book.items.length > 0) {
 
 
-            console.log(book);
-            let book2 = new Book();
-            book2.name = book.items[0].volumeInfo.title;
-            book2.authors = book.items[0].volumeInfo.authors;
-            book2.publisher = book.items[0].volumeInfo.publisher;
-            book2.date = book.items[0].volumeInfo.publishedDate;
-            book2.isbn = book.items[0].volumeInfo.industryIdentifiers[0].identifier;
-            book2.price = Math.round(Math.random() * 100);
-            book2.description = book.items[0].volumeInfo.description;
-            book2.imgURLs = [];
-            if (book.items[0].volumeInfo.imageLinks !== undefined)
-                book2.imgURLs.push(book.items[0].volumeInfo.imageLinks.thumbnail);
-            else
-                book2.imgURLs.push("http://" + req.headers.host + "/img/no_cover.jpg");
-            books.push(book2);
-        } else {
+                console.log(book);
+                let book2 = new Book();
+                book2.name = book.items[0].volumeInfo.title;
+                book2.authors = book.items[0].volumeInfo.authors;
+                book2.publisher = book.items[0].volumeInfo.publisher;
+                book2.date = book.items[0].volumeInfo.publishedDate;
+                book2.isbn = book.items[0].volumeInfo.industryIdentifiers[0].identifier;
+                book2.price = Math.round(Math.random() * 100);
+                book2.description = book.items[0].volumeInfo.description;
+                book2.imgURLs = [];
+                if (book.items[0].volumeInfo.imageLinks !== undefined)
+                    book2.imgURLs.push(book.items[0].volumeInfo.imageLinks.thumbnail);
+                else
+                    book2.imgURLs.push("http://" + req.headers.host + "/img/no_cover.jpg");
+                books.push(book2);
+            } else {
+                console.log("Google API : No book found");
+            }
+        } catch (e) {
             console.log("Google API : No book found");
-        }
-    }catch(e){
-        console.log("Google API : No book found");
         }
     }
 
