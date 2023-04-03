@@ -84,11 +84,6 @@ public class ProductsAdapter extends BaseAdapter {
             }
         });
 
-
-        Animation animation = android.view.animation.AnimationUtils.loadAnimation(activity.getContext(), R.anim.fadein);
-        layoutItem.startAnimation(animation);
-
-
         return layoutItem; //On retourne l'item créé.
     }
 
