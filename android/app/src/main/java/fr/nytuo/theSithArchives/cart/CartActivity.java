@@ -10,9 +10,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import fr.nytuo.theSithArchives.R;
-import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
-import fr.nytuo.theSithArchives.retraitMagasin.MagasinSelectionActivity;
-import fr.nytuo.theSithArchives.retraitMagasin.RetreiveCommandActivity;
+import fr.nytuo.theSithArchives.productslist.ProductsListActivity;
+import fr.nytuo.theSithArchives.clickandcollect.MagasinSelectionActivity;
+import fr.nytuo.theSithArchives.clickandcollect.RetreiveCommandActivity;
 
 /**
  * Activité du panier

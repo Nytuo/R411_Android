@@ -3,7 +3,7 @@ package fr.nytuo.theSithArchives.cart;
 import java.util.ArrayList;
 import java.util.Objects;
 
-import fr.nytuo.theSithArchives.productsList.Product;
+import fr.nytuo.theSithArchives.productslist.Product;
 
 /**
  * Liste des produits du panier

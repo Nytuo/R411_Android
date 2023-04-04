@@ -1,4 +1,4 @@
-package fr.nytuo.theSithArchives.productsList;
+package fr.nytuo.theSithArchives.productslist;
 
 import java.util.ArrayList;
 

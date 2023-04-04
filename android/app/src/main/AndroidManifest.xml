@@ -32,11 +32,11 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".productsList.ProductsListActivity"
+            android:name=".productslist.ProductsListActivity"
             android:exported="true"
             android:permission="fr.nytuo.theSithArchives.PERMISSION" />
         <activity
-            android:name=".retraitMagasin.MagasinSelectionActivity"
+            android:name=".clickandcollect.MagasinSelectionActivity"
             android:exported="true" />
         <activity
             android:name=".product.ProductActivity"
@@ -49,7 +49,7 @@
 
         </activity>
         <activity
-            android:name=".retraitMagasin.RetreiveCommandActivity"
+            android:name=".clickandcollect.RetreiveCommandActivity"
             android:exported="true">
 
         </activity>

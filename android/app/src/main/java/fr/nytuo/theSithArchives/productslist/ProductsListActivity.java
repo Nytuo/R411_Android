@@ -1,4 +1,4 @@
-package fr.nytuo.theSithArchives.productsList;
+package fr.nytuo.theSithArchives.productslist;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -24,7 +24,7 @@ import fr.nytuo.theSithArchives.cart.CartList;
 import fr.nytuo.theSithArchives.networking.HttpAsyncGet;
 import fr.nytuo.theSithArchives.networking.PostExecuteActivity;
 import fr.nytuo.theSithArchives.product.ProductActivity;
-import fr.nytuo.theSithArchives.retraitMagasin.RetreiveCommandActivity;
+import fr.nytuo.theSithArchives.clickandcollect.RetreiveCommandActivity;
 
 /**
  * Activité de la liste des produits (principal)

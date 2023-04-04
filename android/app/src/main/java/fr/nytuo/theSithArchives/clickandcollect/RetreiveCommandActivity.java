@@ -1,4 +1,4 @@
-package fr.nytuo.theSithArchives.retraitMagasin;
+package fr.nytuo.theSithArchives.clickandcollect;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -15,7 +15,7 @@ import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.cart.CartActivity;
 import fr.nytuo.theSithArchives.networking.HttpAsyncGet;
 import fr.nytuo.theSithArchives.networking.PostExecuteActivity;
-import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
+import fr.nytuo.theSithArchives.productslist.ProductsListActivity;
 
 /**
  *  Activité pour retrouver une commande d'après le numéro lors du passage de cette dernière

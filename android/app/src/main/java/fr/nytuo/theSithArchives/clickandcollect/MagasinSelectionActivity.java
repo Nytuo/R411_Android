@@ -1,4 +1,4 @@
-package fr.nytuo.theSithArchives.retraitMagasin;
+package fr.nytuo.theSithArchives.clickandcollect;
 
 
 import android.Manifest;
@@ -29,6 +29,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
+import java.util.Random;
 
 import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.cart.CartActivity;
@@ -36,7 +37,7 @@ import fr.nytuo.theSithArchives.networking.HttpAsyncGet;
 import fr.nytuo.theSithArchives.networking.HttpAsyncPost;
 import fr.nytuo.theSithArchives.networking.PostExecuteActivity;
 import fr.nytuo.theSithArchives.networking.PostExecutePost;
-import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
+import fr.nytuo.theSithArchives.productslist.ProductsListActivity;
 
 
 /**
@@ -68,7 +69,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
         new HttpAsyncGet<>("https://api.nytuo.fr/api/libraries/positions/20", Magasin.class, this, null);
 
         //On génère un nombre aléatoire pour le numéro de commande
-        int commandNumber = (int) (Math.random() * 1000000);
+        int commandNumber = new Random().nextInt(10000000);
 
         //Gestion des elements de l'interface
         Button buttonBuy = findViewById(R.id.buttonBuy);
@@ -100,7 +101,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
                 commande.setCommandNumber("test");
                 commande.setPrice("54");
                 commande.setBooks("test");
-                HttpAsyncPost httpAsyncPost = new HttpAsyncPost("https:////api.nytuo.fr/api/command", commande, this);
+                new HttpAsyncPost("https:////api.nytuo.fr/api/command", commande, this);
 
                 Intent intent = new Intent(this, ProductsListActivity.class);
                 startActivity(intent);
@@ -162,7 +163,6 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
 
     @Override
     public void onPostExecute(List<Magasin> itemList) {
-        TextView selectStoreTextView = findViewById(R.id.selectedStoreTextView);
 
         magasinList = itemList;
         selectedMagasin = magasinList.get(0); // On prend le premier magasin de la liste par défaut (le plus proche)
@@ -220,16 +220,15 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
         new Thread(() -> {
             //On attend que l'utilisateur sélectionne un item
             synchronized (lock) {
-                try {
-                    lock.wait();
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
+                while (getSelectedPosition() == -1) {
+                    try {
+                        lock.wait();
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
                 }
             }
-            runOnUiThread(() -> {
-                //On appelle la méthode qui gère la sélection de l'utilisateur avec la position de l'item sélectionné par l'utilisateur depuis le fragment
-                itemSelected(getSelectedPosition());
-            });
+            runOnUiThread(() -> itemSelected(getSelectedPosition()));
         }).start();
     }
 
@@ -255,7 +254,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
     private void itemSelected(int i) {
         Magasin magasin = magasinList.get(i);
         TextView selectedStoreTextView = findViewById(R.id.selectedStoreTextView);
-        selectedStoreTextView.setText("Boutique actuelle: " + magasin.getName() + " (" + magasin.getDistance() / 1000 + "km)");
+        selectedStoreTextView.setText(getResources().getString(R.string.ActualStore) + magasin.getName() + " (" + magasin.getDistance() / 1000 + "km)");
         selectedMagasin = magasin;
         if (mapView != null) {
             mapView.getMapAsync(googleMap -> googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(selectedMagasin.getLatitude(), selectedMagasin.getLongitude()), 15)));
@@ -313,10 +312,16 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
             locationMagasin.setLongitude(magasin.getLongitude());
             magasin.setDistance(location.distanceTo(locationMagasin));
         }
+        onUpdatedPosition();
+    }
 
+    /**
+     * Définit les actions à effectuer lorsque la position de l'utilisateur et celle des magasins sont mises à jour
+     */
+    private void onUpdatedPosition() {
         mapView.getMapAsync(googleMap -> googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(selectedMagasin.getLatitude(), selectedMagasin.getLongitude()), 15)));
         TextView selectStoreTextView = findViewById(R.id.selectedStoreTextView);
-        selectStoreTextView.setText("Boutique actuelle: " + magasinList.get(0).getName() + " (" + magasinList.get(0).getDistance() / 1000 + "km)");
+        selectStoreTextView.setText(getResources().getString(R.string.ActualStore) + magasinList.get(0).getName() + " (" + magasinList.get(0).getDistance() / 1000 + "km)");
         mapView.getMapAsync(
                 googleMap -> {
                     for (Magasin magasin1 : magasinList) {
@@ -326,7 +331,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
                                 if (magasin.getName().equals(marker.getTitle())) {
                                     selectedMagasin = magasin;
                                     Toast.makeText(this, "Vous avez sélectionné la librairie " + magasin.getName(), Toast.LENGTH_SHORT).show();
-                                    selectStoreTextView.setText("Boutique actuelle: " + magasin.getName() + " (" + magasin.getDistance() / 1000 + "km)");
+                                    selectStoreTextView.setText(getResources().getString(R.string.ActualStore) + magasin.getName() + " (" + magasin.getDistance() / 1000 + "km)");
                                     return true;
                                 }
                             }
@@ -335,10 +340,8 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
                     }
                 }
         );
-
         Button buttonOpenSelectStore = findViewById(R.id.openSelectStore);
         buttonOpenSelectStore.setOnClickListener(v -> showItemListDialogAndWait());
-
     }
 
 
@@ -349,11 +352,11 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
 
     @Override
     public void onSucces() {
-
+        Log.i("MainActivity", "Données récupérées avec succès");
     }
 
     @Override
     public void onError(int responseCode) {
-
+        Log.e("MainActivity", "Erreur lors de la récupération des données");
     }
 }

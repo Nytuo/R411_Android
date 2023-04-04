@@ -1,4 +1,4 @@
-package fr.nytuo.theSithArchives.retraitMagasin;
+package fr.nytuo.theSithArchives.clickandcollect;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

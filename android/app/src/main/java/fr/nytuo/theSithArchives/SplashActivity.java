@@ -6,7 +6,7 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
+import fr.nytuo.theSithArchives.productslist.ProductsListActivity;
 
 public class SplashActivity extends AppCompatActivity {
 

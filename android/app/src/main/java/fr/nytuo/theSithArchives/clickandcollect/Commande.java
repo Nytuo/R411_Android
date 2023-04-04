@@ -1,4 +1,4 @@
-package fr.nytuo.theSithArchives.retraitMagasin;
+package fr.nytuo.theSithArchives.clickandcollect;
 
 /**
  * Classe représentant une commande

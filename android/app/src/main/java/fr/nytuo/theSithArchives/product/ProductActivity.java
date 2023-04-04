@@ -16,9 +16,9 @@ import androidx.palette.graphics.Palette;
 import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.cart.CartActivity;
 import fr.nytuo.theSithArchives.cart.CartList;
-import fr.nytuo.theSithArchives.productsList.ProductsList;
-import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
-import fr.nytuo.theSithArchives.retraitMagasin.RetreiveCommandActivity;
+import fr.nytuo.theSithArchives.productslist.ProductsList;
+import fr.nytuo.theSithArchives.productslist.ProductsListActivity;
+import fr.nytuo.theSithArchives.clickandcollect.RetreiveCommandActivity;
 
 /**
  * Activité du produit (détail)

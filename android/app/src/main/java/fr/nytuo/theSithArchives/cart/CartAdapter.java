@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import fr.nytuo.theSithArchives.R;
-import fr.nytuo.theSithArchives.productsList.Product;
+import fr.nytuo.theSithArchives.productslist.Product;
 
 /**
  * Adapter de la liste de produits du panier
