@@ -335,23 +335,29 @@ async function GETNYTAPI_ISBN(NYTAPIKEY, number = 10) {
     let Ndata = await Nresponse.json();
     let lists = Ndata.results;
     let ISBNs = [];
+    console.log(Ndata,Nresponse);
+    try {
 
-    while (lists.length > 0) {
-        let list = lists[Math.floor(Math.random() * lists.length)];
-        let url = "https://api.nytimes.com/svc/books/v3/lists/current/" + list.list_name_encoded + ".json?api-key=" + NYTAPIKEY;
-        let response = await fetch(url);
-        let data = await response.json();
-        try {
-            for (let i = 0; i < data.results.books.length; i++) {
-                ISBNs.push(data.results.books[i].primary_isbn13);
+
+        while (lists.length > 0) {
+            let list = lists[Math.floor(Math.random() * lists.length)];
+            let url = "https://api.nytimes.com/svc/books/v3/lists/current/" + list.list_name_encoded + ".json?api-key=" + NYTAPIKEY;
+            let response = await fetch(url);
+            let data = await response.json();
+            try {
+                for (let i = 0; i < data.results.books.length; i++) {
+                    ISBNs.push(data.results.books[i].primary_isbn13);
+                }
+                if (ISBNs.length >= number) {
+                    return ISBNs;
+                }
+                lists.splice(lists.indexOf(list), 1);
+            } catch (e) {
+                console.log(e);
             }
-            if (ISBNs.length >= number) {
-                return ISBNs;
-            }
-            lists.splice(lists.indexOf(list), 1);
-        } catch (e) {
-            console.log(e);
         }
+    } catch (e) {
+        console.log(e);
     }
     return ISBNs;
 }

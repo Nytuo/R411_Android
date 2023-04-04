@@ -3,6 +3,7 @@ package fr.nytuo.thesitharchives.clickandcollect;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -26,8 +27,11 @@ public class RetreiveCommandActivity extends AppCompatActivity implements PostEx
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retreive_command);
-        if (getIntent().getExtras() != null) {
+        if (getIntent().getExtras() != null && getIntent().getExtras().containsKey("commandNumber")) {
             String commandNumber = getIntent().getExtras().getString("commandNumber");
+            if (commandNumber != null)
+                Log.d("commandNumber", commandNumber);
+            else Log.d("commandNumber", "null");
             new HttpAsyncGet<>("https://api.nytuo.fr/api/command/" + commandNumber, Commande.class, this, null);
         }
         Button searchForCommand = findViewById(R.id.searchForCommand);

@@ -105,7 +105,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
                 new HttpAsyncPost("https:////api.nytuo.fr/api/command", commande, this);
 
                 Intent intent = new Intent(this, RetreiveCommandActivity.class);
-                intent.putExtra("commandNumber", commandNumber);
+                intent.putExtra("commandNumber", String.valueOf(commandNumber));
                 CartList.getInstance().clear();
                 startActivity(intent);
 
