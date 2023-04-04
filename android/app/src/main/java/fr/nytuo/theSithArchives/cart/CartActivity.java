@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.retraitMagasin.MagasinSelectionActivity;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
+import fr.nytuo.theSithArchives.retraitMagasin.RetreiveCommandActivity;
 
 /**
  * Activité du panier
@@ -32,6 +33,12 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
         Button buttonPanier = findViewById(R.id.buttonPanier);
         Button buttonHome = findViewById(R.id.buttonHome);
         Button buttonConfirmer = findViewById(R.id.buttonConfirmer);
+        Button buttonContact = findViewById(R.id.buttonContact3);
+
+        buttonContact.setOnClickListener(v -> {
+            Intent intent = new Intent(this, RetreiveCommandActivity.class);
+            startActivity(intent);
+        });
 
         // Initialisation de l'adapter
         cartAdapter = new CartAdapter(this, CartList.getInstance());
