@@ -16,6 +16,9 @@ import fr.nytuo.theSithArchives.networking.HttpAsyncGet;
 import fr.nytuo.theSithArchives.networking.PostExecuteActivity;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
+/**
+ *  Activité pour retrouver une commande d'après le numéro lors du passage de cette dernière
+ */
 public class RetreiveCommandActivity extends AppCompatActivity implements PostExecuteActivity<Commande> {
 
     @Override
@@ -47,8 +50,13 @@ public class RetreiveCommandActivity extends AppCompatActivity implements PostEx
             Intent intent = new Intent(this, RetreiveCommandActivity.class);
             startActivity(intent);
         });
+        TextView textView = findViewById(R.id.textView);
+        TextView textView2 = findViewById(R.id.textView2);
+        TextView textView3 = findViewById(R.id.textView4);
 
-
+        textView.setText("Merci d'entrer votre numéro de commande dans le champs ci-dessus.");
+        textView2.setEnabled(false);
+        textView3.setEnabled(false);
     }
 
     @Override
@@ -56,7 +64,9 @@ public class RetreiveCommandActivity extends AppCompatActivity implements PostEx
         TextView textView = findViewById(R.id.textView);
         TextView textView2 = findViewById(R.id.textView2);
         TextView textView3 = findViewById(R.id.textView4);
-
+        textView.setEnabled(true);
+        textView2.setEnabled(true);
+        textView3.setEnabled(true);
         textView.setText(itemList.get(0).getCommandNumber());
         textView2.setText(itemList.get(0).getPrice());
         textView3.setText(itemList.get(0).getBooks());
