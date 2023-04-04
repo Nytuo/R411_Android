@@ -93,7 +93,7 @@ public class CartAdapter extends BaseAdapter {
         ImageView productImage = layoutItem.findViewById(R.id.productImage);
 
         productName.setText(products.get(position).getName());
-        productPrice.setText(products.get(position).getPrice() + "€");
+        productPrice.setText(String.format(cartAdapterListener.getContext().getString(R.string.finishByEUR), products.get(position).getPrice()));
 
         //traitement du bouton +
         plusButton.setOnClickListener(v -> {
@@ -103,7 +103,7 @@ public class CartAdapter extends BaseAdapter {
         });
         plusButton.setBackgroundColor(cartAdapterListener.getContext().getResources().getColor(R.color.colorPrimary));
         plusButton.setTextColor(cartAdapterListener.getContext().getResources().getColor(R.color.White));
-        plusButton.setText(products.get(position).getPrice() + "€");
+        plusButton.setText(String.format(cartAdapterListener.getContext().getString(R.string.finishByEUR), products.get(position).getPrice()));
         plusButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_add_24, 0, 0, 0);
         TextViewCompat.setCompoundDrawableTintList(plusButton, ContextCompat.getColorStateList(cartAdapterListener.getContext(), R.color.White));
         plusButton.setPadding(35, 0, 0, 0);
@@ -116,7 +116,7 @@ public class CartAdapter extends BaseAdapter {
         });
         minusButton.setBackgroundColor(cartAdapterListener.getContext().getResources().getColor(R.color.colorPrimary));
         minusButton.setTextColor(cartAdapterListener.getContext().getResources().getColor(R.color.White));
-        minusButton.setText(products.get(position).getPrice() + "€");
+        minusButton.setText(String.format(cartAdapterListener.getContext().getString(R.string.finishByEUR), products.get(position).getPrice()));
         minusButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_remove_24, 0, 0, 0);
         TextViewCompat.setCompoundDrawableTintList(minusButton, ContextCompat.getColorStateList(cartAdapterListener.getContext(), R.color.White));
         minusButton.setPadding(35, 0, 0, 0);

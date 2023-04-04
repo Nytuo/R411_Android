@@ -117,7 +117,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
      */
     private void updateTotalPrice() {
         TextView totalPrice = findViewById(R.id.textViewTotal);
-        totalPrice.setText(getString(R.string.total) + CartList.getInstance().getTotalPrice() + "€");
+        totalPrice.setText(getString(R.string.total, String.valueOf(CartList.getInstance().getTotalPrice())));
     }
 
 }

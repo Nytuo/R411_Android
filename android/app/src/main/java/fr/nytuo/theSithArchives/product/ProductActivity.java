@@ -57,7 +57,7 @@ public class ProductActivity extends AppCompatActivity {
         name.setText(ProductsList.getInstance().get(position).getName());
         ProductsList.getInstance().get(position).subToGetImgBitmap(this, image);
         description.setText(ProductsList.getInstance().get(position).getDescription());
-        price.setText(ProductsList.getInstance().get(position).getPrice() + "€");
+        price.setText(String.format(ProductActivity.this.getString(R.string.finishByEUR), ProductsList.getInstance().get(position).getPrice()));
         StringBuilder authors = new StringBuilder();
         if (ProductsList.getInstance().get(position).getAuthors().size() > 0) {
             for (String authorE : ProductsList.getInstance().get(position).getAuthors()) {
@@ -68,10 +68,10 @@ public class ProductActivity extends AppCompatActivity {
         } else {
             authors.append("Aucun auteur");
         }
-        author.setText("Auteur: " + authors);
-        publisher.setText("Éditeur: " + ProductsList.getInstance().get(position).getPublisher());
-        isbn.setText("ISBN: " + ProductsList.getInstance().get(position).getIsbn());
-        date.setText("Parution: " + ProductsList.getInstance().get(position).getDate());
+        author.setText(String.format(ProductActivity.this.getString(R.string.auteurs), authors));
+        publisher.setText(String.format(ProductActivity.this.getString(R.string.editeur), ProductsList.getInstance().get(position).getPublisher()));
+        isbn.setText(String.format(ProductActivity.this.getString(R.string.isbn), ProductsList.getInstance().get(position).getIsbn()));
+        date.setText(String.format(ProductActivity.this.getString(R.string.parution), ProductsList.getInstance().get(position).getDate()));
 
         // on récupère les couleurs de l'image pour les appliquer au background
         ProductsList.getInstance().get(position).subToGetImgBitmap(this, image, bitmap -> Palette.from(ProductsList.getInstance().get(position).getImgBitmap()).generate(p -> {

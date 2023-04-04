@@ -103,7 +103,7 @@ public class ProductsAdapter extends BaseAdapter {
 
         buttonAJouter.setBackgroundColor(productAdapterListener.getContext().getResources().getColor(R.color.colorPrimary));
         buttonAJouter.setTextColor(productAdapterListener.getContext().getResources().getColor(R.color.White));
-        buttonAJouter.setText(productList.get(position).getPrice() + "€");
+        buttonAJouter.setText(String.format(productAdapterListener.getContext().getString(R.string.finishByEUR), productList.get(position).getPrice()));
         buttonAJouter.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_add_shopping_cart_24, 0, 0, 0);
         TextViewCompat.setCompoundDrawableTintList(buttonAJouter, ContextCompat.getColorStateList(productAdapterListener.getContext(), R.color.White));
         buttonAJouter.setPadding(50, 0, 0, 0);

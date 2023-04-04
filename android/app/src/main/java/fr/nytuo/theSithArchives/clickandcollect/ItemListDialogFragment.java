@@ -16,6 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import java.util.Comparator;
 import java.util.List;
 
+import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.databinding.FragmentItemListDialogListDialogBinding;
 import fr.nytuo.theSithArchives.databinding.FragmentItemListDialogListDialogItemBinding;
 
@@ -146,7 +147,7 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             //On affiche le nom du magasin et sa distance
-            holder.text.setText(magasins.get(position).getName() + " (" + magasins.get(position).getDistance() / 1000 + " km)");
+            holder.text.setText(String.format(ItemListDialogFragment.this.getString(R.string.nameAndKilometers), magasins.get(position).getName(), magasins.get(position).getDistance() / 1000));
         }
 
     }

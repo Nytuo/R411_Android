@@ -254,7 +254,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
     private void itemSelected(int i) {
         Magasin magasin = magasinList.get(i);
         TextView selectedStoreTextView = findViewById(R.id.selectedStoreTextView);
-        selectedStoreTextView.setText(getResources().getString(R.string.ActualStore) + magasin.getName() + " (" + magasin.getDistance() / 1000 + "km)");
+        selectedStoreTextView.setText(String.format(MagasinSelectionActivity.this.getString(R.string.nameAndKilometers), magasin.getName(), magasin.getDistance() / 1000));
         selectedMagasin = magasin;
         if (mapView != null) {
             mapView.getMapAsync(googleMap -> googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(selectedMagasin.getLatitude(), selectedMagasin.getLongitude()), 15)));
@@ -321,7 +321,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
     private void onUpdatedPosition() {
         mapView.getMapAsync(googleMap -> googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(selectedMagasin.getLatitude(), selectedMagasin.getLongitude()), 15)));
         TextView selectStoreTextView = findViewById(R.id.selectedStoreTextView);
-        selectStoreTextView.setText(getResources().getString(R.string.ActualStore) + magasinList.get(0).getName() + " (" + magasinList.get(0).getDistance() / 1000 + "km)");
+        selectStoreTextView.setText(String.format(MagasinSelectionActivity.this.getString(R.string.nameAndKilometers), magasinList.get(0).getName(), magasinList.get(0).getDistance() / 1000));
         mapView.getMapAsync(
                 googleMap -> {
                     for (Magasin magasin1 : magasinList) {
@@ -331,7 +331,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
                                 if (magasin.getName().equals(marker.getTitle())) {
                                     selectedMagasin = magasin;
                                     Toast.makeText(this, "Vous avez sélectionné la librairie " + magasin.getName(), Toast.LENGTH_SHORT).show();
-                                    selectStoreTextView.setText(getResources().getString(R.string.ActualStore) + magasin.getName() + " (" + magasin.getDistance() / 1000 + "km)");
+                                    selectStoreTextView.setText(String.format(MagasinSelectionActivity.this.getString(R.string.nameAndKilometers), magasin.getName(), magasin.getDistance() / 1000));
                                     return true;
                                 }
                             }

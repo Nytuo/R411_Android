@@ -55,7 +55,7 @@ public class RetreiveCommandActivity extends AppCompatActivity implements PostEx
         TextView textView2 = findViewById(R.id.textView2);
         TextView textView3 = findViewById(R.id.textView4);
 
-        textView.setText("Merci d'entrer votre numéro de commande dans le champs ci-dessus.");
+        textView.setText(R.string.EnterCommandNumberHere);
         textView2.setEnabled(false);
         textView3.setEnabled(false);
     }
@@ -79,7 +79,7 @@ public class RetreiveCommandActivity extends AppCompatActivity implements PostEx
         textView.setEnabled(true);
         textView2.setEnabled(true);
         textView3.setEnabled(true);
-        textView.setText("Aucune commande trouvée.");
+        textView.setText(R.string.NoCommandFound);
 
     }
 
