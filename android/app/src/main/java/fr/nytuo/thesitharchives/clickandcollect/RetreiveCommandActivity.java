@@ -72,9 +72,9 @@ public class RetreiveCommandActivity extends AppCompatActivity implements PostEx
             textView.setEnabled(true);
             textView2.setEnabled(true);
             textView3.setEnabled(true);
-            textView.setText(itemList.get(0).getCommandNumber());
-            textView2.setText(itemList.get(0).getPrice());
-            textView3.setText(itemList.get(0).getBooks());
+            textView.setText(String.format(RetreiveCommandActivity.this.getString(R.string.CommandNumber), itemList.get(0).getCommandNumber()));
+            textView2.setText(String.format(RetreiveCommandActivity.this.getString(R.string.finishByEUR), Integer.parseInt(itemList.get(0).getPrice())));
+            textView3.setText(String.format(RetreiveCommandActivity.this.getString(R.string.Books), itemList.get(0).getBooks()));
         } else {
             TextView textView = findViewById(R.id.textView);
             TextView textView2 = findViewById(R.id.textView2);

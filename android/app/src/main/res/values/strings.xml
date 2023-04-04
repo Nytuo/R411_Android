@@ -26,5 +26,7 @@
     <string name="editeur">Editeur: %1$s</string>
     <string name="EnterCommandNumberHere">Merci d\'entrer votre numéro de commande dans le champs ci-dessus.</string>
     <string name="NoCommandFound">Aucune commande trouvée.</string>
+    <string name="CommandNumber">Numéro de commande : %1$s</string>
+    <string name="Books">Livres : %1$s</string>
 
 </resources>
