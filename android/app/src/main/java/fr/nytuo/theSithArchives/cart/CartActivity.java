@@ -13,39 +13,54 @@ import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.gps.MagasinSelectionActivity;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
+/**
+ * Activité du panier
+ * Récupère la liste des produits du panier et l'affiche, calcule le prix total et permet de passer à la commande
+ */
 public class CartActivity extends AppCompatActivity implements CartAdapterListener {
-    CartAdapter cartAdapter;
+    /**
+     * Adapter de la liste de produits
+     */
+    private CartAdapter cartAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+        // Récupération des éléments de l'interface
+        ListView cartListView = findViewById(R.id.cartListView);
+        Button buttonPanier = findViewById(R.id.buttonPanier);
+        Button buttonHome = findViewById(R.id.buttonHome);
+        Button buttonConfirmer = findViewById(R.id.buttonConfirmer);
 
-        ListView listView = findViewById(R.id.cartListView);
+        // Initialisation de l'adapter
         cartAdapter = new CartAdapter(this, CartList.getInstance());
-        listView.setAdapter(cartAdapter);
+        cartListView.setAdapter(cartAdapter);
         cartAdapter.addListener(this);
 
-        Button button = findViewById(R.id.buttonPanier);
-        button.setOnClickListener(v -> {
+        // Gestion des boutons
+
+        // Bouton panier
+        buttonPanier.setOnClickListener(v -> {
             Intent intent = new Intent(this, CartActivity.class);
             startActivity(intent);
         });
 
-        Button button2 = findViewById(R.id.buttonHome);
-        button2.setOnClickListener(v -> {
+        // Bouton home
+        buttonHome.setOnClickListener(v -> {
             Intent intent = new Intent(this, ProductsListActivity.class);
             startActivity(intent);
         });
 
-        Button button3 = findViewById(R.id.buttonConfirmer);
-        button3.setOnClickListener(v -> {
+        // Bouton confirmer
+        buttonConfirmer.setOnClickListener(v -> {
             CartList.getInstance().clear();
             Intent intent = new Intent(this, MagasinSelectionActivity.class);
             startActivity(intent);
         });
-        button3.setEnabled(!CartList.getInstance().isEmpty());
+        buttonConfirmer.setEnabled(!CartList.getInstance().isEmpty());
 
+        // Mise à jour du prix total
         updateTotalPrice();
     }
 
@@ -56,6 +71,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
 
     @Override
     public void onPlusClick(int position) {
+        // On augmente la quantité du produit, notifie l'adapter et met à jour le prix total
         CartList.getInstance().get(position).setQuantity(CartList.getInstance().get(position).getQuantity() + 1);
         cartAdapter.notifyDataSetChanged();
         updateTotalPrice();
@@ -63,6 +79,9 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
 
     @Override
     public void onMoinsClick(int position) {
+        // On diminue la quantité du produit, notifie l'adapter et met à jour le prix total
+        //si la quantité est à 1, on supprime le produit, sinon on diminue la quantité
+
         if (CartList.getInstance().get(position).getQuantity() > 1) {
             CartList.getInstance().get(position).setQuantity(CartList.getInstance().get(position).getQuantity() - 1);
             cartAdapter.notifyDataSetChanged();
@@ -71,11 +90,12 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
             CartList.getInstance().remove(position);
             cartAdapter.notifyDataSetChanged();
         }
+
         updateTotalPrice();
 
         if (CartList.getInstance().isEmpty()) {
-            Button button3 = findViewById(R.id.buttonConfirmer);
-            button3.setEnabled(false);
+            Button buttonConfirmer = findViewById(R.id.buttonConfirmer);
+            buttonConfirmer.setEnabled(false);
         }
 
     }
@@ -85,6 +105,9 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
         return this;
     }
 
+    /**
+     * Met à jour le prix total
+     */
     private void updateTotalPrice() {
         TextView totalPrice = findViewById(R.id.textViewTotal);
         totalPrice.setText(getString(R.string.total) + CartList.getInstance().getTotalPrice() + "€");
