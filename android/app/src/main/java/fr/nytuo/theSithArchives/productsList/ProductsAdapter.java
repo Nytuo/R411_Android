@@ -13,56 +13,95 @@ import java.util.List;
 
 import fr.nytuo.theSithArchives.R;
 
+/**
+ * Adapter permettant de gérer la liste des produits
+ */
 public class ProductsAdapter extends BaseAdapter {
-    private final List<Product> items;
-    private final LayoutInflater mInflater;
-    private final ProductAdapterListener activity;
-    private final ArrayList<ProductAdapterListener> productListener = new ArrayList<>();
+    /**
+     * Liste des produits
+     */
+    private final List<Product> productList;
+    /**
+     * Layout inflater
+     */
+    private final LayoutInflater layoutInflater;
+    /**
+     * Listener de l'activité
+     */
+    private final ProductAdapterListener productAdapterListener;
+    /**
+     *  Liste des listeners
+     */
+    private final ArrayList<ProductAdapterListener> productAdapterListeners = new ArrayList<>();
 
-    public ProductsAdapter(ProductAdapterListener activity, List<Product> items) {
-        this.activity = activity;
-        this.items = items;
-        mInflater = LayoutInflater.from(activity.getContext());
+    /**
+     * Constructeur de l'adapter
+     * @param productAdapterListener Listener de l'activité
+     * @param productList Liste des produits
+     */
+    public ProductsAdapter(ProductAdapterListener productAdapterListener, List<Product> productList) {
+        this.productAdapterListener = productAdapterListener;
+        this.productList = productList;
+        layoutInflater = LayoutInflater.from(productAdapterListener.getContext());
     }
 
+    /**
+     * Récupère le nombre d'éléments dans la liste
+     * @return Nombre d'éléments dans la liste
+     */
     public int getCount() {
-        return items.size();
+        return productList.size();
     }
 
+    /**
+     * Récupère l'élément à la position donnée
+     * @param position Position de l'élément
+     * @return L'élément à la position donnée
+     */
     public Object getItem(int position) {
-        return items.get(position);
+        return productList.get(position);
     }
 
+    /**
+     * Récupère l'ID de l'élément à la position donnée
+     * @param position Position de l'élément
+     * @return L'ID de l'élément à la position donnée
+     */
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * Récupère la vue de l'élément à la position donnée
+     * @param position Position de l'élément
+     * @param convertView Vue de l'élément
+     * @param parent Parent de l'élément
+     * @return Vue de l'élément
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         View layoutItem;
-        layoutItem = convertView == null ? mInflater.inflate(R.layout.product_layout, parent, false) : convertView;
+        layoutItem = convertView == null ? layoutInflater.inflate(R.layout.product_layout, parent, false) : convertView;
         TextView displayName = layoutItem.findViewById(R.id.productName);
-        displayName.setText(items.get(position).getName());
+        displayName.setText(productList.get(position).getName());
         ImageView displayImg = layoutItem.findViewById(R.id.productImage);
-        items.get(position).subToGetImgBitmap(activity.getActivity(),displayImg);
+        productList.get(position).subToGetImgBitmap(productAdapterListener.getActivity(),displayImg);
         displayName.setTag(position);
-        Button button = layoutItem.findViewById(R.id.buttonAjouter);
+        Button buttonAJouter = layoutItem.findViewById(R.id.buttonAjouter);
 
-        button.setOnClickListener(v -> {
-            button.setText(R.string.added);
-            activity.onAddToCartClick(position);
+        buttonAJouter.setOnClickListener(v -> {
+            buttonAJouter.setText(R.string.added);
+            productAdapterListener.onAddToCartClick(position);
         });
 
-        button.setBackgroundColor(activity.getContext().getResources().getColor(R.color.colorPrimary));
-        button.setTextColor(activity.getContext().getResources().getColor(R.color.White));
-        button.setText(items.get(position).getPrice() + "€");
-
-
-        button.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_add_shopping_cart_24, 0, 0, 0);
-        button.setCompoundDrawableTintList(activity.getContext().getResources().getColorStateList(R.color.White));
-        button.setPadding(50, 0, 0, 0);
+        buttonAJouter.setBackgroundColor(productAdapterListener.getContext().getResources().getColor(R.color.colorPrimary));
+        buttonAJouter.setTextColor(productAdapterListener.getContext().getResources().getColor(R.color.White));
+        buttonAJouter.setText(productList.get(position).getPrice() + "€");
+        buttonAJouter.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_add_shopping_cart_24, 0, 0, 0);
+        buttonAJouter.setCompoundDrawableTintList(productAdapterListener.getContext().getResources().getColorStateList(R.color.White));
+        buttonAJouter.setPadding(50, 0, 0, 0);
 
         layoutItem.setOnClickListener(v -> {
-            for (ProductAdapterListener listener : productListener) {
+            for (ProductAdapterListener listener : productAdapterListeners) {
                 listener.onElementClick(position);
             }
         });
@@ -70,8 +109,12 @@ public class ProductsAdapter extends BaseAdapter {
         return layoutItem;
     }
 
+    /**
+     * Ajoute un listener à l'adapter
+     * @param listener Listener de l'activité
+     */
     public void addListener(ProductAdapterListener listener) {
-        productListener.add(listener);
+        productAdapterListeners.add(listener);
     }
 
 }

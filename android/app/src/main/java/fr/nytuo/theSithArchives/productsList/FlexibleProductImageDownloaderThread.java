@@ -12,47 +12,80 @@ import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
+/**
+ * Thread permettant de télécharger les images des produits
+ */
 public class FlexibleProductImageDownloaderThread implements Runnable{
 
-    private final HashMap<BaseAdapter,AppCompatActivity> adapters= new HashMap<>();
+    /**
+     * Liste des adapters à mettre à jour
+     */
+    private final HashMap<BaseAdapter,AppCompatActivity> baseAdapterAppCompatActivityHashMap = new HashMap<>();
+    /**
+     * File d'attente des produits à télécharger
+     */
     private final BlockingQueue<Product> blockingQueue = new LinkedBlockingDeque<>();
 
-    public static FlexibleProductImageDownloaderThread instance = new FlexibleProductImageDownloaderThread();
+    /**
+     * Instance du thread
+     */
+    public static FlexibleProductImageDownloaderThread flexibleProductImageDownloaderThread = new FlexibleProductImageDownloaderThread();
 
+    /**
+     * Constructeur du thread
+     */
     public FlexibleProductImageDownloaderThread() {
         Thread thread = new Thread(this);
         thread.setDaemon(true);
         thread.start();
     }
+
+    /**
+     * Ajoute un adapter à mettre à jour
+     * @param adapter Adapter à mettre à jour
+     * @param activity Activité
+     */
     public void addAdapter(BaseAdapter adapter, AppCompatActivity activity) {
-        adapters.put(adapter, activity);
-    }
-    public void removeAdapter(BaseAdapter adapter) {
-        adapters.remove(adapter);
+        baseAdapterAppCompatActivityHashMap.put(adapter, activity);
     }
 
+    /**
+     * Supprime un adapter
+     * @param adapter Adapter à supprimer
+     */
+    public void removeAdapter(BaseAdapter adapter) {
+        baseAdapterAppCompatActivityHashMap.remove(adapter);
+    }
+
+    /**
+     * Boucle du thread permettant de télécharger les images
+     */
     @Override
     public void run() {
         while (true) {
             try {
                 Product product = blockingQueue.take();
-
                     Bitmap image = null;
                     try {
+                        // Téléchargement de l'image
                         URL url = new URL(product.getImgURLs().get(0));
                         image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                     } catch(IOException e) {
                         e.printStackTrace();
                     }
-
-                product.resiveImgBitmap(image);
-                adapters.forEach((key, value) -> value.runOnUiThread(key::notifyDataSetChanged));
+                // Mise à jour de l'image
+                product.receiveImgBitmap(image);
+                baseAdapterAppCompatActivityHashMap.forEach((key, value) -> value.runOnUiThread(key::notifyDataSetChanged));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
+    /**
+     * Ajoute un produit à télécharger
+     * @param product Produit à télécharger
+     */
     public void add(Product product) {
         blockingQueue.add(product);
     }

@@ -21,7 +21,13 @@ import fr.nytuo.theSithArchives.cart.CartActivity;
 import fr.nytuo.theSithArchives.cart.CartList;
 import fr.nytuo.theSithArchives.product.ProductActivity;
 
+/**
+ * Activité de la liste des produits (principal)
+ */
 public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity<Product>, ProductAdapterListener {
+    /**
+     * Pop-up de chargement
+     */
     ProgressDialog progressDialog;
 
     @Override
@@ -78,9 +84,9 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         listProduits.startAnimation(animation2);
         this.progressDialog.dismiss();
         ProductsAdapter productsAdapter = new ProductsAdapter(this, ProductsList.getInstance());
-        FlexibleProductImageDownloaderThread.instance.addAdapter(productsAdapter, this);
+        FlexibleProductImageDownloaderThread.flexibleProductImageDownloaderThread.addAdapter(productsAdapter, this);
         for (Product product : ProductsList.getInstance()){
-            FlexibleProductImageDownloaderThread.instance.add(product);
+            FlexibleProductImageDownloaderThread.flexibleProductImageDownloaderThread.add(product);
         }
         this.runOnUiThread(productsAdapter::notifyDataSetChanged);
         listProduits.setAdapter(productsAdapter);
