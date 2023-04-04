@@ -12,6 +12,7 @@ public class ProductsList extends ArrayList<Product> {
     private static ProductsList instance;
 
     public ProductsList() {
+        // Vide car singleton
     }
 
     /**

@@ -67,6 +67,7 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
                 clickTimer = new CountDownTimer(DELAY_MILLIS, DELAY_MILLIS) {
                     @Override
                     public void onTick(long millisUntilFinished) {
+                        // Do nothing
                     }
 
                     @Override

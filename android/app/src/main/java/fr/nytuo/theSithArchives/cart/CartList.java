@@ -15,6 +15,7 @@ public class CartList extends ArrayList<Product> {
     private static CartList instance;
 
     public CartList() {
+        // Vide car singleton
     }
 
     /**

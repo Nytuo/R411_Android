@@ -21,6 +21,7 @@ public class Commande {
     private String books;
 
     public Commande() {
+        //Vide car singleton
     }
 
     /**

@@ -69,6 +69,7 @@ public class Product {
     private EventAfterImageLoad eventAfterImageLoad;
 
     public Product() {
+        //Vide pour le JSON
     }
 
     /**

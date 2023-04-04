@@ -16,9 +16,9 @@ import androidx.palette.graphics.Palette;
 import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.cart.CartActivity;
 import fr.nytuo.theSithArchives.cart.CartList;
+import fr.nytuo.theSithArchives.clickandcollect.RetreiveCommandActivity;
 import fr.nytuo.theSithArchives.productslist.ProductsList;
 import fr.nytuo.theSithArchives.productslist.ProductsListActivity;
-import fr.nytuo.theSithArchives.clickandcollect.RetreiveCommandActivity;
 
 /**
  * Activité du produit (détail)
@@ -59,11 +59,7 @@ public class ProductActivity extends AppCompatActivity {
         description.setText(ProductsList.getInstance().get(position).getDescription());
         price.setText(ProductsList.getInstance().get(position).getPrice() + "€");
         StringBuilder authors = new StringBuilder();
-        if (ProductsList.getInstance().get(position).getAuthors().size() == 1)
-            authors.append(ProductsList.getInstance().get(position).getAuthors().get(0));
-        else if (ProductsList.getInstance().get(position).getAuthors().size() == 2)
-            authors.append(ProductsList.getInstance().get(position).getAuthors().get(0)).append(" et ").append(ProductsList.getInstance().get(position).getAuthors().get(1));
-        else if (ProductsList.getInstance().get(position).getAuthors().size() > 2) {
+        if (ProductsList.getInstance().get(position).getAuthors().size() > 0) {
             for (String authorE : ProductsList.getInstance().get(position).getAuthors()) {
                 if (authorE.equals(ProductsList.getInstance().get(position).getAuthors().get(ProductsList.getInstance().get(position).getAuthors().size() - 1))) {
                     authors.append(authorE);
