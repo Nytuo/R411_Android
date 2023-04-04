@@ -19,13 +19,17 @@ import fr.nytuo.theSithArchives.cart.CartList;
 import fr.nytuo.theSithArchives.productsList.ProductsList;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
+/**
+ * Activité du produit (détail)
+ */
 public class ProductActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setTheme(R.style.Theme_Android411);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fullview);
+        setContentView(R.layout.activity_product_details);
+
         Intent intent = getIntent();
         int position = intent.getIntExtra("position", 0);
 
@@ -34,7 +38,7 @@ public class ProductActivity extends AppCompatActivity {
         ImageView image = findViewById(R.id.imageView);
         TextView description = findViewById(R.id.description);
         ConstraintLayout constraintLayout = findViewById(R.id.background);
-        Button button = findViewById(R.id.button);
+        Button buttonAddToCart = findViewById(R.id.buttonAddToCart);
         TextView price = findViewById(R.id.price);
         TextView author = findViewById(R.id.authors);
         TextView publisher = findViewById(R.id.publisher);
@@ -43,9 +47,9 @@ public class ProductActivity extends AppCompatActivity {
         ScrollView scrollView = (ScrollView) findViewById(R.id.backgroundScroll);
 
 
+        //On initialise les données
         name.setText(ProductsList.getInstance().get(position).getName());
         ProductsList.getInstance().get(position).subToGetImgBitmap(this,image);
-
         description.setText(ProductsList.getInstance().get(position).getDescription());
         price.setText(ProductsList.getInstance().get(position).getPrice() + "€");
         StringBuilder authors = new StringBuilder();
@@ -68,6 +72,7 @@ public class ProductActivity extends AppCompatActivity {
         isbn.setText("ISBN: " + ProductsList.getInstance().get(position).getIsbn());
         date.setText("Parution: " + ProductsList.getInstance().get(position).getDate());
 
+        // on récupère les couleurs de l'image pour les appliquer au background
         ProductsList.getInstance().get(position).subToGetImgBitmap(this, image, bitmap -> {
             Palette.from(ProductsList.getInstance().get(position).getImgBitmap()).generate(p -> {
                 assert p != null;
@@ -81,12 +86,13 @@ public class ProductActivity extends AppCompatActivity {
                 }
                 constraintLayout.setBackgroundColor(darkVibrant);
                 scrollView.setBackgroundColor(darkVibrant);
-                button.setBackgroundColor(muted);
+                buttonAddToCart.setBackgroundColor(muted);
 
                 if (muted == darkVibrant || muted == darkMuted || muted == vibrant) {
-                    button.setBackgroundColor(Color.CYAN);
+                    buttonAddToCart.setBackgroundColor(Color.CYAN);
                 }
 
+                // si la couleur est sombre, on change la couleur des textes
                 if (isColorDark(darkVibrant)){
                     name.setTextColor(Color.WHITE);
                     description.setTextColor(Color.WHITE);
@@ -100,33 +106,50 @@ public class ProductActivity extends AppCompatActivity {
             });
         });
 
-        button.setOnClickListener(v -> {
-            button.setText(R.string.added);
+        // on ajoute le produit au panier
+        buttonAddToCart.setOnClickListener(v -> {
+            buttonAddToCart.setText(R.string.added);
             handleAddToCart(position);
         });
 
-        Button button4 = findViewById(R.id.buttonHome);
-        button4.setOnClickListener(v ->{
+        // on retourne à la liste des produits
+        Button buttonHome = findViewById(R.id.buttonHome);
+        buttonHome.setOnClickListener(v ->{
             Intent intent1 = new Intent(ProductActivity.this, ProductsListActivity.class);
             startActivity(intent1);
         });
 
-        Button button3 = findViewById(R.id.buttonPanier);
-        button3.setOnClickListener(v ->{
+        // on retourne au panier
+        Button buttonPanier = findViewById(R.id.buttonPanier);
+        buttonPanier.setOnClickListener(v ->{
             Intent intent1 = new Intent(ProductActivity.this, CartActivity.class);
             startActivity(intent1);
         });
 
     }
 
+    /**
+     * Vérifie si la couleur est sombre
+     * @param color couleur
+     * @return true si la couleur est sombre
+     */
     private boolean isColorDark(int color) {
         return ColorUtils.calculateLuminance(color) < 0.5 && ColorUtils.calculateContrast(Color.WHITE, color) > 1.5;
     }
 
+    /**
+     * Vérifie si la couleur est claire
+     * @param color couleur
+     * @return true si la couleur est claire
+     */
     private boolean isColorLight(int color) {
         return ColorUtils.calculateLuminance(color) > 0.5;
     }
 
+    /**
+     * Ajoute un produit à la liste du panier
+     * @param position position du produit dans la liste
+     */
     public void handleAddToCart(int position) {
         ProductsList.getInstance().get(position).setQuantity(1);
         CartList.getInstance().add(ProductsList.getInstance().get(position));
