@@ -33,6 +33,7 @@ import java.util.Random;
 
 import fr.nytuo.thesitharchives.R;
 import fr.nytuo.thesitharchives.cart.CartActivity;
+import fr.nytuo.thesitharchives.cart.CartList;
 import fr.nytuo.thesitharchives.networking.HttpAsyncGet;
 import fr.nytuo.thesitharchives.networking.HttpAsyncPost;
 import fr.nytuo.thesitharchives.networking.PostExecuteActivity;
@@ -98,12 +99,14 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
                         + "'. Votre commande porte le numéro: " + commandNumber, System.currentTimeMillis() + 10000, 2);
 
                 Commande commande = new Commande();
-                commande.setCommandNumber("test");
-                commande.setPrice("54");
-                commande.setBooks("test");
+                commande.setCommandNumber(String.valueOf(commandNumber));
+                commande.setPrice(String.valueOf(CartList.getInstance().getTotalPrice()));
+                commande.setBooks(String.valueOf(CartList.getInstance().getAllBooksName()));
                 new HttpAsyncPost("https:////api.nytuo.fr/api/command", commande, this);
 
-                Intent intent = new Intent(this, ProductsListActivity.class);
+                Intent intent = new Intent(this, RetreiveCommandActivity.class);
+                intent.putExtra("commandNumber", commandNumber);
+                CartList.getInstance().clear();
                 startActivity(intent);
 
             });

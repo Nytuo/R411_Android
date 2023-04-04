@@ -43,6 +43,14 @@ public class CartList extends ArrayList<Product> {
         return totalPrice;
     }
 
+    public String getAllBooksName() {
+        String allBooksName = "";
+        for (int i = 0; i < this.size(); i++) {
+            allBooksName += this.get(i).getName() + ", ";
+        }
+        return allBooksName;
+    }
+
     @Override
     public boolean add(Product product) {
         product.setQuantity(product.getQuantity() + 1);

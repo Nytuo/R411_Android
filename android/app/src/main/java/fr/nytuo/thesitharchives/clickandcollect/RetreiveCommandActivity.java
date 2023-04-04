@@ -18,7 +18,7 @@ import fr.nytuo.thesitharchives.networking.PostExecuteActivity;
 import fr.nytuo.thesitharchives.productslist.ProductsListActivity;
 
 /**
- *  Activité pour retrouver une commande d'après le numéro lors du passage de cette dernière
+ * Activité pour retrouver une commande d'après le numéro lors du passage de cette dernière
  */
 public class RetreiveCommandActivity extends AppCompatActivity implements PostExecuteActivity<Commande> {
 
@@ -26,7 +26,10 @@ public class RetreiveCommandActivity extends AppCompatActivity implements PostEx
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_retreive_command);
-
+        if (getIntent().getExtras() != null) {
+            String commandNumber = getIntent().getExtras().getString("commandNumber");
+            new HttpAsyncGet<>("https://api.nytuo.fr/api/command/" + commandNumber, Commande.class, this, null);
+        }
         Button searchForCommand = findViewById(R.id.searchForCommand);
         searchForCommand.setOnClickListener(v -> {
             EditText editText = findViewById(R.id.editTextCommand);
@@ -62,7 +65,7 @@ public class RetreiveCommandActivity extends AppCompatActivity implements PostEx
 
     @Override
     public void onPostExecute(List<Commande> itemList) {
-        if (itemList!=null && itemList.get(0) != null){
+        if (itemList != null && itemList.get(0) != null) {
             TextView textView = findViewById(R.id.textView);
             TextView textView2 = findViewById(R.id.textView2);
             TextView textView3 = findViewById(R.id.textView4);
@@ -72,14 +75,17 @@ public class RetreiveCommandActivity extends AppCompatActivity implements PostEx
             textView.setText(itemList.get(0).getCommandNumber());
             textView2.setText(itemList.get(0).getPrice());
             textView3.setText(itemList.get(0).getBooks());
+        } else {
+            TextView textView = findViewById(R.id.textView);
+            TextView textView2 = findViewById(R.id.textView2);
+            TextView textView3 = findViewById(R.id.textView4);
+            textView.setEnabled(true);
+            textView2.setEnabled(true);
+            textView3.setEnabled(true);
+            textView.setText(R.string.NoCommandFound);
+            textView2.setText("");
+            textView3.setText("");
         }
-        TextView textView = findViewById(R.id.textView);
-        TextView textView2 = findViewById(R.id.textView2);
-        TextView textView3 = findViewById(R.id.textView4);
-        textView.setEnabled(true);
-        textView2.setEnabled(true);
-        textView3.setEnabled(true);
-        textView.setText(R.string.NoCommandFound);
 
     }
 
