@@ -36,7 +36,9 @@ public class HttpAsyncGet<T>{
             doInBackGround(url);
             postExecuteActivity.runOnUiThread( ()-> {
                 if(progressDialog != null) progressDialog.dismiss();
-                postExecuteActivity.onPostExecute(getItemResult());
+                if (itemList != null){
+                    postExecuteActivity.onPostExecute(getItemResult());
+                }
             } );
         };
         Executors.newSingleThreadExecutor().execute( runnable );
