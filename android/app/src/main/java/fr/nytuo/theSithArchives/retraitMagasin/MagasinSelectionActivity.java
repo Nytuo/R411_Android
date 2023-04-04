@@ -143,7 +143,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
 
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(System.currentTimeMillis())
+                .setWhen(time)
                 .setSmallIcon(R.drawable.logo)
                 .setContentTitle("Commande")
                 .setContentText(text)
