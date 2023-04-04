@@ -76,6 +76,14 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
         Button buttonBuy = findViewById(R.id.buttonBuy);
         Button buttonPanier = findViewById(R.id.buttonPanier_magasin);
         Button buttonHome = findViewById(R.id.buttonHome_magasin);
+
+        Button buttonContact = findViewById(R.id.buttonContact2);
+
+        buttonContact.setOnClickListener(v -> {
+            Intent intent = new Intent(this, RetreiveCommandActivity.class);
+            startActivity(intent);
+        });
+
         mapView = findViewById(R.id.map);
 
 

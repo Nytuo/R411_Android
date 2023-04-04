@@ -44,6 +44,10 @@
             android:name=".cart.CartActivity"
             android:exported="true">
 
+        </activity>        <activity
+            android:name=".retraitMagasin.RetreiveCommandActivity"
+            android:exported="true">
+
         </activity>
     </application>
 
