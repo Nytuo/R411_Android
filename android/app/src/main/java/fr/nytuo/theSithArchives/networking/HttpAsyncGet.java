@@ -2,8 +2,10 @@ package fr.nytuo.theSithArchives.networking;
 
 import android.app.ProgressDialog;
 import android.util.Log;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,12 +18,12 @@ import java.net.URL;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-public class HttpAsyncGet<T>{
+public class HttpAsyncGet<T> {
     private static final String TAG = "android411 " + HttpAsyncGet.class.getSimpleName();
     private final Class<T> clazz;
-    private List<T> itemList;
     private final HttpHandler webService;
-    PostExecuteActivity postExecuteActivity;
+    private final PostExecuteActivity<?> postExecuteActivity;
+    private List<T> itemList;
 
 
     public HttpAsyncGet(String url, Class<T> clazz, PostExecuteActivity postExecuteActivity, ProgressDialog progressDialog) {
@@ -31,27 +33,25 @@ public class HttpAsyncGet<T>{
         this.postExecuteActivity = postExecuteActivity;
 
 
-        if(progressDialog != null) onPreExecute( progressDialog );
-        Runnable runnable = ()->{
+        if (progressDialog != null) onPreExecute(progressDialog);
+        Runnable runnable = () -> {
             doInBackGround(url);
-            postExecuteActivity.runOnUiThread( ()-> {
-                if(progressDialog != null) progressDialog.dismiss();
-                if (itemList != null){
+            postExecuteActivity.runOnUiThread(() -> {
+                if (progressDialog != null) progressDialog.dismiss();
+                if (itemList != null) {
                     postExecuteActivity.onPostExecute(getItemResult());
                 }
-            } );
+            });
         };
-        Executors.newSingleThreadExecutor().execute( runnable );
+        Executors.newSingleThreadExecutor().execute(runnable);
     }
 
 
-    public void doInBackGround(String urlAddress){
+    public void doInBackGround(String urlAddress) {
         // get the jsonStr to parse
         String jsonStr = webService.makeServiceCall(urlAddress);
         if (jsonStr == null) {
-            postExecuteActivity.runOnUiThread( ()-> {
-                postExecuteActivity.onError();
-            } );
+            postExecuteActivity.runOnUiThread(() -> postExecuteActivity.onError());
             return;
         }
         ObjectMapper mapper = new ObjectMapper();
@@ -66,7 +66,7 @@ public class HttpAsyncGet<T>{
         return itemList;
     }
 
-    public void onPreExecute( ProgressDialog progressDialog ) {
+    public void onPreExecute(ProgressDialog progressDialog) {
         progressDialog.setMessage("Connexion en cours...");
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -100,12 +100,16 @@ public class HttpAsyncGet<T>{
             try {
                 while ((line = reader.readLine()) != null) {
                     stringBuilder.append(line).append('\n');
-                    Log.e(TAG,line);
+                    Log.e(TAG, line);
                 }
-            }
-            catch (IOException e) {  e.printStackTrace();   }
-            finally {
-                try { inputStream.close(); } catch (IOException e) { e.printStackTrace();  }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
             return stringBuilder.toString();
         }

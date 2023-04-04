@@ -30,14 +30,15 @@ public class ProductsAdapter extends BaseAdapter {
      */
     private final ProductAdapterListener productAdapterListener;
     /**
-     *  Liste des listeners
+     * Liste des listeners
      */
     private final ArrayList<ProductAdapterListener> productAdapterListeners = new ArrayList<>();
 
     /**
      * Constructeur de l'adapter
+     *
      * @param productAdapterListener Listener de l'activité
-     * @param productList Liste des produits
+     * @param productList            Liste des produits
      */
     public ProductsAdapter(ProductAdapterListener productAdapterListener, List<Product> productList) {
         this.productAdapterListener = productAdapterListener;
@@ -47,6 +48,7 @@ public class ProductsAdapter extends BaseAdapter {
 
     /**
      * Récupère le nombre d'éléments dans la liste
+     *
      * @return Nombre d'éléments dans la liste
      */
     public int getCount() {
@@ -55,6 +57,7 @@ public class ProductsAdapter extends BaseAdapter {
 
     /**
      * Récupère l'élément à la position donnée
+     *
      * @param position Position de l'élément
      * @return L'élément à la position donnée
      */
@@ -64,6 +67,7 @@ public class ProductsAdapter extends BaseAdapter {
 
     /**
      * Récupère l'ID de l'élément à la position donnée
+     *
      * @param position Position de l'élément
      * @return L'ID de l'élément à la position donnée
      */
@@ -73,9 +77,10 @@ public class ProductsAdapter extends BaseAdapter {
 
     /**
      * Récupère la vue de l'élément à la position donnée
-     * @param position Position de l'élément
+     *
+     * @param position    Position de l'élément
      * @param convertView Vue de l'élément
-     * @param parent Parent de l'élément
+     * @param parent      Parent de l'élément
      * @return Vue de l'élément
      */
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -84,7 +89,7 @@ public class ProductsAdapter extends BaseAdapter {
         TextView displayName = layoutItem.findViewById(R.id.productName);
         displayName.setText(productList.get(position).getName());
         ImageView displayImg = layoutItem.findViewById(R.id.productImage);
-        productList.get(position).subToGetImgBitmap(productAdapterListener.getActivity(),displayImg);
+        productList.get(position).subToGetImgBitmap(productAdapterListener.getActivity(), displayImg);
         displayName.setTag(position);
         Button buttonAJouter = layoutItem.findViewById(R.id.buttonAjouter);
 
@@ -111,6 +116,7 @@ public class ProductsAdapter extends BaseAdapter {
 
     /**
      * Ajoute un listener à l'adapter
+     *
      * @param listener Listener de l'activité
      */
     public void addListener(ProductAdapterListener listener) {

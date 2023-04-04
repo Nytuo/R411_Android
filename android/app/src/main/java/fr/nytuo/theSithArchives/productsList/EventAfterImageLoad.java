@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 public interface EventAfterImageLoad {
     /**
      * Appelé après le chargement d'une image
+     *
      * @param image Image chargée
      */
     void onImageLoad(Bitmap image);

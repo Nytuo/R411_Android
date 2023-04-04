@@ -16,17 +16,18 @@ public class Magasin {
     /**
      * Distance entre le magasin et l'utilisateur
      */
-    private double distance=-1;
+    private double distance = -1;
     /**
      * Nom du magasin
      */
     private String name;
 
-    Magasin(){
+    Magasin() {
     }
 
     /**
      * Récupère la latitude du magasin
+     *
      * @return Latitude du magasin
      */
     public double getLatitude() {
@@ -34,23 +35,8 @@ public class Magasin {
     }
 
     /**
-     * Récupère la longitude du magasin
-     * @return Longitude du magasin
-     */
-    public double getLongitude() {
-        return longitude;
-    }
-
-    /**
-     * Récupère le nom du magasin
-     * @return le nom du magasin
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
      * Définit la latitude du magasin
+     *
      * @param latitude Latitude du magasin
      */
     public void setLatitude(double latitude) {
@@ -58,7 +44,17 @@ public class Magasin {
     }
 
     /**
+     * Récupère la longitude du magasin
+     *
+     * @return Longitude du magasin
+     */
+    public double getLongitude() {
+        return longitude;
+    }
+
+    /**
      * Définit la longitude du magasin
+     *
      * @param longitude Longitude du magasin
      */
     public void setLongitude(double longitude) {
@@ -66,7 +62,17 @@ public class Magasin {
     }
 
     /**
+     * Récupère le nom du magasin
+     *
+     * @return le nom du magasin
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
      * Définit le nom du magasin
+     *
      * @param name le nom du magasin
      */
     public void setName(String name) {
@@ -75,6 +81,7 @@ public class Magasin {
 
     /**
      * Récupère la distance entre le magasin et l'utilisateur
+     *
      * @return La distance entre le magasin et l'utilisateur
      */
     public double getDistance() {
@@ -83,6 +90,7 @@ public class Magasin {
 
     /**
      * Définit la distance entre le magasin et l'utilisateur
+     *
      * @param distance La distance entre le magasin et l'utilisateur
      */
     public void setDistance(double distance) {

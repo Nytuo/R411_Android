@@ -28,14 +28,13 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.text.BreakIterator;
 import java.util.List;
 
+import fr.nytuo.theSithArchives.R;
+import fr.nytuo.theSithArchives.cart.CartActivity;
 import fr.nytuo.theSithArchives.networking.HttpAsyncGet;
 import fr.nytuo.theSithArchives.networking.HttpAsyncPost;
 import fr.nytuo.theSithArchives.networking.PostExecuteActivity;
-import fr.nytuo.theSithArchives.R;
-import fr.nytuo.theSithArchives.cart.CartActivity;
 import fr.nytuo.theSithArchives.networking.PostExecutePost;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
@@ -45,12 +44,11 @@ import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
  */
 public class MagasinSelectionActivity extends AppCompatActivity implements PostExecuteActivity<Magasin>, PostExecutePost {
 
+    public static int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
     /**
      * Liste des magasins
      */
     private List<Magasin> magasinList;
-    public static int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
-
     /**
      * Magasin sélectionné
      */
@@ -102,7 +100,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
                 commande.setCommandNumber("test");
                 commande.setPrice("54");
                 commande.setBooks("test");
-                HttpAsyncPost httpAsyncPost = new HttpAsyncPost("https:////api.nytuo.fr/api/command", commande,this);
+                HttpAsyncPost httpAsyncPost = new HttpAsyncPost("https:////api.nytuo.fr/api/command", commande, this);
 
                 Intent intent = new Intent(this, ProductsListActivity.class);
                 startActivity(intent);
@@ -128,7 +126,8 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
 
     /**
      * Génère une notification
-     * @param text  Texte de la notification
+     *
+     * @param text Texte de la notification
      * @param time Temps de la notification
      * @param id   ID de la notification
      */
@@ -214,7 +213,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
         dialogFragment.setOnItemSelectedListener(position -> {
             //On débloque le thread en attente
             synchronized (lock) {
-                lock.notify();
+                lock.notifyAll();
             }
         });
 
@@ -224,7 +223,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
                 try {
                     lock.wait();
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    Thread.currentThread().interrupt();
                 }
             }
             runOnUiThread(() -> {

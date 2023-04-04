@@ -4,32 +4,25 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
-import java.util.Objects;
 
-import fr.nytuo.theSithArchives.networking.HttpAsyncGet;
-import fr.nytuo.theSithArchives.networking.PostExecuteActivity;
 import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.cart.CartActivity;
 import fr.nytuo.theSithArchives.cart.CartList;
+import fr.nytuo.theSithArchives.networking.HttpAsyncGet;
+import fr.nytuo.theSithArchives.networking.PostExecuteActivity;
 import fr.nytuo.theSithArchives.product.ProductActivity;
 import fr.nytuo.theSithArchives.retraitMagasin.RetreiveCommandActivity;
 
@@ -38,10 +31,6 @@ import fr.nytuo.theSithArchives.retraitMagasin.RetreiveCommandActivity;
  */
 public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity<Product>, ProductAdapterListener {
     /**
-     * Pop-up de chargement
-     */
-    private ProgressDialog progressDialog;
-    /**
      * Delay pour le multi-click
      */
     private static final int DELAY_MILLIS = 500;
@@ -49,12 +38,14 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
      * Nombre de click max pour le multi-click
      */
     private static final int MAX_CLICK_COUNT = 3;
-
     /**
      * Media player pour la musique
      */
     MediaPlayer mediaPlayer;
-
+    /**
+     * Pop-up de chargement
+     */
+    private ProgressDialog progressDialog;
     /**
      * Compteur sur le nombre de click
      */
@@ -63,6 +54,34 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
      * CountDownTimer pour le multi-click
      */
     private CountDownTimer clickTimer;
+    /**
+     * Listener du bouton home
+     * Permet de lancer la musique si on clique X fois dessus et de revenir à l'activité principale
+     */
+    private final View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            clickCount++;
+
+            if (clickCount == 1) {
+                clickTimer = new CountDownTimer(DELAY_MILLIS, DELAY_MILLIS) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                    }
+
+                    @Override
+                    public void onFinish() {
+                        startActivity(new Intent(ProductsListActivity.this, ProductsListActivity.class));
+                    }
+                }.start();
+            } else if (clickCount == MAX_CLICK_COUNT) {
+                clickTimer.cancel();
+                playSong();
+                clickCount = 0;
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -103,49 +122,19 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
 
     }
 
-
-    /**
-     * Listener du bouton home
-     * Permet de lancer la musique si on clique X fois dessus et de revenir à l'activité principale
-     */
-    private final View.OnClickListener onClickListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            clickCount++;
-
-            if (clickCount == 1) {
-                clickTimer = new CountDownTimer(DELAY_MILLIS, DELAY_MILLIS) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {}
-
-                    @Override
-                    public void onFinish() {
-                        startActivity(new Intent(ProductsListActivity.this, ProductsListActivity.class));
-                    }
-                }.start();
-            } else if (clickCount == MAX_CLICK_COUNT) {
-                clickTimer.cancel();
-                playSong();
-                clickCount = 0;
-            }
-        }
-    };
-
     /**
      * Lance la musique
      */
     private void playSong() {
-        if (mediaPlayer == null) {
-            mediaPlayer = MediaPlayer.create(this, R.raw.maintheme);
-        }else{
+        if (mediaPlayer != null) {
             mediaPlayer.stop();
             mediaPlayer.release();
-            mediaPlayer = MediaPlayer.create(this, R.raw.maintheme);
         }
+        mediaPlayer = MediaPlayer.create(this, R.raw.maintheme);
         mediaPlayer.start();
     }
 
-    private void onsubmit(String query){
+    private void onsubmit(String query) {
         this.progressDialog.show();
         query = Uri.parse("https://api.nytuo.fr/api/book/search/" + query).buildUpon().build().toString();
         new HttpAsyncGet<>(query, Product.class, ProductsListActivity.this, null);
@@ -163,7 +152,7 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         this.progressDialog.dismiss();
         ProductsAdapter productsAdapter = new ProductsAdapter(this, ProductsList.getInstance());
         FlexibleProductImageDownloaderThread.flexibleProductImageDownloaderThread.addAdapter(productsAdapter, this);
-        for (Product product : ProductsList.getInstance()){
+        for (Product product : ProductsList.getInstance()) {
             FlexibleProductImageDownloaderThread.flexibleProductImageDownloaderThread.add(product);
         }
         this.runOnUiThread(productsAdapter::notifyDataSetChanged);

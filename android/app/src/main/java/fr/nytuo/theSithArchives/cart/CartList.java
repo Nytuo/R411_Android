@@ -14,35 +14,37 @@ public class CartList extends ArrayList<Product> {
      */
     private static CartList instance;
 
+    public CartList() {
+    }
+
     /**
      * Retourne l'instance de la liste
+     *
      * @return L'instance de la liste
      */
-    public static CartList getInstance(){
-        if (instance==null) {
+    public static CartList getInstance() {
+        if (instance == null) {
             instance = new CartList();
         }
         return instance;
     }
 
-    public CartList() {
-    }
-
     /**
      * Retourne le prix total de la liste
+     *
      * @return Le prix total de la liste
      */
     public int getTotalPrice() {
         int totalPrice = 0;
         for (int i = 0; i < this.size(); i++) {
-            totalPrice += this.get(i).getPrice()*this.get(i).getQuantity();
+            totalPrice += this.get(i).getPrice() * this.get(i).getQuantity();
         }
         return totalPrice;
     }
 
     @Override
     public boolean add(Product product) {
-        product.setQuantity(product.getQuantity()+1);
+        product.setQuantity(product.getQuantity() + 1);
         for (int i = 0; i < this.size(); i++) {
             if (Objects.equals(this.get(i).getIsbn(), product.getIsbn())) {
                 return true;

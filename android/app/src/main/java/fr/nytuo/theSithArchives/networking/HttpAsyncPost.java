@@ -10,7 +10,7 @@ import java.util.concurrent.Executors;
 
 public class HttpAsyncPost {
 
-    public HttpAsyncPost(String url,Object object,PostExecutePost postExecuteActivity) {
+    public HttpAsyncPost(String url, Object object, PostExecutePost postExecuteActivity) {
         ObjectMapper mapper = new ObjectMapper();
         String jsonStr = null;
         try {
@@ -19,7 +19,7 @@ public class HttpAsyncPost {
             e.printStackTrace();
         }
         String finalJsonStr = jsonStr;
-        Runnable runnable = ()->{
+        Runnable runnable = () -> {
             try {
                 HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
                 connection.setRequestMethod("POST");
@@ -30,24 +30,16 @@ public class HttpAsyncPost {
                 connection.getOutputStream().close();
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    postExecuteActivity.runOnUiThread( ()-> {
-                        postExecuteActivity.onSucces();
-                    } );
-                }
-                else {
-                    postExecuteActivity.runOnUiThread( ()-> {
-                        postExecuteActivity.onError(responseCode);
-                    } );
+                    postExecuteActivity.runOnUiThread(() -> postExecuteActivity.onSucces());
+                } else {
+                    postExecuteActivity.runOnUiThread(() -> postExecuteActivity.onError(responseCode));
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         };
 
-        Executors.newSingleThreadExecutor().execute( runnable );
-
-
-
+        Executors.newSingleThreadExecutor().execute(runnable);
 
 
     }

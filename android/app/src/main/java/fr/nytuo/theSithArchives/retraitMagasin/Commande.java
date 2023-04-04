@@ -13,42 +13,19 @@ public class Commande {
     /**
      * Prix de la commande
      */
-   private  String price;
+    private String price;
 
     /**
-     *  Livres de la commande
+     * Livres de la commande
      */
     private String books;
 
-    public Commande(){
-    }
-
-    /**
-     * Définit le numéro de la commande
-     * @param commandNumber  Numéro de la commande
-     */
-    public void setCommandNumber(String commandNumber) {
-        this.commandNumber = commandNumber;
-    }
-
-    /**
-     * Définit le prix de la commande
-     * @param price Prix de la commande
-     */
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
-    /**
-     * Définit les livres de la commande
-     * @param books Livres de la commande
-     */
-    public void setBooks(String books) {
-        this.books = books;
+    public Commande() {
     }
 
     /**
      * Récupère le numéro de la commande
+     *
      * @return Numéro de la commande
      */
     public String getCommandNumber() {
@@ -56,7 +33,17 @@ public class Commande {
     }
 
     /**
+     * Définit le numéro de la commande
+     *
+     * @param commandNumber Numéro de la commande
+     */
+    public void setCommandNumber(String commandNumber) {
+        this.commandNumber = commandNumber;
+    }
+
+    /**
      * Récupère le prix de la commande
+     *
      * @return Prix de la commande
      */
     public String getPrice() {
@@ -64,10 +51,29 @@ public class Commande {
     }
 
     /**
+     * Définit le prix de la commande
+     *
+     * @param price Prix de la commande
+     */
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    /**
      * Récupère les livres de la commande
+     *
      * @return Les livres de la commande
      */
     public String getBooks() {
         return books;
+    }
+
+    /**
+     * Définit les livres de la commande
+     *
+     * @param books Livres de la commande
+     */
+    public void setBooks(String books) {
+        this.books = books;
     }
 }

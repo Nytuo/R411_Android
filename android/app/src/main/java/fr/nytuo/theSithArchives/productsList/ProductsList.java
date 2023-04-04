@@ -1,4 +1,5 @@
 package fr.nytuo.theSithArchives.productsList;
+
 import java.util.ArrayList;
 
 /**
@@ -10,16 +11,18 @@ public class ProductsList extends ArrayList<Product> {
      */
     private static ProductsList instance;
 
+    public ProductsList() {
+    }
+
     /**
      * Récupère l'instance de la liste de produits
+     *
      * @return Instance de la liste de produits
      */
-    public static ProductsList getInstance(){
-        if (instance==null) {
+    public static ProductsList getInstance() {
+        if (instance == null) {
             instance = new ProductsList();
         }
         return instance;
-    }
-    public ProductsList() {
     }
 }

@@ -37,7 +37,7 @@ public class CartAdapter extends BaseAdapter {
 
     /**
      * @param cartAdapterListener Listener de l'adapter
-     * @param products Liste des produits
+     * @param products            Liste des produits
      */
     public CartAdapter(CartAdapterListener cartAdapterListener, List<Product> products) {
         this.cartAdapterListener = cartAdapterListener;
@@ -47,6 +47,7 @@ public class CartAdapter extends BaseAdapter {
 
     /**
      * Retourne le nombre de produits
+     *
      * @return Le nombre de produits
      */
     public int getCount() {
@@ -70,9 +71,9 @@ public class CartAdapter extends BaseAdapter {
     }
 
     /**
-     * @param position Position du produit dans la liste
+     * @param position    Position du produit dans la liste
      * @param convertView Vue à réutiliser
-     * @param parent Parent de la vue
+     * @param parent      Parent de la vue
      * @return La vue du produit à la position donnée
      */
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -118,13 +119,14 @@ public class CartAdapter extends BaseAdapter {
         minusButton.setPadding(35, 0, 0, 0);
 
         productQuantity.setText(String.valueOf(products.get(position).getQuantity()));
-        products.get(position).subToGetImgBitmap(cartAdapterListener.getActivity(),productImage);
+        products.get(position).subToGetImgBitmap(cartAdapterListener.getActivity(), productImage);
         productName.setTag(position);
         return layoutItem;
     }
 
     /**
      * Ajoute un listener à l'adapter
+     *
      * @param listener Listener à ajouter
      */
     public void addListener(CartAdapterListener listener) {

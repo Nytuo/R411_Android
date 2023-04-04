@@ -10,8 +10,8 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import fr.nytuo.theSithArchives.R;
-import fr.nytuo.theSithArchives.retraitMagasin.MagasinSelectionActivity;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
+import fr.nytuo.theSithArchives.retraitMagasin.MagasinSelectionActivity;
 import fr.nytuo.theSithArchives.retraitMagasin.RetreiveCommandActivity;
 
 /**
@@ -23,6 +23,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
      * Adapter de la liste de produits
      */
     private CartAdapter cartAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,8 +93,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
         if (CartList.getInstance().get(position).getQuantity() > 1) {
             CartList.getInstance().get(position).setQuantity(CartList.getInstance().get(position).getQuantity() - 1);
             cartAdapter.notifyDataSetChanged();
-        }
-        else {
+        } else {
             CartList.getInstance().remove(position);
             cartAdapter.notifyDataSetChanged();
         }

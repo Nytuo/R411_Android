@@ -45,7 +45,7 @@ public class ProductActivity extends AppCompatActivity {
         TextView publisher = findViewById(R.id.publisher);
         TextView isbn = findViewById(R.id.isbn);
         TextView date = findViewById(R.id.date);
-        ScrollView scrollView = (ScrollView) findViewById(R.id.backgroundScroll);
+        ScrollView scrollView = findViewById(R.id.backgroundScroll);
         Button buttonContact = findViewById(R.id.buttonContact4);
 
         buttonContact.setOnClickListener(v -> {
@@ -55,7 +55,7 @@ public class ProductActivity extends AppCompatActivity {
 
         //On initialise les données
         name.setText(ProductsList.getInstance().get(position).getName());
-        ProductsList.getInstance().get(position).subToGetImgBitmap(this,image);
+        ProductsList.getInstance().get(position).subToGetImgBitmap(this, image);
         description.setText(ProductsList.getInstance().get(position).getDescription());
         price.setText(ProductsList.getInstance().get(position).getPrice() + "€");
         StringBuilder authors = new StringBuilder();
@@ -67,10 +67,9 @@ public class ProductActivity extends AppCompatActivity {
             for (String authorE : ProductsList.getInstance().get(position).getAuthors()) {
                 if (authorE.equals(ProductsList.getInstance().get(position).getAuthors().get(ProductsList.getInstance().get(position).getAuthors().size() - 1))) {
                     authors.append(authorE);
-                } else
-                    authors.append(authorE).append(", ");
+                } else authors.append(authorE).append(", ");
             }
-        }else{
+        } else {
             authors.append("Aucun auteur");
         }
         author.setText("Auteur: " + authors);
@@ -79,38 +78,36 @@ public class ProductActivity extends AppCompatActivity {
         date.setText("Parution: " + ProductsList.getInstance().get(position).getDate());
 
         // on récupère les couleurs de l'image pour les appliquer au background
-        ProductsList.getInstance().get(position).subToGetImgBitmap(this, image, bitmap -> {
-            Palette.from(ProductsList.getInstance().get(position).getImgBitmap()).generate(p -> {
-                assert p != null;
-                int vibrant = p.getVibrantColor(0x000000);
-                int darkVibrant = p.getDarkVibrantColor(0x000000);
-                int muted = p.getMutedColor(0x000000);
-                int darkMuted = p.getDarkMutedColor(0x000000);
-                int lightMuted = p.getLightMutedColor(0x000000);
-                if (darkVibrant == Color.TRANSPARENT || darkVibrant == Color.WHITE) {
-                    darkVibrant = Color.BLACK;
-                }
-                constraintLayout.setBackgroundColor(darkVibrant);
-                scrollView.setBackgroundColor(darkVibrant);
-                buttonAddToCart.setBackgroundColor(muted);
+        ProductsList.getInstance().get(position).subToGetImgBitmap(this, image, bitmap -> Palette.from(ProductsList.getInstance().get(position).getImgBitmap()).generate(p -> {
+            assert p != null;
+            int vibrant = p.getVibrantColor(0x000000);
+            int darkVibrant = p.getDarkVibrantColor(0x000000);
+            int muted = p.getMutedColor(0x000000);
+            int darkMuted = p.getDarkMutedColor(0x000000);
+            int lightMuted = p.getLightMutedColor(0x000000);
+            if (darkVibrant == Color.TRANSPARENT || darkVibrant == Color.WHITE) {
+                darkVibrant = Color.BLACK;
+            }
+            constraintLayout.setBackgroundColor(darkVibrant);
+            scrollView.setBackgroundColor(darkVibrant);
+            buttonAddToCart.setBackgroundColor(muted);
 
-                if (muted == darkVibrant || muted == darkMuted || muted == vibrant) {
-                    buttonAddToCart.setBackgroundColor(Color.CYAN);
-                }
+            if (muted == darkVibrant || muted == darkMuted || muted == vibrant) {
+                buttonAddToCart.setBackgroundColor(Color.CYAN);
+            }
 
-                // si la couleur est sombre, on change la couleur des textes
-                if (isColorDark(darkVibrant)){
-                    name.setTextColor(Color.WHITE);
-                    description.setTextColor(Color.WHITE);
-                    price.setTextColor(Color.WHITE);
-                    author.setTextColor(Color.WHITE);
-                    publisher.setTextColor(Color.WHITE);
-                    isbn.setTextColor(Color.WHITE);
-                    date.setTextColor(Color.WHITE);
-                }
+            // si la couleur est sombre, on change la couleur des textes
+            if (isColorDark(darkVibrant)) {
+                name.setTextColor(Color.WHITE);
+                description.setTextColor(Color.WHITE);
+                price.setTextColor(Color.WHITE);
+                author.setTextColor(Color.WHITE);
+                publisher.setTextColor(Color.WHITE);
+                isbn.setTextColor(Color.WHITE);
+                date.setTextColor(Color.WHITE);
+            }
 
-            });
-        });
+        }));
 
         // on ajoute le produit au panier
         buttonAddToCart.setOnClickListener(v -> {
@@ -120,14 +117,14 @@ public class ProductActivity extends AppCompatActivity {
 
         // on retourne à la liste des produits
         Button buttonHome = findViewById(R.id.buttonHome);
-        buttonHome.setOnClickListener(v ->{
+        buttonHome.setOnClickListener(v -> {
             Intent intent1 = new Intent(ProductActivity.this, ProductsListActivity.class);
             startActivity(intent1);
         });
 
         // on retourne au panier
         Button buttonPanier = findViewById(R.id.buttonPanier);
-        buttonPanier.setOnClickListener(v ->{
+        buttonPanier.setOnClickListener(v -> {
             Intent intent1 = new Intent(ProductActivity.this, CartActivity.class);
             startActivity(intent1);
         });
@@ -136,6 +133,7 @@ public class ProductActivity extends AppCompatActivity {
 
     /**
      * Vérifie si la couleur est sombre
+     *
      * @param color couleur
      * @return true si la couleur est sombre
      */
@@ -145,6 +143,7 @@ public class ProductActivity extends AppCompatActivity {
 
     /**
      * Vérifie si la couleur est claire
+     *
      * @param color couleur
      * @return true si la couleur est claire
      */
@@ -154,6 +153,7 @@ public class ProductActivity extends AppCompatActivity {
 
     /**
      * Ajoute un produit à la liste du panier
+     *
      * @param position position du produit dans la liste
      */
     private void handleAddToCart(int position) {
