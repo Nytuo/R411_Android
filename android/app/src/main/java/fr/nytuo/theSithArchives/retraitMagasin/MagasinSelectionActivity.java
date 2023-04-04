@@ -46,18 +46,18 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
     /**
      * Liste des magasins
      */
-    List<Magasin> magasinList;
+    private List<Magasin> magasinList;
     public static int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
 
     /**
      * Magasin sélectionné
      */
-    Magasin selectedMagasin;
+    private Magasin selectedMagasin;
 
     /**
      * MapView (Google Maps)
      */
-    MapView mapView;
+    private MapView mapView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,7 +115,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
      * @param time Temps de la notification
      * @param id   ID de la notification
      */
-    public void spawnNotification(String text, long time, int id) {
+    private void spawnNotification(String text, long time, int id) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         String NOTIFICATION_CHANNEL_ID = "fr.nytuo.theSithArchives";
 
@@ -170,7 +170,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
     /**
      * Affiche la liste des magasins dans un fragment et attend que l'utilisateur en sélectionne un
      */
-    public void showItemListDialogAndWait() {
+    private void showItemListDialogAndWait() {
         //On génère le fragment
         ItemListDialogFragment dialogFragment = ItemListDialogFragment.newInstance(magasinList.size(), magasinList);
         //On affiche le fragment
@@ -247,7 +247,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
 
     }
 
-    public void updateDistanceOnList() {
+    private void updateDistanceOnList() {
         getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;

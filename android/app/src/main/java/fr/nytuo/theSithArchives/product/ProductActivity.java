@@ -150,7 +150,7 @@ public class ProductActivity extends AppCompatActivity {
      * Ajoute un produit à la liste du panier
      * @param position position du produit dans la liste
      */
-    public void handleAddToCart(int position) {
+    private void handleAddToCart(int position) {
         ProductsList.getInstance().get(position).setQuantity(1);
         CartList.getInstance().add(ProductsList.getInstance().get(position));
     }

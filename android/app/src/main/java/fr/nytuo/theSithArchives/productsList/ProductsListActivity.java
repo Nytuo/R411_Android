@@ -28,7 +28,7 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
     /**
      * Pop-up de chargement
      */
-    ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +67,7 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         });
     }
 
-    public void onsubmit(String query){
+    private void onsubmit(String query){
         this.progressDialog.show();
         query = Uri.parse("https://api.nytuo.fr/api/book/search/" + query).buildUpon().build().toString();
         new HttpAsyncGet<>(query, Product.class, ProductsListActivity.this, null);
