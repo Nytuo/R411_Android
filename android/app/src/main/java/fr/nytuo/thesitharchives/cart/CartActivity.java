@@ -59,6 +59,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapterListen
             Intent intent = new Intent(this, ProductsListActivity.class);
             startActivity(intent);
         });
+        
 
         // Bouton confirmer
         buttonConfirmer.setOnClickListener(v -> {
