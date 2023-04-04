@@ -33,7 +33,6 @@
         app:icon="@drawable/baseline_shopping_cart_24"
         app:iconPadding="0dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
