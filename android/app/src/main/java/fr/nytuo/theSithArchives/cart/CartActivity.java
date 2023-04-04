@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import fr.nytuo.theSithArchives.R;
-import fr.nytuo.theSithArchives.gps.MagasinSelectionActivity;
+import fr.nytuo.theSithArchives.retraitMagasin.MagasinSelectionActivity;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
 /**
