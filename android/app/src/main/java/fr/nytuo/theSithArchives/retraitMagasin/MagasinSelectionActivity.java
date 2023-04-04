@@ -28,6 +28,7 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.text.BreakIterator;
 import java.util.List;
 
 import fr.nytuo.theSithArchives.networking.HttpAsyncGet;
@@ -133,7 +134,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
 
         notificationBuilder.setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_ALL)
-                .setWhen(time)
+                .setWhen(System.currentTimeMillis())
                 .setSmallIcon(R.drawable.logo)
                 .setContentTitle("Commande")
                 .setContentText(text)
@@ -150,7 +151,6 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
         magasinList = itemList;
         selectedMagasin = magasinList.get(0); // On prend le premier magasin de la liste par défaut (le plus proche)
         //On bouge la caméra sur la position du magasin sélectionné
-        mapView.getMapAsync(googleMap -> googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(selectedMagasin.getLatitude(), selectedMagasin.getLongitude()), 15)));
 
         //On demande la permission d'accéder à la position de l'utilisateur
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -160,28 +160,9 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
         }
         //On met à jour la distance entre l'utilisateur et les magasins et on modifie le texte de la boutique actuelle
         updateDistanceOnList();
-        selectStoreTextView.setText("Boutique actuelle: " + magasinList.get(0).getName() + " (" + magasinList.get(0).getDistance() / 1000 + "km)");
-        Button buttonOpenSelectStore = findViewById(R.id.openSelectStore);
 
-        //On ajoute les marqueurs sur la map et définit les actions sur le click pour toutes les librairies
-        mapView.getMapAsync(
-                googleMap -> {
-                    for (Magasin magasin1 : magasinList) {
-                        googleMap.addMarker(new MarkerOptions().position(new LatLng(magasin1.getLatitude(), magasin1.getLongitude())).title(magasin1.getName()));
-                        googleMap.setOnMarkerClickListener(marker -> {
-                            for (Magasin magasin : magasinList) {
-                                if (magasin.getName().equals(marker.getTitle())) {
-                                    selectedMagasin = magasin;
-                                    Toast.makeText(this, "Vous avez sélectionné la librairie " + magasin.getName(), Toast.LENGTH_SHORT).show();
-                                    selectStoreTextView.setText("Boutique actuelle: " + magasin.getName() + " (" + magasin.getDistance() / 1000 + "km)");
-                                    return true;
-                                }
-                            }
-                            return false;
-                        });
-                    }
-                }
-        );
+
+        Button buttonOpenSelectStore = findViewById(R.id.openSelectStore);
         //On définit l'action à effectuer lorsque l'utilisateur clique sur le bouton pour ouvrir la liste des magasins (le fragment)
         buttonOpenSelectStore.setOnClickListener(v -> showItemListDialogAndWait());
     }
@@ -267,6 +248,7 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
     }
 
     public void updateDistanceOnList() {
+        getSystemService(LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
@@ -300,6 +282,29 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
             locationMagasin.setLongitude(magasin.getLongitude());
             magasin.setDistance(location.distanceTo(locationMagasin));
         }
+
+        mapView.getMapAsync(googleMap -> googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(selectedMagasin.getLatitude(), selectedMagasin.getLongitude()), 15)));
+        TextView selectStoreTextView = findViewById(R.id.selectedStoreTextView);
+        selectStoreTextView.setText("Boutique actuelle: " + magasinList.get(0).getName() + " (" + magasinList.get(0).getDistance() / 1000 + "km)");
+        mapView.getMapAsync(
+                googleMap -> {
+                    for (Magasin magasin1 : magasinList) {
+                        googleMap.addMarker(new MarkerOptions().position(new LatLng(magasin1.getLatitude(), magasin1.getLongitude())).title(magasin1.getName()));
+                        googleMap.setOnMarkerClickListener(marker -> {
+                            for (Magasin magasin : magasinList) {
+                                if (magasin.getName().equals(marker.getTitle())) {
+                                    selectedMagasin = magasin;
+                                    Toast.makeText(this, "Vous avez sélectionné la librairie " + magasin.getName(), Toast.LENGTH_SHORT).show();
+                                    selectStoreTextView.setText("Boutique actuelle: " + magasin.getName() + " (" + magasin.getDistance() / 1000 + "km)");
+                                    return true;
+                                }
+                            }
+                            return false;
+                        });
+                    }
+                }
+        );
+
     }
 
 
