@@ -326,7 +326,7 @@ app.post("/api/command", limiterDefault, async function (req, res) {
 app.get("/api/command/:commandNumber", limiterDefault, async function (req, res) {
     let commandNumber = req.params.commandNumber;
     let command = Commands.find(c => c.commandNumber === commandNumber);
-    res.send(command);
+    res.send([command]);
 });
 
 async function GETNYTAPI_ISBN(NYTAPIKEY, number = 10) {
