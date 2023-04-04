@@ -120,7 +120,6 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
 
     @Override
     public void onAddToCartClick(int position) {
-        ProductsList.getInstance().get(position).setQuantity(1);
         CartList.getInstance().add(ProductsList.getInstance().get(position));
     }
 
