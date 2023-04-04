@@ -28,6 +28,7 @@
         android:layout_marginStart="72dp"
         android:layout_marginEnd="16dp"
         android:paddingLeft="8dp"
+        android:text="text"
         android:textSize="0sp"
         app:icon="@drawable/baseline_shopping_cart_24"
         app:iconPadding="0dp"
@@ -40,6 +41,7 @@
         android:layout_width="187dp"
         android:layout_height="70dp"
         android:layout_marginTop="8dp"
+        android:contentDescription="@string/logo_desc"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -56,7 +58,6 @@
         android:textSize="0sp"
         app:icon="@drawable/baseline_home_24"
         app:iconPadding="0dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageView2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,6 +67,7 @@
         android:layout_height="398dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:contentDescription="@string/worldWideMap"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/openSelectStore" />
@@ -77,7 +79,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="16dp"
-        android:text="Réserver"
+        android:text="@string/reserve"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/map" />
@@ -88,7 +90,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
         android:gravity="center"
-        android:text="Merci de selectionner la boutique dans laquelle retirer votre commande."
+        android:text="@string/selectIntroMagasinText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView4" />
@@ -98,7 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Changer"
+        android:text="@string/change"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selectedStoreTextView" />
@@ -110,7 +112,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Boutique actuelle : "
+        android:text="@string/ActualStore"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
