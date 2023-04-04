@@ -41,6 +41,28 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
      * Pop-up de chargement
      */
     private ProgressDialog progressDialog;
+    /**
+     * Delay pour le multi-click
+     */
+    private static final int DELAY_MILLIS = 500;
+    /**
+     * Nombre de click max pour le multi-click
+     */
+    private static final int MAX_CLICK_COUNT = 3;
+
+    /**
+     * Media player pour la musique
+     */
+    MediaPlayer mediaPlayer;
+
+    /**
+     * Compteur sur le nombre de click
+     */
+    private int clickCount = 0;
+    /**
+     * CountDownTimer pour le multi-click
+     */
+    private CountDownTimer clickTimer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,34 +102,28 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         });
 
     }
-    private static final int DELAY_MILLIS = 1000; // Change this to the delay you want
-    private static final int MAX_CLICK_COUNT = 3; // Change this to the maximum number of clicks
 
-    MediaPlayer mediaPlayer;
 
-    private int clickCount = 0;
-    private CountDownTimer clickTimer;
-
+    /**
+     * Listener du bouton home
+     * Permet de lancer la musique si on clique X fois dessus et de revenir à l'activité principale
+     */
     private final View.OnClickListener onClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             clickCount++;
 
             if (clickCount == 1) {
-                // Start the timer if this is the first click
                 clickTimer = new CountDownTimer(DELAY_MILLIS, DELAY_MILLIS) {
                     @Override
                     public void onTick(long millisUntilFinished) {}
 
                     @Override
                     public void onFinish() {
-                        // Timer finished without reaching the max click count
-                        // Start the new Intent
                         startActivity(new Intent(ProductsListActivity.this, ProductsListActivity.class));
                     }
                 }.start();
             } else if (clickCount == MAX_CLICK_COUNT) {
-                // Stop the timer and play the song
                 clickTimer.cancel();
                 playSong();
                 clickCount = 0;
@@ -115,6 +131,9 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         }
     };
 
+    /**
+     * Lance la musique
+     */
     private void playSong() {
         if (mediaPlayer == null) {
             mediaPlayer = MediaPlayer.create(this, R.raw.maintheme);
