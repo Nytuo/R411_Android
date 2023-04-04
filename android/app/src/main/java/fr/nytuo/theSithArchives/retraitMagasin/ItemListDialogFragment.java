@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.Comparator;
 import java.util.List;
 
 import fr.nytuo.theSithArchives.databinding.FragmentItemListDialogListDialogItemBinding;
@@ -61,6 +62,8 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         final Bundle args = new Bundle();
         //On initialise la liste des magasins
         ItemListDialogFragment.magasins = magasins;
+        //sort by distance
+        ItemListDialogFragment.magasins.sort(Comparator.comparingDouble(Magasin::getDistance));
         args.putInt(ARG_ITEM_COUNT, itemCount);
         fragment.setArguments(args);
         return fragment;

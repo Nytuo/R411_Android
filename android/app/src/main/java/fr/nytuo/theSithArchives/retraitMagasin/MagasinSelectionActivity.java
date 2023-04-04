@@ -305,6 +305,9 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
                 }
         );
 
+        Button buttonOpenSelectStore = findViewById(R.id.openSelectStore);
+        buttonOpenSelectStore.setOnClickListener(v -> showItemListDialogAndWait());
+
     }
 
 
