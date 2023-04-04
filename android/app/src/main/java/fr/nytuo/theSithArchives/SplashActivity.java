@@ -18,16 +18,9 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         new Handler().postDelayed(() -> {
-            playMusic();
-            startActivity(new Intent(SplashActivity.this, ProductsListActivity.class).putExtra("mediaPlayer", mediaPlayer.getCurrentPosition()));
+            startActivity(new Intent(SplashActivity.this, ProductsListActivity.class));
             finish();
         }, 1000);
 
-    }
-    private void playMusic(){
-        if (mediaPlayer == null){
-            mediaPlayer = MediaPlayer.create(this, R.raw.maintheme);
-            mediaPlayer.start();
-        }
     }
 }

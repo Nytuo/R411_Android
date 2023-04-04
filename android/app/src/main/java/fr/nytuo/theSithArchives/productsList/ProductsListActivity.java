@@ -11,7 +11,9 @@ import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ListView;
@@ -39,14 +41,6 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
      * Pop-up de chargement
      */
     private ProgressDialog progressDialog;
-
-    private SensorManager mSensorManager;
-    private float mAccel;
-    private float mAccelCurrent;
-    private float mAccelLast;
-    private MediaPlayer mediaPlayer;
-
-    private boolean oldMusicStatus = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,11 +65,7 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
             }
         });
         Button buttonHome = findViewById(R.id.buttonHome);
-        buttonHome.setOnClickListener(v -> {
-            Intent intent = getIntent();
-            finish();
-            startActivity(intent);
-        });
+        buttonHome.setOnClickListener(onClickListener);
 
         Button buttonPanier = findViewById(R.id.buttonPanier);
         buttonPanier.setOnClickListener(v -> {
@@ -89,16 +79,52 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
             startActivity(intent);
         });
 
-        int mediaPosition = getIntent().getIntExtra("mediaPlayer", 0);
-        mediaPlayer = MediaPlayer.create(this, R.raw.maintheme);
-        mediaPlayer.start();
-        mediaPlayer.seekTo(mediaPosition);
-        mediaPlayer.setLooping(true);
-
-
-
     }
+    private static final int DELAY_MILLIS = 1000; // Change this to the delay you want
+    private static final int MAX_CLICK_COUNT = 3; // Change this to the maximum number of clicks
 
+    MediaPlayer mediaPlayer;
+
+    private int clickCount = 0;
+    private CountDownTimer clickTimer;
+
+    private final View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            clickCount++;
+
+            if (clickCount == 1) {
+                // Start the timer if this is the first click
+                clickTimer = new CountDownTimer(DELAY_MILLIS, DELAY_MILLIS) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {}
+
+                    @Override
+                    public void onFinish() {
+                        // Timer finished without reaching the max click count
+                        // Start the new Intent
+                        startActivity(new Intent(ProductsListActivity.this, ProductsListActivity.class));
+                    }
+                }.start();
+            } else if (clickCount == MAX_CLICK_COUNT) {
+                // Stop the timer and play the song
+                clickTimer.cancel();
+                playSong();
+                clickCount = 0;
+            }
+        }
+    };
+
+    private void playSong() {
+        if (mediaPlayer == null) {
+            mediaPlayer = MediaPlayer.create(this, R.raw.maintheme);
+        }else{
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = MediaPlayer.create(this, R.raw.maintheme);
+        }
+        mediaPlayer.start();
+    }
 
     private void onsubmit(String query){
         this.progressDialog.show();
