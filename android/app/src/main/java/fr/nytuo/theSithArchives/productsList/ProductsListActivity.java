@@ -21,8 +21,14 @@ import fr.nytuo.theSithArchives.cart.CartActivity;
 import fr.nytuo.theSithArchives.cart.CartList;
 import fr.nytuo.theSithArchives.product.ProductActivity;
 
+/**
+ * Activité de la liste des produits (principal)
+ */
 public class ProductsListActivity extends AppCompatActivity implements PostExecuteActivity<Product>, ProductAdapterListener {
-    ProgressDialog progressDialog;
+    /**
+     * Pop-up de chargement
+     */
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +67,7 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         });
     }
 
-    public void onsubmit(String query){
+    private void onsubmit(String query){
         this.progressDialog.show();
         query = Uri.parse("https://api.nytuo.fr/api/book/search/" + query).buildUpon().build().toString();
         new HttpAsyncGet<>(query, Product.class, ProductsListActivity.this, null);
@@ -78,9 +84,9 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         listProduits.startAnimation(animation2);
         this.progressDialog.dismiss();
         ProductsAdapter productsAdapter = new ProductsAdapter(this, ProductsList.getInstance());
-        FlexibleProductImageDownloaderThread.instance.addAdapter(productsAdapter, this);
+        FlexibleProductImageDownloaderThread.flexibleProductImageDownloaderThread.addAdapter(productsAdapter, this);
         for (Product product : ProductsList.getInstance()){
-            FlexibleProductImageDownloaderThread.instance.add(product);
+            FlexibleProductImageDownloaderThread.flexibleProductImageDownloaderThread.add(product);
         }
         this.runOnUiThread(productsAdapter::notifyDataSetChanged);
         listProduits.setAdapter(productsAdapter);
