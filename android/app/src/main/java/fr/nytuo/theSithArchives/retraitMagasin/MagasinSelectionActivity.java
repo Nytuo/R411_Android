@@ -32,16 +32,18 @@ import java.text.BreakIterator;
 import java.util.List;
 
 import fr.nytuo.theSithArchives.networking.HttpAsyncGet;
+import fr.nytuo.theSithArchives.networking.HttpAsyncPost;
 import fr.nytuo.theSithArchives.networking.PostExecuteActivity;
 import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.cart.CartActivity;
+import fr.nytuo.theSithArchives.networking.PostExecutePost;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
 
 /**
  * Activité de sélection de la librairie
  */
-public class MagasinSelectionActivity extends AppCompatActivity implements PostExecuteActivity<Magasin> {
+public class MagasinSelectionActivity extends AppCompatActivity implements PostExecuteActivity<Magasin>, PostExecutePost {
 
     /**
      * Liste des magasins
@@ -87,6 +89,13 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
             builder.setPositiveButton("OK", (dialog, which) -> {
                 spawnNotification("Vos articles sont disponibles dans votre librairie '" + selectedMagasin.getName()
                         + "'. Votre commande porte le numéro: " + commandNumber, System.currentTimeMillis() + 10000, 2);
+
+                Commande commande = new Commande();
+                commande.setCommandNumber("test");
+                commande.setPrice("54");
+                commande.setBooks("test");
+                HttpAsyncPost httpAsyncPost = new HttpAsyncPost("https:////api.nytuo.fr/api/command", commande,this);
+
                 Intent intent = new Intent(this, ProductsListActivity.class);
                 startActivity(intent);
 
@@ -311,5 +320,15 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
     @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
+    }
+
+    @Override
+    public void onSucces() {
+
+    }
+
+    @Override
+    public void onError(int responseCode) {
+
     }
 }
