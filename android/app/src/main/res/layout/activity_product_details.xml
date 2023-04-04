@@ -15,6 +15,19 @@
         android:layout_height="match_parent">
 
         <Button
+            android:id="@+id/buttonContact4"
+            android:layout_width="40dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="56dp"
+            android:paddingLeft="8dp"
+            android:text="text"
+            android:textSize="0sp"
+            app:icon="@drawable/baseline_account_box_24"
+            app:iconPadding="0dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
             android:id="@+id/buttonHome"
             android:layout_width="40dp"
             android:layout_height="48dp"

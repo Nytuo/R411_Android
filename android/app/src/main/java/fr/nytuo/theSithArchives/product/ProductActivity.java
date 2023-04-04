@@ -18,6 +18,7 @@ import fr.nytuo.theSithArchives.cart.CartActivity;
 import fr.nytuo.theSithArchives.cart.CartList;
 import fr.nytuo.theSithArchives.productsList.ProductsList;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
+import fr.nytuo.theSithArchives.retraitMagasin.RetreiveCommandActivity;
 
 /**
  * Activité du produit (détail)
@@ -45,7 +46,12 @@ public class ProductActivity extends AppCompatActivity {
         TextView isbn = findViewById(R.id.isbn);
         TextView date = findViewById(R.id.date);
         ScrollView scrollView = (ScrollView) findViewById(R.id.backgroundScroll);
+        Button buttonContact = findViewById(R.id.buttonContact4);
 
+        buttonContact.setOnClickListener(v -> {
+            Intent intent1 = new Intent(this, RetreiveCommandActivity.class);
+            startActivity(intent1);
+        });
 
         //On initialise les données
         name.setText(ProductsList.getInstance().get(position).getName());

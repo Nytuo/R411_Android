@@ -20,6 +20,7 @@ import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.cart.CartActivity;
 import fr.nytuo.theSithArchives.cart.CartList;
 import fr.nytuo.theSithArchives.product.ProductActivity;
+import fr.nytuo.theSithArchives.retraitMagasin.RetreiveCommandActivity;
 
 /**
  * Activité de la liste des produits (principal)
@@ -63,6 +64,12 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
         Button buttonPanier = findViewById(R.id.buttonPanier);
         buttonPanier.setOnClickListener(v -> {
             Intent intent = new Intent(this, CartActivity.class);
+            startActivity(intent);
+        });
+
+        Button buttonInfoCommande = findViewById(R.id.buttonContact);
+        buttonInfoCommande.setOnClickListener(v -> {
+            Intent intent = new Intent(this, RetreiveCommandActivity.class);
             startActivity(intent);
         });
     }
