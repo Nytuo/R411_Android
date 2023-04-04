@@ -307,12 +307,9 @@ let Commands = [];
 
 class Command {
     constructor(commandNumber, price, books) {
-        this.id = Crypto.randomBytes(16).toString("hex");
         this.books = books;
         this.price = price;
         this.commandNumber = commandNumber;
-        this.date = new Date();
-        this.status = "pending";
     }
 }
 
