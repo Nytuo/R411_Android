@@ -14,75 +14,121 @@ import java.util.List;
 import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.productsList.Product;
 
+/**
+ * Adapter de la liste de produits du panier
+ */
 public class CartAdapter extends BaseAdapter {
-    private final List<Product> items;
-    private final LayoutInflater mInflater;
-    private final CartAdapterListener activity;
-    private final ArrayList<CartAdapterListener> productListener = new ArrayList<>();
+    /**
+     * Liste des produits
+     */
+    private final List<Product> products;
+    /**
+     * Inflater pour charger les layouts
+     */
+    private final LayoutInflater layoutInflater;
+    /**
+     * Listener de l'adapter
+     */
+    private final CartAdapterListener cartAdapterListener;
+    /**
+     * Liste des listeners de l'adapter
+     */
+    private final ArrayList<CartAdapterListener> cartAdapterListeners = new ArrayList<>();
 
-    public CartAdapter(CartAdapterListener activity, List<Product> items) {
-        this.activity = activity;
-        this.items = items;
-        mInflater = LayoutInflater.from(activity.getContext());
+    /**
+     * @param cartAdapterListener Listener de l'adapter
+     * @param products Liste des produits
+     */
+    public CartAdapter(CartAdapterListener cartAdapterListener, List<Product> products) {
+        this.cartAdapterListener = cartAdapterListener;
+        this.products = products;
+        layoutInflater = LayoutInflater.from(cartAdapterListener.getContext());
     }
 
+    /**
+     * Retourne le nombre de produits
+     * @return Le nombre de produits
+     */
     public int getCount() {
-        return items.size();
+        return products.size();
     }
 
+    /**
+     * @param position Position du produit dans la liste
+     * @return Le produit à la position donnée
+     */
     public Object getItem(int position) {
-        return items.get(position);
+        return products.get(position);
     }
 
+    /**
+     * @param position Position du produit dans la liste
+     * @return La position du produit dans la liste
+     */
     public long getItemId(int position) {
         return position;
     }
 
+    /**
+     * @param position Position du produit dans la liste
+     * @param convertView Vue à réutiliser
+     * @param parent Parent de la vue
+     * @return La vue du produit à la position donnée
+     */
     public View getView(int position, View convertView, ViewGroup parent) {
         View layoutItem;
 
-        layoutItem = convertView == null ? mInflater.inflate(R.layout.cart_layout, parent, false) : convertView;
+        layoutItem = convertView == null ? layoutInflater.inflate(R.layout.cart_layout, parent, false) : convertView;
 
-        TextView displayName = layoutItem.findViewById(R.id.productName);
-        TextView displayPrice = layoutItem.findViewById(R.id.productPrice);
-        displayName.setText(items.get(position).getName());
-        displayPrice.setText(items.get(position).getPrice() + "€");
+        // On récupère les éléments de la vue
+        TextView productName = layoutItem.findViewById(R.id.productName);
+        TextView productPrice = layoutItem.findViewById(R.id.productPrice);
         Button plusButton = layoutItem.findViewById(R.id.buttonPlus);
+        Button minusButton = layoutItem.findViewById(R.id.buttonMoins);
+        TextView productQuantity = layoutItem.findViewById(R.id.quantity);
+        ImageView productImage = layoutItem.findViewById(R.id.productImage);
+
+        productName.setText(products.get(position).getName());
+        productPrice.setText(products.get(position).getPrice() + "€");
+
+        //traitement du bouton +
         plusButton.setOnClickListener(v -> {
-            for (CartAdapterListener listener : productListener) {
+            for (CartAdapterListener listener : cartAdapterListeners) {
                 listener.onPlusClick(position);
             }
         });
-        plusButton.setBackgroundColor(activity.getContext().getResources().getColor(R.color.colorPrimary));
-        plusButton.setTextColor(activity.getContext().getResources().getColor(R.color.White));
-        plusButton.setText(items.get(position).getPrice() + "€");
-
-
+        plusButton.setBackgroundColor(cartAdapterListener.getContext().getResources().getColor(R.color.colorPrimary));
+        plusButton.setTextColor(cartAdapterListener.getContext().getResources().getColor(R.color.White));
+        plusButton.setText(products.get(position).getPrice() + "€");
         plusButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_add_24, 0, 0, 0);
-        plusButton.setCompoundDrawableTintList(activity.getContext().getResources().getColorStateList(R.color.White));
+        plusButton.setCompoundDrawableTintList(cartAdapterListener.getContext().getResources().getColorStateList(R.color.White));
         plusButton.setPadding(35, 0, 0, 0);
-        Button minusButton = layoutItem.findViewById(R.id.buttonMoins);
+
+        //traitement du bouton -
         minusButton.setOnClickListener(v -> {
-            for (CartAdapterListener listener : productListener) {
+            for (CartAdapterListener listener : cartAdapterListeners) {
                 listener.onMoinsClick(position);
             }
         });
-        minusButton.setBackgroundColor(activity.getContext().getResources().getColor(R.color.colorPrimary));
-        minusButton.setTextColor(activity.getContext().getResources().getColor(R.color.White));
-        minusButton.setText(items.get(position).getPrice() + "€");
+        minusButton.setBackgroundColor(cartAdapterListener.getContext().getResources().getColor(R.color.colorPrimary));
+        minusButton.setTextColor(cartAdapterListener.getContext().getResources().getColor(R.color.White));
+        minusButton.setText(products.get(position).getPrice() + "€");
         minusButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_remove_24, 0, 0, 0);
-        minusButton.setCompoundDrawableTintList(activity.getContext().getResources().getColorStateList(R.color.White));
+        minusButton.setCompoundDrawableTintList(cartAdapterListener.getContext().getResources().getColorStateList(R.color.White));
         minusButton.setPadding(35, 0, 0, 0);
-        TextView displayQuantity = layoutItem.findViewById(R.id.quantity);
-        displayQuantity.setText(String.valueOf(items.get(position).getQuantity()));
-        ImageView displayImg = layoutItem.findViewById(R.id.productImage);
-        items.get(position).subToGetImgBitmap(activity.getActivity(),displayImg);
-        displayName.setTag(position);
+
+        productQuantity.setText(String.valueOf(products.get(position).getQuantity()));
+        products.get(position).subToGetImgBitmap(cartAdapterListener.getActivity(),productImage);
+        productName.setTag(position);
         return layoutItem;
     }
 
+    /**
+     * Ajoute un listener à l'adapter
+     * @param listener Listener à ajouter
+     */
     public void addListener(CartAdapterListener listener) {
-        productListener.add(listener);
+        cartAdapterListeners.add(listener);
     }
 
 }
