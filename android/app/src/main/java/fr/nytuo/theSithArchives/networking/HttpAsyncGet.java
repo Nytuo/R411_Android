@@ -21,12 +21,16 @@ public class HttpAsyncGet<T>{
     private final Class<T> clazz;
     private List<T> itemList;
     private final HttpHandler webService;
+    PostExecuteActivity postExecuteActivity;
 
 
     public HttpAsyncGet(String url, Class<T> clazz, PostExecuteActivity postExecuteActivity, ProgressDialog progressDialog) {
         super();
         webService = new HttpHandler();
         this.clazz = clazz;
+        this.postExecuteActivity = postExecuteActivity;
+
+
         if(progressDialog != null) onPreExecute( progressDialog );
         Runnable runnable = ()->{
             doInBackGround(url);
@@ -41,7 +45,13 @@ public class HttpAsyncGet<T>{
 
     public void doInBackGround(String urlAddress){
         // get the jsonStr to parse
-        String jsonStr = webService.makeServiceCall(urlAddress);
+        String jsonStr = webService.makeServiceCall("dsq"+urlAddress);
+        if (jsonStr == null) {
+            postExecuteActivity.runOnUiThread( ()-> {
+                postExecuteActivity.onError();
+            } );
+            return;
+        }
         ObjectMapper mapper = new ObjectMapper();
         try {
             itemList = mapper.readValue(jsonStr, mapper.getTypeFactory().constructCollectionType(List.class, clazz));

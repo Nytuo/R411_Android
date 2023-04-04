@@ -14,4 +14,6 @@ public interface PostExecuteActivity<T> {
      * @param runable Runnable à exécuter sur l'UI
      */
     void runOnUiThread( Runnable runable);
+
+    void onError();
 }

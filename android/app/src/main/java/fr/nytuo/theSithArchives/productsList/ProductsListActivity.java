@@ -94,6 +94,11 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
     }
 
     @Override
+    public void onError() {
+        System.out.println("Erreur");
+    }
+
+    @Override
     public void onPointerCaptureChanged(boolean hasCapture) {
         super.onPointerCaptureChanged(hasCapture);
 

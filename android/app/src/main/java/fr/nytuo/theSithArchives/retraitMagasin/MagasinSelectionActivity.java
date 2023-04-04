@@ -176,6 +176,11 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
         buttonOpenSelectStore.setOnClickListener(v -> showItemListDialogAndWait());
     }
 
+    @Override
+    public void onError() {
+
+    }
+
     /**
      * Affiche la liste des magasins dans un fragment et attend que l'utilisateur en sélectionne un
      */
