@@ -4,16 +4,24 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
+import java.util.Objects;
 
 import fr.nytuo.theSithArchives.networking.HttpAsyncGet;
 import fr.nytuo.theSithArchives.networking.PostExecuteActivity;
@@ -32,6 +40,13 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
      */
     private ProgressDialog progressDialog;
 
+    private SensorManager mSensorManager;
+    private float mAccel;
+    private float mAccelCurrent;
+    private float mAccelLast;
+    private MediaPlayer mediaPlayer;
+
+    private boolean oldMusicStatus = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +88,17 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
             Intent intent = new Intent(this, RetreiveCommandActivity.class);
             startActivity(intent);
         });
+
+        int mediaPosition = getIntent().getIntExtra("mediaPlayer", 0);
+        mediaPlayer = MediaPlayer.create(this, R.raw.maintheme);
+        mediaPlayer.start();
+        mediaPlayer.seekTo(mediaPosition);
+        mediaPlayer.setLooping(true);
+
+
+
     }
+
 
     private void onsubmit(String query){
         this.progressDialog.show();
@@ -143,4 +168,5 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
     public AppCompatActivity getActivity() {
         return this;
     }
+
 }
