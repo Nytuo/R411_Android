@@ -62,24 +62,25 @@ public class RetreiveCommandActivity extends AppCompatActivity implements PostEx
 
     @Override
     public void onPostExecute(List<Commande> itemList) {
-        if (itemList!=null){
+        if (itemList.get(0)!=null){
             TextView textView = findViewById(R.id.textView);
             TextView textView2 = findViewById(R.id.textView2);
             TextView textView3 = findViewById(R.id.textView4);
             textView.setEnabled(true);
             textView2.setEnabled(true);
             textView3.setEnabled(true);
-            textView.setText(itemList.get(0).getCommandNumber());
+            textView.setText("Command number : "+itemList.get(0).getCommandNumber());
             textView2.setText(itemList.get(0).getPrice());
             textView3.setText(itemList.get(0).getBooks());
+        }else{
+            TextView textView = findViewById(R.id.textView);
+            TextView textView2 = findViewById(R.id.textView2);
+            TextView textView3 = findViewById(R.id.textView4);
+            textView.setEnabled(true);
+            textView2.setEnabled(true);
+            textView3.setEnabled(true);
+            textView.setText("Aucune commande trouvée.");
         }
-        TextView textView = findViewById(R.id.textView);
-        TextView textView2 = findViewById(R.id.textView2);
-        TextView textView3 = findViewById(R.id.textView4);
-        textView.setEnabled(true);
-        textView2.setEnabled(true);
-        textView3.setEnabled(true);
-        textView.setText("Aucune commande trouvée.");
 
     }
 

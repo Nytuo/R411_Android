@@ -31,12 +31,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.text.BreakIterator;
 import java.util.List;
 
+import fr.nytuo.theSithArchives.cart.CartList;
 import fr.nytuo.theSithArchives.networking.HttpAsyncGet;
 import fr.nytuo.theSithArchives.networking.HttpAsyncPost;
 import fr.nytuo.theSithArchives.networking.PostExecuteActivity;
 import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.cart.CartActivity;
 import fr.nytuo.theSithArchives.networking.PostExecutePost;
+import fr.nytuo.theSithArchives.productsList.Product;
+import fr.nytuo.theSithArchives.productsList.ProductsList;
 import fr.nytuo.theSithArchives.productsList.ProductsListActivity;
 
 
@@ -88,6 +91,22 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
 
 
         buttonBuy.setOnClickListener(v -> {
+            Commande commande = new Commande();
+            commande.setCommandNumber(""+commandNumber);
+            commande.setPrice("Total price : "+CartList.getInstance().getTotalPrice()+"€");
+            StringBuilder books = new StringBuilder();
+            books.append("Cart list : \n");
+            for (Product product : CartList.getInstance()) {
+                books.append(product.getName())
+                        .append(" x")
+                        .append(product.getQuantity())
+                        .append("\n");
+            }
+            commande.setBooks(books.toString());
+            HttpAsyncPost httpAsyncPost = new HttpAsyncPost("https:////api.nytuo.fr/api/command", commande,this);
+
+//            CartList.getInstance().clear();
+
             spawnNotification("Vos articles sont réservés dans votre librairie '" + selectedMagasin.getName()
                     + "'. Vous recevrez une notification lors de leur disponibilité. Votre commande porte le numéro: " + commandNumber, System.currentTimeMillis(), 1);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -98,11 +117,6 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
                 spawnNotification("Vos articles sont disponibles dans votre librairie '" + selectedMagasin.getName()
                         + "'. Votre commande porte le numéro: " + commandNumber, System.currentTimeMillis() + 10000, 2);
 
-                Commande commande = new Commande();
-                commande.setCommandNumber("test");
-                commande.setPrice("54");
-                commande.setBooks("test");
-                HttpAsyncPost httpAsyncPost = new HttpAsyncPost("https:////api.nytuo.fr/api/command", commande,this);
 
                 Intent intent = new Intent(this, ProductsListActivity.class);
                 startActivity(intent);
