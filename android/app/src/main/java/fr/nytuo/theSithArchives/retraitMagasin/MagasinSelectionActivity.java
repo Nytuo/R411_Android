@@ -186,6 +186,16 @@ public class MagasinSelectionActivity extends AppCompatActivity implements PostE
 
     @Override
     public void onError() {
+        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
+        builder.setMessage("le serveur n'est pas joignable")
+                .setTitle("Erreur");
+        builder.setPositiveButton("OK", (dialog, id) -> {
+            Intent intent = getIntent();
+            startActivity(intent);
+            finish();
+        });
+        android.app.AlertDialog dialog = builder.create();
+        dialog.show();
 
     }
 

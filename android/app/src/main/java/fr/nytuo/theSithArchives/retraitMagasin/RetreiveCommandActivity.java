@@ -1,5 +1,6 @@
 package fr.nytuo.theSithArchives.retraitMagasin;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -61,19 +62,38 @@ public class RetreiveCommandActivity extends AppCompatActivity implements PostEx
 
     @Override
     public void onPostExecute(List<Commande> itemList) {
+        if (itemList!=null){
+            TextView textView = findViewById(R.id.textView);
+            TextView textView2 = findViewById(R.id.textView2);
+            TextView textView3 = findViewById(R.id.textView4);
+            textView.setEnabled(true);
+            textView2.setEnabled(true);
+            textView3.setEnabled(true);
+            textView.setText(itemList.get(0).getCommandNumber());
+            textView2.setText(itemList.get(0).getPrice());
+            textView3.setText(itemList.get(0).getBooks());
+        }
         TextView textView = findViewById(R.id.textView);
         TextView textView2 = findViewById(R.id.textView2);
         TextView textView3 = findViewById(R.id.textView4);
         textView.setEnabled(true);
         textView2.setEnabled(true);
         textView3.setEnabled(true);
-        textView.setText(itemList.get(0).getCommandNumber());
-        textView2.setText(itemList.get(0).getPrice());
-        textView3.setText(itemList.get(0).getBooks());
+        textView.setText("Aucune commande trouvée.");
+
     }
 
     @Override
     public void onError() {
-
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("le serveur n'est pas joignable")
+                .setTitle("Erreur");
+        builder.setPositiveButton("OK", (dialog, id) -> {
+            Intent intent = getIntent();
+            startActivity(intent);
+            finish();
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 }
