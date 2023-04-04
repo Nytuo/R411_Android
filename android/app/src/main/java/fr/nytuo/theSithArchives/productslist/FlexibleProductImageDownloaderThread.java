@@ -21,7 +21,7 @@ public class FlexibleProductImageDownloaderThread implements Runnable {
     /**
      * Instance du thread
      */
-    public static FlexibleProductImageDownloaderThread flexibleProductImageDownloaderThread = new FlexibleProductImageDownloaderThread();
+    public static final FlexibleProductImageDownloaderThread flexibleProductImageDownloaderThread = new FlexibleProductImageDownloaderThread();
     /**
      * Liste des adapters à mettre à jour
      */

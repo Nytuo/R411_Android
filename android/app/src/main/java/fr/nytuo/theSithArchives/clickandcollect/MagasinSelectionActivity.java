@@ -45,7 +45,7 @@ import fr.nytuo.theSithArchives.productslist.ProductsListActivity;
  */
 public class MagasinSelectionActivity extends AppCompatActivity implements PostExecuteActivity<Magasin>, PostExecutePost {
 
-    public static int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
+    public static final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
     /**
      * Liste des magasins
      */

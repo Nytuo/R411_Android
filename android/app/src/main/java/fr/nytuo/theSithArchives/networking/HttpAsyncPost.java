@@ -27,12 +27,13 @@ public class HttpAsyncPost {
                 connection.setRequestMethod("POST");
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setDoOutput(true);
+                assert finalJsonStr != null;
                 connection.getOutputStream().write(finalJsonStr.getBytes());
                 connection.getOutputStream().flush();
                 connection.getOutputStream().close();
                 int responseCode = connection.getResponseCode();
                 if (responseCode == HttpURLConnection.HTTP_OK) {
-                    postExecuteActivity.runOnUiThread(() -> postExecuteActivity.onSucces());
+                    postExecuteActivity.runOnUiThread(postExecuteActivity::onSucces);
                 } else {
                     postExecuteActivity.runOnUiThread(() -> postExecuteActivity.onError(responseCode));
                 }

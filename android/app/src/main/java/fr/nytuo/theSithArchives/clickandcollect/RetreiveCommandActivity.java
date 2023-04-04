@@ -29,7 +29,7 @@ public class RetreiveCommandActivity extends AppCompatActivity implements PostEx
 
         Button searchForCommand = findViewById(R.id.searchForCommand);
         searchForCommand.setOnClickListener(v -> {
-            EditText editText = findViewById(R.id.editTextTextPersonName);
+            EditText editText = findViewById(R.id.editTextCommand);
             String commandNumber = editText.getText().toString();
             new HttpAsyncGet<>("https://api.nytuo.fr/api/command/" + commandNumber, Commande.class, this, null);
         });

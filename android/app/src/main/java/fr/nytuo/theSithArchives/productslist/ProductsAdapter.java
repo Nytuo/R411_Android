@@ -8,6 +8,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.TextViewCompat;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +105,7 @@ public class ProductsAdapter extends BaseAdapter {
         buttonAJouter.setTextColor(productAdapterListener.getContext().getResources().getColor(R.color.White));
         buttonAJouter.setText(productList.get(position).getPrice() + "€");
         buttonAJouter.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_add_shopping_cart_24, 0, 0, 0);
-        buttonAJouter.setCompoundDrawableTintList(productAdapterListener.getContext().getResources().getColorStateList(R.color.White));
+        TextViewCompat.setCompoundDrawableTintList(buttonAJouter, ContextCompat.getColorStateList(productAdapterListener.getContext(), R.color.White));
         buttonAJouter.setPadding(50, 0, 0, 0);
 
         layoutItem.setOnClickListener(v -> {

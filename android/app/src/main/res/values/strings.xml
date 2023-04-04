@@ -12,5 +12,6 @@
     <string name="cover">Image de couverture du libre</string>
     <string name="addToCart">AJOUTER AU PANIER</string>
     <string name="lookfor">Rechercher</string>
+    <string name="insertCommandNumber">Insérer votre numéro de commande</string>
 
 </resources>

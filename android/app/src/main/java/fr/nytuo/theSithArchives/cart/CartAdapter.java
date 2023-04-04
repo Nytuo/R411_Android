@@ -8,6 +8,9 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.widget.TextViewCompat;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +105,7 @@ public class CartAdapter extends BaseAdapter {
         plusButton.setTextColor(cartAdapterListener.getContext().getResources().getColor(R.color.White));
         plusButton.setText(products.get(position).getPrice() + "€");
         plusButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_add_24, 0, 0, 0);
-        plusButton.setCompoundDrawableTintList(cartAdapterListener.getContext().getResources().getColorStateList(R.color.White));
+        TextViewCompat.setCompoundDrawableTintList(plusButton, ContextCompat.getColorStateList(cartAdapterListener.getContext(), R.color.White));
         plusButton.setPadding(35, 0, 0, 0);
 
         //traitement du bouton -
@@ -115,7 +118,7 @@ public class CartAdapter extends BaseAdapter {
         minusButton.setTextColor(cartAdapterListener.getContext().getResources().getColor(R.color.White));
         minusButton.setText(products.get(position).getPrice() + "€");
         minusButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.baseline_remove_24, 0, 0, 0);
-        minusButton.setCompoundDrawableTintList(cartAdapterListener.getContext().getResources().getColorStateList(R.color.White));
+        TextViewCompat.setCompoundDrawableTintList(minusButton, ContextCompat.getColorStateList(cartAdapterListener.getContext(), R.color.White));
         minusButton.setPadding(35, 0, 0, 0);
 
         productQuantity.setText(String.valueOf(products.get(position).getQuantity()));

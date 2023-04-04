@@ -138,16 +138,6 @@ public class ProductActivity extends AppCompatActivity {
     }
 
     /**
-     * Vérifie si la couleur est claire
-     *
-     * @param color couleur
-     * @return true si la couleur est claire
-     */
-    private boolean isColorLight(int color) {
-        return ColorUtils.calculateLuminance(color) > 0.5;
-    }
-
-    /**
      * Ajoute un produit à la liste du panier
      *
      * @param position position du produit dans la liste

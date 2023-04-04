@@ -26,7 +26,7 @@ public class HttpAsyncGet<T> {
     private List<T> itemList;
 
 
-    public HttpAsyncGet(String url, Class<T> clazz, PostExecuteActivity postExecuteActivity, ProgressDialog progressDialog) {
+    public HttpAsyncGet(String url, Class<T> clazz, PostExecuteActivity<T> postExecuteActivity, ProgressDialog progressDialog) {
         super();
         webService = new HttpHandler();
         this.clazz = clazz;
@@ -38,9 +38,7 @@ public class HttpAsyncGet<T> {
             doInBackGround(url);
             postExecuteActivity.runOnUiThread(() -> {
                 if (progressDialog != null) progressDialog.dismiss();
-                if (itemList != null) {
-                    postExecuteActivity.onPostExecute(getItemResult());
-                }
+                if (itemList != null) postExecuteActivity.onPostExecute(getItemResult());
             });
         };
         Executors.newSingleThreadExecutor().execute(runnable);
@@ -51,7 +49,7 @@ public class HttpAsyncGet<T> {
         // get the jsonStr to parse
         String jsonStr = webService.makeServiceCall(urlAddress);
         if (jsonStr == null) {
-            postExecuteActivity.runOnUiThread(() -> postExecuteActivity.onError());
+            postExecuteActivity.runOnUiThread(postExecuteActivity::onError);
             return;
         }
         ObjectMapper mapper = new ObjectMapper();
