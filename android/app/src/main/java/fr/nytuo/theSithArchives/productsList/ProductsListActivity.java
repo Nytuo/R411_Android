@@ -1,5 +1,6 @@
 package fr.nytuo.theSithArchives.productsList;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -102,7 +103,17 @@ public class ProductsListActivity extends AppCompatActivity implements PostExecu
 
     @Override
     public void onError() {
-        System.out.println("Erreur");
+        this.progressDialog.dismiss();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("le serveur n'est pas joignable")
+                .setTitle("Erreur");
+        builder.setPositiveButton("OK", (dialog, id) -> {
+            Intent intent = getIntent();
+            startActivity(intent);
+            finish();
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override

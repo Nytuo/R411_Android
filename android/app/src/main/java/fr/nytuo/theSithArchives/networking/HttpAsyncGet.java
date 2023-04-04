@@ -47,7 +47,7 @@ public class HttpAsyncGet<T>{
 
     public void doInBackGround(String urlAddress){
         // get the jsonStr to parse
-        String jsonStr = webService.makeServiceCall("dsq"+urlAddress);
+        String jsonStr = webService.makeServiceCall(urlAddress);
         if (jsonStr == null) {
             postExecuteActivity.runOnUiThread( ()-> {
                 postExecuteActivity.onError();
