@@ -1,4 +1,4 @@
-package fr.nytuo.theSithArchives;
+package fr.nytuo.theSithArchives.networking;
 
 import java.util.List;
 

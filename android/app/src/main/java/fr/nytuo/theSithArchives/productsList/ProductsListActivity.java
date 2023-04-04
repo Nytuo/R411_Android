@@ -14,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.List;
 
-import fr.nytuo.theSithArchives.HttpAsyncGet;
-import fr.nytuo.theSithArchives.PostExecuteActivity;
+import fr.nytuo.theSithArchives.networking.HttpAsyncGet;
+import fr.nytuo.theSithArchives.networking.PostExecuteActivity;
 import fr.nytuo.theSithArchives.R;
 import fr.nytuo.theSithArchives.cart.CartActivity;
 import fr.nytuo.theSithArchives.cart.CartList;

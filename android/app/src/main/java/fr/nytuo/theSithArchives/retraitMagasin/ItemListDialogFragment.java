@@ -1,4 +1,4 @@
-package fr.nytuo.theSithArchives;
+package fr.nytuo.theSithArchives.retraitMagasin;
 
 import android.os.Bundle;
 
@@ -19,31 +19,48 @@ import java.util.List;
 
 import fr.nytuo.theSithArchives.databinding.FragmentItemListDialogListDialogItemBinding;
 import fr.nytuo.theSithArchives.databinding.FragmentItemListDialogListDialogBinding;
-import fr.nytuo.theSithArchives.gps.PositionMagasin;
 
 
+/**
+ * Un fragment qui affiche une liste de choix dans un {@link BottomSheetDialogFragment}.
+ */
 public class ItemListDialogFragment extends BottomSheetDialogFragment {
 
+    /**
+     * Configuration du listener
+     * @param onItemSelectedListener Listener de selection d'un item
+     */
     public void setOnItemSelectedListener(OnItemSelectedListener onItemSelectedListener) {
-        mListener = onItemSelectedListener;
+        this.onItemSelectedListener = onItemSelectedListener;
     }
 
+    /**
+     * Interface pour la selection d'un item
+     */
     public interface OnItemSelectedListener {
+        /**
+         * Appelé quand on clique sur un item
+         * @param position Position de l'item dans la liste
+         */
         void onItemSelected(int position);
     }
 
-    private OnItemSelectedListener mListener;
+    /**
+     * Listener de click sur un item
+     */
+    private OnItemSelectedListener onItemSelectedListener;
 
     private static final String ARG_ITEM_COUNT = "item_count";
     private FragmentItemListDialogListDialogBinding binding;
 
-    private static List<PositionMagasin> magasinss;
+    private static List<Magasin> magasins;
     private int selectedPosition = -1;
 
-    public static ItemListDialogFragment newInstance(int itemCount, List<PositionMagasin> magasins) {
+    public static ItemListDialogFragment newInstance(int itemCount, List<Magasin> magasins) {
         final ItemListDialogFragment fragment = new ItemListDialogFragment();
         final Bundle args = new Bundle();
-        magasinss = magasins;
+        //On initialise la liste des magasins
+        ItemListDialogFragment.magasins = magasins;
         args.putInt(ARG_ITEM_COUNT, itemCount);
         fragment.setArguments(args);
         return fragment;
@@ -72,6 +89,10 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
         binding = null;
     }
 
+    /**
+     * Retourne l'item selectionné
+     * @return L'item selectionné
+     */
     public int getSelectedItem() {
         return selectedPosition;
     }
@@ -84,13 +105,14 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
             super(binding.getRoot());
             text = binding.text;
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    selectedPosition = getAdapterPosition();
-                    mListener.onItemSelected(selectedPosition);
-                    dismiss();
-                }
+            //On ajoute un listener sur le click
+            itemView.setOnClickListener(v -> {
+                //On met à jour la position selectionnée
+                selectedPosition = getAdapterPosition();
+                //On appelle le listener
+                onItemSelectedListener.onItemSelected(selectedPosition);
+                //On ferme la fenêtre
+                dismiss();
             });
 
         }
@@ -120,7 +142,8 @@ public class ItemListDialogFragment extends BottomSheetDialogFragment {
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.text.setText(magasinss.get(position).getName() + " (" + magasinss.get(position).getDistance()/1000 + " km)");
+            //On affiche le nom du magasin et sa distance
+            holder.text.setText(magasins.get(position).getName() + " (" + magasins.get(position).getDistance()/1000 + " km)");
         }
 
     }
