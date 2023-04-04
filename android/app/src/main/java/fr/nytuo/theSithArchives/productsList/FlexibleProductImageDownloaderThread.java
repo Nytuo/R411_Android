@@ -2,6 +2,7 @@ package fr.nytuo.theSithArchives.productsList;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.widget.BaseAdapter;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -73,7 +74,7 @@ public class FlexibleProductImageDownloaderThread implements Runnable {
                     URL url = new URL(product.getImgURLs().get(0));
                     image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e("FlexibleProductImageDownloaderThread", "Erreur lors du téléchargement de l'image", e);
                 }
                 // Mise à jour de l'image
                 product.receiveImgBitmap(image);

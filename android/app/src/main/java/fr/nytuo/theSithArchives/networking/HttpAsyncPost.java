@@ -1,5 +1,7 @@
 package fr.nytuo.theSithArchives.networking;
 
+import android.util.Log;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -16,7 +18,7 @@ public class HttpAsyncPost {
         try {
             jsonStr = mapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            Log.e("HttpAsyncPost", "Error while parsing object to json", e);
         }
         String finalJsonStr = jsonStr;
         Runnable runnable = () -> {

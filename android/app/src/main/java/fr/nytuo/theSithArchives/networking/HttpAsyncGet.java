@@ -103,12 +103,12 @@ public class HttpAsyncGet<T> {
                     Log.e(TAG, line);
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, "IOException: " + e.getMessage());
             } finally {
                 try {
                     inputStream.close();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    Log.e(TAG, "IOException: " + e.getMessage());
                 }
             }
             return stringBuilder.toString();
